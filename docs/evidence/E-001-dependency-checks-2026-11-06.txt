@@ -1,0 +1,36 @@
+# E-001 dependency checks, run 2026-11-06 13:36 UTC with cast Version: 1.8.3
+## chain ids
+lasna 5318007 · unichain-sepolia 1301 · base-sepolia 84532
+## bytecode present (hex chars)
+lasna:system                       0x8888888888888888888888888888888888888888   481
+unichain:callback-proxy            0x775c9B990ADe401060B78D0e98684eEf8d2466C1   439
+base:callback-proxy                0x476F44b11F5C942c58f4c8E3d0300E5710743585   439
+base:lreact-faucet                 0x2afaFD298b23b62760711756088F75B7409f5967   3071
+unichain:v4-PoolManager            0x00b036b58a818b1bc34d502d3fe730db729e62ac   48021
+unichain:v4-PositionManager        0xf969aee60879c54baaed9f3ed26147db216fd664   47757
+unichain:v4-PoolSwapTest           0x9140a78c1a137c7ff1c151ec8231272af78a99a4   13903
+unichain:v4-PoolModifyLiquidityTest 0x5fa728c0a5cfd51bee4b060773f50554c0c8a7ab   12103
+unichain:v4-StateView              0xc199f1072a74d4e905aba1a84d9a45e2546b6222   7065
+base:v4-PoolManager                0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408   48021
+base:v4-PositionManager            0x4b2c77d209d3405f41a037ec6c77f7f5b8e2ca80   47757
+base:v4-PoolSwapTest               0x8b5bcc363dde2614281ad875bad385e0a785d3b9   13903
+base:v4-PoolModifyLiquidityTest    0x37429cd17cb1454c34e7f50b09725202fd533039   12103
+base:v4-StateView                  0x571291b572ed32ce6751a2cb2486ebee8defb9b4   7065
+## block times (300-block window)
+https://lasna-rpc.rnk.dev/ head=7679972 300 blocks in 322s
+https://sepolia.unichain.org head=67119798 300 blocks in 300s
+https://sepolia.base.org head=55251816 300 blocks in 60s
+lasna gas price (wei): 100000000000
+## v4 PositionManager selectors in deployed bytecode (1 = present)
+unichain modifyLiquidities(bytes,uint256) 0xdd46508f 1
+unichain getPoolAndPositionInfo(uint256) 0x7ba03aad 1
+unichain getPositionLiquidity(uint256) 0x1efeed33 1
+unichain nextTokenId() 0x75794a3c 1
+unichain ownerOf(uint256) 0x6352211e 1
+base modifyLiquidities(bytes,uint256) 0xdd46508f 1
+base getPoolAndPositionInfo(uint256) 0x7ba03aad 1
+base getPositionLiquidity(uint256) 0x1efeed33 1
+base nextTokenId() 0x75794a3c 1
+base ownerOf(uint256) 0x6352211e 1
+## topics
+v4 Swap(bytes32,address,int128,int128,uint160,uint128,int24,uint24) = 0x40e9cecb9f5f1f1c5b9c97dec2917b7ee92e57ba5563708daca94dd84ad7112f

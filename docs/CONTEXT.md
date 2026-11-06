@@ -1,0 +1,70 @@
+# Context
+Verified facts about everything this project depends on. Each entry says how it was verified, so no session has to re-derive it or trust training data. Read this before touching an integration.
+
+- `[E-001]` means checked on-chain on 2026-11-06 (see `docs/evidence/E-001-dependency-checks-2026-11-06.txt`).
+- `[docs]` means taken from official docs but not independently checked.
+
+## Networks
+| Name | Chain ID | RPC (env var) | Explorer | Verified |
+|---|---|---|---|---|
+| Reactive Lasna (testnet, Omni) | 5318007 | `LASNA_RPC` = https://lasna-rpc.rnk.dev/ | https://lasna.reactscan.net/ | chain ID, ~1.07 s blocks, gas price 100 gwei [E-001]; explorer [docs] |
+| Unichain Sepolia | 1301 | `UNICHAIN_SEPOLIA_RPC` = https://sepolia.unichain.org | https://sepolia.uniscan.xyz | chain ID, 1.0 s blocks [E-001] |
+| Base Sepolia | 84532 | `BASE_SEPOLIA_RPC` = https://sepolia.base.org | https://sepolia.basescan.org | chain ID, 0.2 s blocks [E-001] |
+| Ethereum Sepolia | 11155111 | `SEPOLIA_RPC` | https://sepolia.etherscan.io | [docs] only (used just for the lREACT faucet) |
+| Reactive mainnet | 1597 | https://mainnet-rpc.rnk.dev/ | https://reactscan.net/ | [docs]. Not used: testnets only |
+
+## Contracts we call
+| Name | Address | Source of address | Interface | Verified how |
+|---|---|---|---|---|
+| Reactive system contract (Lasna, Omni) | `0x8888888888888888888888888888888888888888` | reactive-lib-omni `AbstractReactive.SYSTEM`; docs /reactive-mainnet | `ISystemContract` (reactive-lib-omni v0.1.0) | bytecode [E-001] |
+| Callback proxy, Unichain Sepolia | `0x775c9B990ADe401060B78D0e98684eEf8d2466C1` | dev.reactive.network/origins-and-destinations | `IPayable` | bytecode [E-001] |
+| Callback proxy, Base Sepolia | `0x476F44b11F5C942c58f4c8E3d0300E5710743585` | same page (the docs also list this address for Robinhood mainnet) | `IPayable` | bytecode [E-001] |
+| Callback proxy, Ethereum Sepolia | `0xAa14d9Cd0f788Ca23d11805986C1d8bd035D23b4` | same page | `IPayable` | [docs] only |
+| lREACT faucet, Base Sepolia | `0x2afaFD298b23b62760711756088F75B7409f5967` | docs /reactive-mainnet | `request(address)` payable | bytecode [E-001] |
+| lREACT faucet, Ethereum Sepolia | `0x9b9BB25f1A81078C544C829c5EB7822d747Cf434` | docs /reactive-mainnet | `request(address)` payable | [docs] only |
+| v4 PoolManager, Unichain Sepolia | `0x00b036b58a818b1bc34d502d3fe730db729e62ac` | Uniswap/docs `content/protocols/v4/deployments.mdx` | `IPoolManager` (v4-core v4.0.0) | bytecode [E-001] |
+| v4 PositionManager, Unichain Sepolia | `0xf969aee60879c54baaed9f3ed26147db216fd664` | same | `IPositionManager` (v4-periphery) | bytecode + selectors [E-001] |
+| v4 StateView, Unichain Sepolia | `0xc199f1072a74d4e905aba1a84d9a45e2546b6222` | same | `StateView` | bytecode [E-001] |
+| v4 PoolSwapTest / PoolModifyLiquidityTest, Unichain Sepolia | `0x9140a78c1a137c7ff1c151ec8231272af78a99a4` / `0x5fa728c0a5cfd51bee4b060773f50554c0c8a7ab` | same | v4-core test routers | bytecode [E-001] |
+| v4 PoolManager, Base Sepolia | `0x05E73354cFDd6745C338b50BcFDfA3Aa6fA03408` | same | `IPoolManager` | bytecode [E-001] |
+| v4 PositionManager, Base Sepolia | `0x4b2c77d209d3405f41a037ec6c77f7f5b8e2ca80` | same | `IPositionManager` | bytecode + selectors [E-001] |
+| v4 StateView, Base Sepolia | `0x571291b572ed32ce6751a2cb2486ebee8defb9b4` | same | `StateView` | bytecode [E-001] |
+| v4 PoolSwapTest / PoolModifyLiquidityTest, Base Sepolia | `0x8b5bcc363dde2614281ad875bad385e0a785d3b9` / `0x37429cd17cb1454c34e7f50b09725202fd533039` | same | v4-core test routers | bytecode [E-001] |
+| Permit2 (both chains) | `0x000000000022D473030F116dDEE9F6B43aC78BA3` | same | Permit2 | [docs] only |
+
+## SDKs and exact signatures
+| Package | Pinned | Calls we use | Verified in |
+|---|---|---|---|
+| reactive-lib-omni | v0.1.0 (`3ade0dcf1d27`) | `SYSTEM.subscribe(uint256 chainId, address contract, uint256 t0, uint256 t1, uint256 t2, uint256 t3)`. Wildcard `REACTIVE_IGNORE = 0xa65f96fc951c35ead38878e0f0b7a3c744a6f5ccc1476b313353ce31712313ad`. `SYSTEM.requestCallbackV_1_0(CallbackConfiguration_V_1_0{uint256 chainId; address recipient; uint64 gasLimit; bytes payload})`. `modifier onlySystem`. `AbstractCallback(IPayable callbackProxy, address callbackSender)` + `onlyCallbackSender(address)`. `AbstractPayer`: `receive()`, `pay(uint256)` (onlyServiceProvider), `_coverDebt()` (internal, so expose a wrapper) | source: `src/base/AbstractReactive.sol`, `AbstractCallback.sol`, `AbstractPayer.sol`, `interfaces/ISystemContract.sol`, `ISubscriptionService.sol` (read 2026-11-06) |
+| v4-core | v4.0.0 (`e50237c43811`) | `event Swap(PoolId indexed id, address indexed sender, int128 amount0, int128 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick, uint24 fee)`. topic0 = `0x40e9cecb9f5f1f1c5b9c97dec2917b7ee92e57ba5563708daca94dd84ad7112f`, topic1 = poolId, topic2 = swap router (msg.sender to PoolManager), and `tick` sits in data | `src/interfaces/IPoolManager.sol@v4.0.0`. topic0 via `cast keccak` [E-001] |
+| v4-periphery | commit recorded at scaffold | `modifyLiquidities(bytes unlockData, uint256 deadline)` `0xdd46508f`. `getPoolAndPositionInfo(uint256)` `0x7ba03aad`. `getPositionLiquidity(uint256)` `0x1efeed33`. `nextTokenId()` `0x75794a3c`. `ownerOf(uint256)` `0x6352211e`. Actions: `DECREASE_LIQUIDITY = 0x01`, `MINT_POSITION = 0x02`, `BURN_POSITION = 0x03`, `SETTLE_PAIR = 0x0d`, `TAKE_PAIR = 0x11`, `CLOSE_CURRENCY = 0x12` | `src/interfaces/IPositionManager.sol`, `src/libraries/Actions.sol` (main, 2026-11-06). Selectors present in both deployed PositionManagers [E-001] |
+
+## Reactive behaviour
+All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
+- Reactive overwrites the **first 160 bits of the callback payload** with the requesting reactive contract's address. Pass `address(0)` as the first argument.
+- Minimum callback gas limit is **100,000**. Requests below it are ignored. The reactive tx gas cap is **900,000**.
+- Callback cost is charged to the callback contract in the destination's native token, and reactive txs are charged in lREACT.
+  - Debt blocks execution: the proxy reverts with `InDebt` before delivery.
+  - Failed `react()` and failed callbacks are still charged.
+  - Fund with a payable constructor, `receive()`, or `depositTo(address)` on the system contract or proxy.
+- Subscriptions match on equality only. `chainId 0` means any chain and `address(0)` means any contract, but at least one criterion must be specific.
+- **[reported]** another entrant (emilhuseyn/reactive-omni) measured a Base Sepolia → Lasna → Base Sepolia loop at 1–2 s in 5/5 runs. Not our evidence.
+
+## Traps
+- **Legacy vs Omni.** Reactive's `reactive-smart-contract-demos` (pushed 2026-10-07) still imports legacy `reactive-lib`. Its stop-order demos use `vm`, `emit Callback` and `REACTIVE_CHAIN_ID = 1597` mislabelled as Lasna. Don't copy from them. (source: repo read 2026-11-06)
+- **`reactive-test-lib` is legacy-shaped.** Its README etches its mock at `SERVICE_ADDR 0x…fffFfF` and targets `reactive-lib` v0.2.0+. Unverified against Omni's `0x8888…`. (D-004)
+- **Pragma conflict.** v4 `PoolManager.sol` and `PositionManager.sol` pin `pragma solidity 0.8.26` exactly, while reactive-lib-omni needs `^0.8.29`. Import only v4 **interfaces and libraries**, which use `^0.8.0` or `^0.8.24` and are safe. Never import the concrete v4 contracts in one unit with our sources. Fork-test against live deployments instead. (pragma lookups via GitHub API, 2026-11-06)
+- **`forge lint` exit code.** Bare `forge lint` exits 0 even with warnings. `--deny warnings` exits 1. Verified on forge 1.8.3 with an unchecked ERC20 `transfer`, 2026-11-06.
+- **Base Sepolia timers.** 200 ms blocks: use timestamps, never block counts. (event ground rule; block time [E-001])
+- **Cron on Omni is unknown.** The cron topics are documented only against the legacy `0x…fffFfF`. That address has bytecode on Lasna (research, 2026-11-06), but cron delivery on Omni is unverified. Ripcord's design doesn't need cron.
+- **Faucet gating (reported).** Another entrant found Base Sepolia public faucets gated on a mainnet ETH balance.
+- **Callback proxy bytecode is small (~220 bytes),** so it's a proxy. Read fee parameters on-chain, not from docs.
+
+## Environment
+| Var | Purpose | Where to get it |
+|---|---|---|
+| `LASNA_RPC` | Reactive Lasna RPC | https://lasna-rpc.rnk.dev/ |
+| `UNICHAIN_SEPOLIA_RPC` | pool-chain RPC and fork tests | https://sepolia.unichain.org (public) |
+| `BASE_SEPOLIA_RPC` | pool-chain RPC and fork tests | https://sepolia.base.org (public) |
+| `SEPOLIA_RPC` | lREACT faucet on Ethereum Sepolia | any Sepolia RPC provider |
+| `DEPLOYER_ADDRESS` | deployer address only, never a key | the user's wallet. Keys stay in a Foundry keystore (`cast wallet import`), never in `.env` |

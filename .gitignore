@@ -1,0 +1,22 @@
+# Strategy, research, PRD, submission drafts: never commit
+internal/
+
+# Secrets
+.env*
+!.env.example
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/*/31337/
+contracts/broadcast/**/dry-run/
+
+# Node
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Tool scratch
+.playwright-mcp/
+.DS_Store
