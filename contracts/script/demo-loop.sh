@@ -77,5 +77,5 @@ for run in $(seq 1 "$RUNS"); do
       liquidityAfter:$liquidityAfter, unichainBlocksSwapToExit:($dBlk-$sBlk),
       wallClockMs:{swapMinedToLasnaSeen:($tL-$tO), swapMinedToExitSeen:($tD-$tO), swapSentToExitSeen:($tD-$tS)},
       receipts:{arm:$arm, swap:$swap, lasna:$lasna, exit:$exit}}' > "../docs/evidence/m1/loop-$TOKEN_ID.json"
-  echo "run $run · $RESULT · tick $NOW→$AFTER · liquidity after $LIQ · swap→exit $((D_BLK-S_BLK)) blocks, $((T_DEST-T_ORIGIN)) ms wall · swap $S_TX · exit $D_TX"
+  echo "run $run · $RESULT · tick ${NOW}→${AFTER} · liquidity after $LIQ · swap→exit $((D_BLK-S_BLK)) blocks, $((T_DEST-T_ORIGIN)) ms wall · swap $S_TX · exit $D_TX"
 done

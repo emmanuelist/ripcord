@@ -1,0 +1,17 @@
+{
+  "poolChain": "unichain-sepolia",
+  "poolChainId": 1301,
+  "token0": "0x211De8a94B65CAA40e7B77Cfe88c6C522dc6297b",
+  "token1": "0x76565356bE65F80220566C57C5681E1dEEB4b8Ef",
+  "poolId": "0xcd8519fedccc6235e1775b43017dc99d10e3be81b9989bda25d9d4a20aa3d064",
+  "fee": 3000,
+  "tickSpacing": 60,
+  "ripcordVault": "0x641413bb227c5452ef2b968c9774bc31f5f54c98",
+  "ripcordReactive": "0xA2deA4D676236Aa905c0Cb1B90712Fc3591af2B5",
+  "callbackProxy": "0x775c9B990ADe401060B78D0e98684eEf8d2466C1",
+  "poolManager": "0x00B036B58a818B1BC34d502D3fE730Db729e62AC",
+  "positionManager": "0xf969Aee60879C54bAAed9F3eD26147Db216Fd664",
+  "stateView": "0xc199f1072a74d4e905aba1a84d9a45e2546b6222",
+  "swapRouter": "0x9140a78c1a137C7fF1c151EC8231272aF78a99A4",
+  "deployedAt": "2026-11-06T16:04:27Z"
+}
