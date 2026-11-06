@@ -13,18 +13,37 @@ function usePrefersReducedMotion(): boolean {
   );
 }
 
-const STEP_MS = 55;
-const STAGGER_MS = 32;
+/** Barlow Semi Condensed has no ≤ or ≥ (checked in the browser), so those two are drawn in the flap's own ink and weight. */
+function Glyph({ ch }: { ch: string }) {
+  if (ch === "≤" || ch === "≥") {
+    const chevron = ch === "≤" ? "M7.6 2.8 2.6 6.4l5 3.6" : "M2.6 2.8l5 3.6-5 3.6";
+    return (
+      <svg className="dir" viewBox="0 0 10.2 16" aria-hidden="true" focusable="false">
+        <path d={chevron} />
+        <path d="M2.6 13h5" />
+      </svg>
+    );
+  }
+  return <>{ch === " " ? "\u00a0" : ch}</>;
+}
+
+/** One flap step: the upper half falls (half of it), then the lower half lands (the other half). Matches the CSS. */
+const STEP_MS = 130;
+const STAGGER_MS = 40;
 
 interface Turning {
   chars: string[];
-  /** Per tile, how many times it has turned; drives the remount that plays one flip. */
+  /** The character each tile showed before its latest step: its halves are the ones that fall away. */
+  prev: string[];
+  /** Per tile, how many times it has turned; keys the remount that plays one fall. */
   turns: number[];
 }
 
 /**
  * A row of split-flap tiles. The characters turn only when `text` changes (a real state change), never on first
- * render, and never under reduced motion. Screen readers get the final text, not the flapping.
+ * render, and never under reduced motion. Each step is a real flap fall: the old upper half hinges down over the
+ * split, revealing the new upper half, then the new lower half swings down onto the old one. Screen readers get the
+ * final text, not the flapping.
  */
 export function Flap({
   text,
@@ -38,7 +57,7 @@ export function Flap({
   className?: string;
 }) {
   const reduced = usePrefersReducedMotion();
-  const [turning, setTurning] = useState<Turning>(() => ({ chars: [...text], turns: [...text].map(() => 0) }));
+  const [turning, setTurning] = useState<Turning>(() => ({ chars: [...text], prev: [...text], turns: [...text].map(() => 0) }));
   const settled = useRef(text);
 
   useEffect(() => {
@@ -58,14 +77,17 @@ export function Flap({
           setTimeout(() => {
             setTurning((t) => {
               const chars = [...t.chars];
+              const prev = [...t.prev];
               const turns = [...t.turns];
               while (chars.length < width) {
                 chars.push(" ");
+                prev.push(" ");
                 turns.push(0);
               }
+              prev[i] = chars[i] ?? " ";
               chars[i] = ch;
               turns[i] = (turns[i] ?? 0) + 1;
-              return { chars, turns };
+              return { chars, prev, turns };
             });
           }, at),
         );
@@ -73,24 +95,44 @@ export function Flap({
     }
     // Settle exactly on the new text once the slowest tile has landed (trims tiles a shorter word no longer needs).
     timers.push(
-      setTimeout(() => setTurning((t) => ({ chars: [...text], turns: t.turns.slice(0, to.length) })), lastAt + STEP_MS),
+      setTimeout(
+        () => setTurning((t) => ({ chars: [...text], prev: [...text], turns: t.turns.slice(0, to.length) })),
+        lastAt + STEP_MS + 40,
+      ),
     );
     return () => timers.forEach(clearTimeout);
   }, [text, reduced]);
 
   const chars = reduced ? [...text] : turning.chars;
-  const turns = reduced ? [] : turning.turns;
   return (
     <span className={`flap flap-${size} tone-${tone}${className ? ` ${className}` : ""}`}>
       <span className="sr-only">{text}</span>
       <span className="flap-tiles" aria-hidden="true">
-        {chars.map((ch, i) => (
-          <span className={`tile${ch === " " ? " blank" : ""}`} key={i}>
-            <span className={turns[i] ? "glyph turned" : "glyph"} key={turns[i] ?? 0}>
-              {ch === " " ? " " : ch}
+        {chars.map((ch, i) => {
+          const turns = reduced ? 0 : (turning.turns[i] ?? 0);
+          const old = turning.prev[i] ?? " ";
+          const falling = turns > 0 && old !== ch;
+          return (
+            <span className={`tile${ch === " " ? " blank" : ""}`} key={i}>
+              <span className="glyph">
+                <Glyph ch={ch} />
+              </span>
+              {falling && (
+                <span className="fall" key={turns}>
+                  <span className="half old-bottom">
+                    <Glyph ch={old} />
+                  </span>
+                  <span className="half old-top">
+                    <Glyph ch={old} />
+                  </span>
+                  <span className="half new-bottom">
+                    <Glyph ch={ch} />
+                  </span>
+                </span>
+              )}
             </span>
-          </span>
-        ))}
+          );
+        })}
       </span>
     </span>
   );

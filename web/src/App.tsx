@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRipcord } from "./chain/useRipcord";
-import { eventTime } from "./chain/model";
+import { boardStatus, eventTime } from "./chain/model";
+import { useFunding } from "./chain/useFunding";
 import { Board } from "./components/Board";
 import { Departure } from "./components/Departure";
 import { Explainer } from "./components/Explainer";
@@ -28,7 +29,11 @@ export function App() {
   const selectedId = picked !== undefined && s.positions.has(picked) ? picked : latest?.tokenId;
   const selected = selectedId !== undefined ? s.positions.get(selectedId) : undefined;
   // The explainer quotes one real loop's hops: the featured one if it exited, else the newest exit.
-  const quoted = selected?.exit ? selected : positions.filter((p) => p.exit).sort((a, b) => eventTime(b) - eventTime(a))[0];
+  const newestExit = useMemo(() => positions.filter((p) => p.exit && p.lasna).sort((a, b) => eventTime(b) - eventTime(a))[0], [positions]);
+  const quoted = selected?.exit ? selected : newestExit;
+  // Funding is priced by the most recent real loop, whatever is featured.
+  const funding = useFunding(newestExit);
+  const armed = positions.filter((p) => boardStatus(p) === "armed").length;
 
   const select = (id: bigint) => {
     setPicked(id);
@@ -57,8 +62,8 @@ export function App() {
           <Hero positions={positions} />
           <Departure key={selected ? String(selected.tokenId) : "none"} p={selected} tickNow={s.poolTick} />
         </section>
-        <Board positions={positions} selected={selectedId} onSelect={select} loading={s.loading} />
-        <Explainer p={quoted} />
+        <Board positions={positions} selected={selectedId} onSelect={select} loading={s.loading} poolTick={s.poolTick} funding={funding} />
+        <Explainer p={quoted} armed={armed} funding={funding} />
       </main>
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {s.announcement}

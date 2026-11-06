@@ -1,14 +1,21 @@
 import { addressUrl, deploy, txUrl } from "../chain/clients";
-import { fmtInt, fmtTick, shortHash, type Position } from "../chain/model";
+import type { Funding } from "../chain/funding";
+import { crosses, fmtAmount, fmtInt, fmtTick, shortHash, type Position } from "../chain/model";
 import { Flap } from "./Flap";
 
 /** Source lines pinned to the commit the deployed contracts were built from (contracts/ unchanged since). */
 const SRC = "https://github.com/emmanuelist/ripcord/blob/a7b4bbd68ddec105113e698e32d8c7b96c1b1c4c/contracts/src";
 
-function Cite({ code, file, line }: { code: string; file: string; line: number }) {
+/** A cited source line, and what it evaluated to in one real recorded loop. */
+function Cite({ code, file, line, evaluated }: { code: string; file: string; line: number; evaluated?: string }) {
   return (
     <figure className="cite">
       <code>{code}</code>
+      {evaluated && (
+        <p className="cite-eval">
+          <span className="cite-k">This loop</span> <code>{evaluated}</code>
+        </p>
+      )}
       <figcaption>
         <a href={`${SRC}/${file}#L${line}`} target="_blank" rel="noreferrer">
           {file}:{line}
@@ -30,6 +37,11 @@ function Recorded({ label, chain, hop }: { label: string; chain: "unichain" | "l
   );
 }
 
+const sci = (n: bigint) => {
+  const s = n.toString();
+  return s.length > 6 ? `${s[0]}.${s.slice(1, 3)}e${s.length - 1}` : s;
+};
+
 const contracts: { name: string; role: string; chain: "unichain" | "lasna"; address: string }[] = [
   { name: "RipcordVault", role: "Holds your lines; removes liquidity on a verified callback", chain: "unichain", address: deploy.ripcordVault },
   { name: "RipcordReactive", role: "Watches the pool's swaps; pulls the ripcord when a line is crossed", chain: "lasna", address: deploy.ripcordReactive },
@@ -38,39 +50,64 @@ const contracts: { name: string; role: string; chain: "unichain" | "lasna"; addr
   { name: "Uniswap v4 PositionManager", role: "Owns the position NFTs the vault is approved on", chain: "unichain", address: deploy.positionManager },
 ];
 
-export function Explainer({ p }: { p?: Position }) {
+export function Explainer({ p, armed, funding }: { p?: Position; armed: number; funding?: Funding }) {
   const id = p ? `#${p.tokenId}` : "";
+  const seen = p?.lasna?.observedTick ?? p?.swap?.tick;
+  const reactEval =
+    p && seen !== undefined
+      ? `exitBelow = ${p.exitBelow}: tick ${fmtTick(seen)} ${p.exitBelow ? "<=" : ">="} triggerTick ${fmtTick(p.line)} → ${crosses(seen, p.line, p.exitBelow)}`
+      : undefined;
+  const exitEval = p?.exit
+    ? `liquidity ${sci(p.exit.liquidity)} → 0; ${fmtAmount(p.exit.amount0)} RDA + ${fmtAmount(p.exit.amount1)} RDB to ${p.owner ? shortHash(p.owner) : "the owner"}`
+    : undefined;
+  const reactiveCovers = funding?.reactive.covers;
+
   return (
     <div className="explainer">
       <section id="how" className="ex-section" aria-labelledby="how-title">
         <h2 id="how-title">How a ripcord pulls</h2>
         <ol className="flow" aria-label="The three hops of one exit">
           <li>
-            <Flap text="SWAP" tone="yellow" size="s" />
-            <div>
-              <h3>A swap moves the pool</h3>
+            <div className="flow-text">
+              <h3>
+                <Flap text="SWAP" tone="yellow" size="s" /> <span>The pool's tick moves</span>
+              </h3>
               <p>On Unichain Sepolia, every swap in a Uniswap v4 pool emits a Swap event carrying the pool's new tick. An AMM price only moves through swaps, so no crossing goes unseen.</p>
-              <Recorded label={`${id} crossing swap, tick → ${p?.swap?.tick !== undefined ? fmtTick(p.swap.tick) : "?"}, Unichain`} chain="unichain" hop={p?.swap} />
+              <Recorded label={`${id} crossing swap, Unichain`} chain="unichain" hop={p?.swap} />
             </div>
-            <Cite code="SYSTEM.subscribe(POOL_CHAIN_ID, POOL_MANAGER, SWAP_TOPIC, uint256(poolId), …);" file="RipcordReactive.sol" line={109} />
+            <div className="flow-cites">
+              <Cite
+                code="SYSTEM.subscribe(POOL_CHAIN_ID, POOL_MANAGER, SWAP_TOPIC, uint256(poolId), …);"
+                file="RipcordReactive.sol"
+                line={109}
+                evaluated={`poolId = ${shortHash(deploy.poolId)}, the demo pool`}
+              />
+            </div>
           </li>
           <li>
-            <Flap text="REACT" tone="yellow" size="s" />
-            <div>
-              <h3>RipcordReactive checks the lines</h3>
+            <div className="flow-text">
+              <h3>
+                <Flap text="REACT" tone="yellow" size="s" /> <span>RipcordReactive checks every line</span>
+              </h3>
               <p>On Reactive Lasna, a Reactive contract subscribed to that pool receives the event, compares the tick with every armed line, and requests one callback for each line it crosses.</p>
               <Recorded label={`${id} reaction, Lasna`} chain="lasna" hop={p?.lasna} />
             </div>
-            <Cite code="if (line.exitBelow ? tick <= line.triggerTick : tick >= line.triggerTick) {" file="RipcordReactive.sol" line={137} />
+            <div className="flow-cites">
+              <Cite code="if (line.exitBelow ? tick <= line.triggerTick : tick >= line.triggerTick) {" file="RipcordReactive.sol" line={137} evaluated={reactEval} />
+            </div>
           </li>
           <li>
-            <Flap text="EXIT" tone="yellow" size="s" />
-            <div>
-              <h3>RipcordVault exits</h3>
+            <div className="flow-text">
+              <h3>
+                <Flap text="EXIT" tone="yellow" size="s" /> <span>RipcordVault removes the liquidity</span>
+              </h3>
               <p>Back on Unichain Sepolia, Reactive's callback proxy calls the vault, which accepts only RipcordReactive's callbacks, removes all of the position's liquidity, and sends both tokens to the NFT's owner.</p>
               <Recorded label={`${id} exit, Unichain`} chain="unichain" hop={p?.exit} />
             </div>
-            <Cite code=") external onlyServiceProvider onlyCallbackSender(injectedSender) {" file="RipcordVault.sol" line={165} />
+            <div className="flow-cites">
+              <Cite code=") external onlyServiceProvider onlyCallbackSender(injectedSender) {" file="RipcordVault.sol" line={165} />
+              <Cite code="POSITION_MANAGER.modifyLiquidities(abi.encode(actions, params), block.timestamp);" file="RipcordVault.sol" line={220} evaluated={exitEval} />
+            </div>
           </li>
         </ol>
         <p className="ex-note">Nothing of the owner's runs: no bot, no server, no open tab. The board above shows each loop's three transactions.</p>
@@ -89,8 +126,17 @@ export function Explainer({ p }: { p?: Position }) {
         <ul className="limits">
           <li>Testnet only, on Unichain Sepolia and Reactive Lasna. The contracts are not audited.</li>
           <li>The exit lands blocks after the crossing swap, not at your exact price: one large swap can carry the price well past your line.</li>
-          <li>At most 8 armed lines per pool, so a single swap can't push the reaction past Lasna's gas cap.</li>
-          <li>No funding, no exit: RipcordReactive pays for reactions in lREACT and the vault pays callback gas in ETH.</li>
+          <li>
+            At most 8 armed lines per pool, so a single swap can't push the reaction past Lasna's gas cap. <span className="live-fact num">{armed} of 8 armed now.</span>
+          </li>
+          <li>
+            No funding, no exit: RipcordReactive pays for reactions in lREACT and the vault pays callback gas in ETH.{" "}
+            {reactiveCovers !== undefined && (
+              <a className="live-fact num" href="#board">
+                RipcordReactive covers {fmtInt(reactiveCovers)} more {reactiveCovers === 1 ? "exit" : "exits"} now.
+              </a>
+            )}
+          </li>
           <li>Revoke the approval, move the NFT, or add a subscriber, and the exit is refused on-chain. The board marks it cancelled with the reason.</li>
           <li>This page reads public RPCs. It shows the recorded loops and anything that happens while it is open.</li>
         </ul>
@@ -111,7 +157,9 @@ export function Explainer({ p }: { p?: Position }) {
             <tbody>
               {contracts.map((c) => (
                 <tr key={c.name}>
-                  <th scope="row" data-label="Contract">{c.name}</th>
+                  <th scope="row" data-label="Contract">
+                    {c.name}
+                  </th>
                   <td data-label="Role">{c.role}</td>
                   <td data-label="Network">{c.chain === "unichain" ? "Unichain Sepolia" : "Reactive Lasna"}</td>
                   <td data-label="Address">
