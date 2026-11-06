@@ -10,60 +10,12 @@
  *
  * Signing never touches a key in this process: `cast mktx` signs with the encrypted Foundry keystore (D-007).
  */
-import { execFile } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { promisify } from "node:util";
-import {
-  createPublicClient,
-  decodeEventLog,
-  defineChain,
-  encodeEventTopics,
-  http,
-  keccak256,
-  numberToHex,
-  type Address,
-  type Hex,
-  type Log,
-  type PublicClient,
-} from "viem";
-import { erc721Transfer, exitFailed, exited, lineTracked, ripcordPulled, stateViewAbi } from "./abi.js";
+import { mkdir, writeFile } from "node:fs/promises";
+import { decodeEventLog, encodeEventTopics, keccak256, numberToHex, type Address, type Hex, type PublicClient } from "viem";
+import { exitFailed, exited, lineTracked, ripcordPulled } from "./abi.js";
+import { bigintJson, clients, currentTick, env, firstLog, loadDeploy, mintedTokenId, mktx, poolKey, sendSigned, type Deploy } from "./chain.js";
 import { encodeApprove, encodeArm, encodeMint, encodeSwap, planRun, type PoolKey } from "./encode.js";
 import { hopBounds, median, percentile, watch, type Sighting } from "./timing.js";
-
-const run = promisify(execFile);
-
-const env = (name: string): string => {
-  const v = process.env[name];
-  if (!v) throw new Error(`missing env ${name} (run with --env-file=../.env)`);
-  return v;
-};
-
-interface Deploy {
-  token0: Address;
-  token1: Address;
-  poolId: Hex;
-  ripcordVault: Address;
-  ripcordReactive: Address;
-  positionManager: Address;
-  stateView: Address;
-  swapRouter: Address;
-}
-
-// Minimal chain definitions: the harness needs receipts, logs and raw sends only. viem's built-in unichainSepolia adds
-// OP-stack formatters whose types don't unify with a plain PublicClient.
-const unichain = defineChain({
-  id: 1301,
-  name: "Unichain Sepolia",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: { default: { http: ["https://sepolia.unichain.org"] } },
-});
-
-const lasna = defineChain({
-  id: 5318007,
-  name: "Reactive Lasna",
-  nativeCurrency: { name: "lREACT", symbol: "lREACT", decimals: 18 },
-  rpcUrls: { default: { http: ["https://lasna-rpc.rnk.dev/"] } },
-});
 
 async function main() {
   const runs = Number(process.env.RUNS ?? "1");
@@ -71,19 +23,11 @@ async function main() {
   const swapIn = BigInt(process.env.SWAP_IN ?? "10000000000000000000");
   const intervalMs = Number(process.env.POLL_MS ?? "50");
   const outDir = process.env.OUT_DIR ?? "../docs/evidence/harness";
-  const deploy = JSON.parse(await readFile("../docs/evidence/m1/deploy.json", "utf8")) as Deploy;
+  const deploy = await loadDeploy();
   const owner = env("DEPLOYER_ADDRESS") as Address;
-  const key: PoolKey = {
-    currency0: deploy.token0,
-    currency1: deploy.token1,
-    fee: 3000,
-    tickSpacing: 60,
-    hooks: "0x0000000000000000000000000000000000000000",
-  };
+  const key = poolKey(deploy);
 
-  const uni = createPublicClient({ chain: unichain, transport: http(env("UNICHAIN_SEPOLIA_RPC")) });
-  const las = createPublicClient({ chain: lasna, transport: http(env("LASNA_RPC")) });
-  if ((await uni.getChainId()) !== 1301 || (await las.getChainId()) !== 5318007) throw new Error("wrong RPCs");
+  const { uni, las } = await clients();
 
   const t0 = performance.now();
   const now = () => performance.now() - t0;
@@ -235,73 +179,11 @@ async function oneRun(i: number, c: Ctx): Promise<RunResult> {
   };
 }
 
-interface FoundLog {
-  blockNumber: bigint;
-  transactionHash: Hex;
-  data: Hex;
-  topics: [Hex, ...Hex[]];
-}
-
-/** The first log at `address` matching exact `topics` since `fromBlock`, via raw eth_getLogs. */
-async function firstLog(
-  client: PublicClient,
-  address: Address,
-  topics: (Hex | Hex[] | null)[],
-  fromBlock: bigint,
-): Promise<FoundLog | undefined> {
-  const logs = await client.request({
-    method: "eth_getLogs",
-    params: [{ address, topics, fromBlock: numberToHex(fromBlock), toBlock: "latest" }],
-  });
-  const l = logs[0];
-  const [sig, ...rest] = l?.topics ?? [];
-  if (!l || !sig || !l.blockNumber || !l.transactionHash) return undefined;
-  return { blockNumber: BigInt(l.blockNumber), transactionHash: l.transactionHash, data: l.data, topics: [sig, ...rest] };
-}
-
 /** topic0 of an event ABI item. */
 function topic0(event: typeof exited | typeof exitFailed): Hex {
   const [t] = encodeEventTopics({ abi: [event] });
   if (!t || Array.isArray(t)) throw new Error("no topic0");
   return t;
-}
-
-function mintedTokenId(logs: readonly Log[], positionManager: Address, owner: Address): bigint {
-  for (const l of logs) {
-    if (l.address.toLowerCase() !== positionManager.toLowerCase()) continue;
-    try {
-      const ev = decodeEventLog({ abi: [erc721Transfer], data: l.data, topics: l.topics });
-      if (ev.args.to.toLowerCase() === owner.toLowerCase()) return ev.args.id;
-    } catch {
-      /* not a Transfer */
-    }
-  }
-  throw new Error("mint receipt has no Transfer to the owner");
-}
-
-async function currentTick(client: PublicClient, d: Deploy): Promise<number> {
-  const [, tick] = await client.readContract({ address: d.stateView, abi: stateViewAbi, functionName: "getSlot0", args: [d.poolId] });
-  return tick;
-}
-
-/** Signs with the encrypted keystore via `cast mktx` (nonce and fees from the RPC). The key never enters Node. */
-async function mktx(to: Address, data: Hex): Promise<Hex> {
-  const { stdout } = await run("cast", [
-    "mktx",
-    "--rpc-url",
-    env("UNICHAIN_SEPOLIA_RPC"),
-    "--account",
-    env("ACCOUNT"),
-    "--password-file",
-    env("KEYSTORE_PASSWORD_FILE"),
-    to,
-    data,
-  ]);
-  return stdout.trim() as Hex;
-}
-
-async function sendSigned(client: PublicClient, to: Address, data: Hex): Promise<Hex> {
-  return client.sendRawTransaction({ serializedTransaction: await mktx(to, data) });
 }
 
 async function rtt(f: () => Promise<unknown>): Promise<number> {
@@ -315,7 +197,6 @@ async function rtt(f: () => Promise<unknown>): Promise<number> {
 }
 
 const fmt = (b: Bounds) => `[${Math.round(b.minMs)}, ${Math.round(b.maxMs)}] ms`;
-const bigintJson = (_k: string, v: unknown) => (typeof v === "bigint" ? v.toString() : v);
 
 main().catch((e: unknown) => {
   console.error(e);

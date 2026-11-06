@@ -40,7 +40,7 @@ On (a) or (b), re-open research for this track.
 
 ### M2 · Core claim
 - [x] **N over ≥10 runs** (done 2026-11-06, E-012/E-013: 11 runs, swap → exit median 2, p90 3, max 3 Unichain blocks, 2–3 s on Unichain's clock). The thesis wording (which N, chain clock or viewer wall clock) is the user's call (C-1).
-- [ ] **Reversal beat on-chain** (exit criterion above): a direct call to `RipcordVault.exit` from the project wallet reverts; a swap that doesn't cross an armed line leaves the position untouched (and its reaction is billed). Each with tx hashes and raw receipts.
+- [x] **Reversal beat on-chain** (done 2026-11-06, E-016): a non-crossing swap leaves #7955 untouched (its reaction billed, no callback); a direct `exit()` from the wallet reverts with `NotAuthorized`; a revoked approval turns a real crossing into `ExitFailed: NotApproved` with the position untouched. 16 raw receipts.
 - [ ] **Refusal room on the page**, once the reversal transactions exist: between "How a ripcord pulls" and "What you give, what you keep", in the board's grammar (CANCELLED in red, decoded reason, tx read back). No placeholder rows (finish review, round 3).
 - [ ] Includes the "what one second buys" source: a real mainnet crash price series (research needed).
 

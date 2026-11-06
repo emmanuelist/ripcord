@@ -11,7 +11,16 @@ export const positionManagerAbi = parseAbi([
 
 export const vaultAbi = parseAbi([
   "function arm(uint256 tokenId, int24 triggerTick, bool exitBelow)",
+  "function disarm(uint256 tokenId)",
+  "function exit(address injectedSender, uint256 tokenId, int24 observedTick, uint256 originBlock, uint256 originTxHash)",
   "function lines(uint256 tokenId) view returns (address owner, bytes32 poolId, int24 triggerTick, bool exitBelow, uint8 status)",
+]);
+
+/** Errors a refusal can carry: reactive-lib-omni AbstractPayer/AbstractCallback, v4-periphery PositionManager. */
+export const refusalErrorsAbi = parseAbi([
+  "error NotAuthorized(address sender_, address provider_)",
+  "error CallbackNotAuthorized(address sender_, address expectedSender_)",
+  "error NotApproved(address caller)",
 ]);
 
 export const swapRouterAbi = parseAbi([
@@ -28,6 +37,11 @@ export const stateViewAbi = parseAbi([
 export const erc721Transfer = parseAbiItem(
   "event Transfer(address indexed from, address indexed to, uint256 indexed id)",
 );
+/** v4-core IPoolManager.Swap (CONTEXT.md): the post-swap tick is in the event, so no read can be stale. */
+export const poolSwap = parseAbiItem(
+  "event Swap(bytes32 indexed id, address indexed sender, int128 amount0, int128 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick, uint24 fee)",
+);
+export const lineDisarmed = parseAbiItem("event LineDisarmed(bytes32 indexed poolId, uint256 indexed tokenId, address indexed owner)");
 export const lineTracked = parseAbiItem(
   "event LineTracked(bytes32 indexed poolId, uint256 indexed tokenId, int24 triggerTick, bool exitBelow)",
 );

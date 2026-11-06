@@ -1,0 +1,96 @@
+{
+  "measuredAt": "2026-11-06T20:46:00.720Z",
+  "holds": {
+    "tokenId": "7955",
+    "line": -2134,
+    "exitBelow": true,
+    "tickBefore": -934,
+    "tickAfter": -1124,
+    "liquidityBefore": "1000000000000000000000",
+    "liquidityAfter": "1000000000000000000000",
+    "statusAfter": "Armed",
+    "callbackRequested": false,
+    "txs": {
+      "mint": "0x613b404c868ff131452962f2f9a50727a404a2423ffb3811b5c9bfc7da371d22",
+      "approve": "0x77f05114c0c03b1d4341003e6e758ce2ecb74c64a971cbaa44b1e1ae7061fe17",
+      "arm": "0xd8abd94ebafdae54629522359a28f5b7e87eb7c78383eeb7efd460e3d4a3e209",
+      "tracked": "0x40b2fc5f74698b884ffbea02d728f7fe5cb3e98254d8bab12b80fd4a435ec5f6",
+      "swap": "0x6b67894a7ef208e2b35d4d8a6a648d29985c6831654ab3182cd8dc12767a937a",
+      "reaction": "0xb52659bef2c5b0d4c77bbca45b86e538ef5a328c2cebe62de9e3991feed70421"
+    },
+    "blocks": {
+      "swap": "67145473",
+      "reaction": "7703931"
+    },
+    "reactionCharge": {
+      "wei": "11899100000000000",
+      "read": "RipcordReactive balance at Lasna block 7703930 minus at 7703931",
+      "logs": 0
+    }
+  },
+  "direct": {
+    "tokenId": "7955",
+    "from": "0x08e768752cA0F8a132cB82cB4bB4354470DD9111",
+    "forgedInjectedSender": "0xA2deA4D676236Aa905c0Cb1B90712Fc3591af2B5",
+    "tx": "0x6f5761d4658392c7e01f248fe220ad29268ff4ccfd0f90fd876796476f3052ad",
+    "block": "67145497",
+    "status": "reverted",
+    "gasUsed": "25430",
+    "reason": {
+      "raw": "0xc55ddc9700000000000000000000000008e768752ca0f8a132cb82cb4bb4354470dd9111000000000000000000000000775c9b990ade401060b78d0e98684eef8d2466c1",
+      "name": "NotAuthorized",
+      "args": [
+        "0x08e768752cA0F8a132cB82cB4bB4354470DD9111",
+        "0x775c9B990ADe401060B78D0e98684eEf8d2466C1"
+      ]
+    },
+    "liquidityAfter": "1000000000000000000000",
+    "statusAfter": "Armed",
+    "disarm": {
+      "tx": "0x03ce4525b8feb1c92312d8ffc0721d3633fd08919c52490e9412a3dc0a27a027",
+      "block": "67145502",
+      "statusAfter": "Disarmed"
+    }
+  },
+  "custody": {
+    "tokenId": "7956",
+    "line": -1184,
+    "exitBelow": true,
+    "tickBefore": -1124,
+    "tickAfter": -1218,
+    "liquidityBefore": "1000000000000000000000",
+    "liquidityAfter": "1000000000000000000000",
+    "statusAfter": "Failed",
+    "reason": {
+      "raw": "0x0ca968d8000000000000000000000000641413bb227c5452ef2b968c9774bc31f5f54c98",
+      "name": "NotApproved",
+      "args": [
+        "0x641413BB227c5452Ef2b968C9774bc31f5f54C98"
+      ]
+    },
+    "txs": {
+      "mint": "0x267397baaf59cdd8196ad7bc6b14f1104a546872c3eede48b24556aed30a14b4",
+      "approve": "0xd02a28ee563cff4b37df8f8510a39190bba443ef57795dffbb78a9a4613daed8",
+      "arm": "0x503ae58beea34af404f38d34741b8f4d757cec6c8b9a954efef897a06e8e83a1",
+      "tracked": "0x255129d78a1ac60f4509cb64454395428afa5951268380c049d922f0a67d684c",
+      "revoke": "0x0fd10c2fdf031cc227f8cb99ecce48daaf905f25c8878e822cd470e9882cf863",
+      "swap": "0xfd32a7451b55f6e787df5e9018e685a50c95cc707442e88843dd89e6cf127cfa",
+      "lasna": "0xb84a9ef26dd7d3226bb193ccbb64b262640e52ed8df151023b1ad3509afab1aa",
+      "failed": "0x2fb3cc41eda9f5fa7080603d6fb7b6292ad17979b3fe63b4354409b2c9cb5a8f"
+    },
+    "blocks": {
+      "swap": "67145529",
+      "lasna": "7703984",
+      "failed": "67145531"
+    }
+  },
+  "readCorrections": {
+    "note": "The first run read three values from an RPC node that had not yet served the transaction's block (CONTEXT.md: visibility trails inclusion). They are replaced with the chain's own record: post-swap ticks from the Swap event in each swap receipt, statuses from a fresh lines() read. The script now reads ticks from the receipt and waits for the block before any state read.",
+    "firstRunValues": {
+      "holdsTickAfter": -934,
+      "custodyTickAfter": -1124,
+      "disarmStatus": "Armed"
+    },
+    "correctedAt": "2026-11-06T20:47:26.574Z"
+  }
+}
