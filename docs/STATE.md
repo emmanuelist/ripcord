@@ -7,7 +7,7 @@ _Last verified: 2026-11-06 14:10 UTC at the spike S2 commit_
 
 **Next action:** once funded, run spike S1 on Unichain Sepolia: `POOL=unichain ACCOUNT=<keystore> ./script/spike/s1-deploy.sh`, then `RUNS=5 ./script/spike/s1-run.sh` (from `contracts/`). The same funding also unlocks one on-chain S2 exit through the real proxy.
 
-**Blocked on:** testnet funds for spikes S1 and S2 (owner: user, since 2026-11-06). Also a GitHub repo and its visibility (user decision) for CI.
+**Blocked on:** faucet drips to the project wallet `0x08e768752cA0F8a132cB82cB4bB4354470DD9111` (D-007): ~0.05 ETH on Unichain Sepolia plus ~0.05–0.1 ETH on Base Sepolia or Ethereum Sepolia (owner: user, since 2026-11-06; balances were 0 on all four chains at 14:40 UTC). Also a GitHub repo and its visibility (user decision) for CI.
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |

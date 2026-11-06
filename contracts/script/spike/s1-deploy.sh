@@ -3,8 +3,8 @@
 #
 #   POOL=unichain ACCOUNT=ripcord-deployer ./script/spike/s1-deploy.sh      (run from contracts/)
 #
-# Needs: LASNA_RPC, UNICHAIN_SEPOLIA_RPC or BASE_SEPOLIA_RPC, DEPLOYER_ADDRESS (from ../.env), and a Foundry
-# keystore account (`cast wallet import <name> --interactive`). No private key is ever read from a file.
+# Needs from ../.env: LASNA_RPC, UNICHAIN_SEPOLIA_RPC or BASE_SEPOLIA_RPC, DEPLOYER_ADDRESS, ACCOUNT and
+# KEYSTORE_PASSWORD_FILE. Signing uses the encrypted Foundry keystore (D-007). The key is never in the repo or .env.
 # Writes the deployed addresses to ../docs/evidence/s1/<pool>-deploy.json.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
@@ -12,6 +12,8 @@ cd "$(dirname "$0")/../.."
 
 : "${POOL:?set POOL=unichain or POOL=base}"
 : "${ACCOUNT:?set ACCOUNT to your Foundry keystore account name}"
+: "${KEYSTORE_PASSWORD_FILE:?set KEYSTORE_PASSWORD_FILE in .env}"
+UNLOCK=(--account "$ACCOUNT" --password-file "$KEYSTORE_PASSWORD_FILE")
 : "${DEPLOYER_ADDRESS:?set DEPLOYER_ADDRESS in .env}"
 : "${LASNA_RPC:?set LASNA_RPC in .env}"
 
@@ -31,7 +33,7 @@ echo "PingReactive will be deployed at $EXPECTED (deployer Lasna nonce $NONCE)"
 
 POOL_CHAIN_ID=$CHAIN CALLBACK_PROXY=$PROXY EXPECTED_REACTIVE=$EXPECTED \
   forge script script/spike/DeployS1.s.sol:DeployS1Pool --rpc-url "$RPC" \
-  --account "$ACCOUNT" --sender "$DEPLOYER_ADDRESS" --broadcast
+  "${UNLOCK[@]}" --sender "$DEPLOYER_ADDRESS" --broadcast
 
 RUN="broadcast/DeployS1.s.sol/$CHAIN/run-latest.json"
 SOURCE=$(jq -r '[.transactions[] | select(.contractName=="PingSource")][0].contractAddress' "$RUN")
@@ -40,7 +42,7 @@ SINK=$(jq -r '[.transactions[] | select(.contractName=="PongSink")][0].contractA
 [ "$(cast nonce "$DEPLOYER_ADDRESS" --rpc-url "$LASNA_RPC")" = "$NONCE" ] || { echo "Lasna nonce moved; redeploy" >&2; exit 1; }
 POOL_CHAIN_ID=$CHAIN PING_SOURCE=$SOURCE PONG_SINK=$SINK EXPECTED_REACTIVE=$EXPECTED \
   forge script script/spike/DeployS1.s.sol:DeployS1Reactive --rpc-url "$LASNA_RPC" \
-  --account "$ACCOUNT" --sender "$DEPLOYER_ADDRESS" --broadcast ${LASNA_LEGACY:+--legacy}
+  "${UNLOCK[@]}" --sender "$DEPLOYER_ADDRESS" --broadcast ${LASNA_LEGACY:+--legacy}
 
 mkdir -p ../docs/evidence/s1
 jq -n --arg pool "$POOL" --argjson chain "$CHAIN" --arg source "$SOURCE" --arg sink "$SINK" \

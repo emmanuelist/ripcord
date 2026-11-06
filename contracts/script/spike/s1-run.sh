@@ -10,7 +10,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 [ -f ../.env ] && set -a && . ../.env && set +a
-: "${POOL:?set POOL=unichain or POOL=base}"; : "${ACCOUNT:?}"; : "${LASNA_RPC:?}"
+: "${POOL:?set POOL=unichain or POOL=base}"; : "${ACCOUNT:?}"; : "${LASNA_RPC:?}"; : "${KEYSTORE_PASSWORD_FILE:?}"
 RUNS=${RUNS:-5}; POLL_MS=${POLL_MS:-100}; TIMEOUT_S=${TIMEOUT_S:-90}
 [ "$TIMEOUT_S" -le 150 ] || { echo "TIMEOUT_S over 150 s can exceed the 1000-block log range on Base Sepolia" >&2; exit 1; }
 DEPLOY="../docs/evidence/s1/$POOL-deploy.json"
@@ -40,7 +40,7 @@ block_ts() { cast block "$2" --field timestamp --rpc-url "$1"; }
 for _ in $(seq 1 "$RUNS"); do
   POOL_FROM=$(cast block-number --rpc-url "$RPC"); LASNA_FROM=$(cast block-number --rpc-url "$LASNA_RPC")
   T_SEND=$(now_ms)
-  PING_RCPT=$(cast send "$SOURCE" "ping()" --rpc-url "$RPC" --account "$ACCOUNT" --json)
+  PING_RCPT=$(cast send "$SOURCE" "ping()" --rpc-url "$RPC" --account "$ACCOUNT" --password-file "$KEYSTORE_PASSWORD_FILE" --json)
   T_ORIGIN=$(now_ms)
   SEQ=$(echo "$PING_RCPT" | jq -r '.logs[0].topics[1]' | cast to-dec)
   LASNA_LOG=$(wait_log "$LASNA_RPC" "$LASNA_FROM" "$RC" "PingSeen(uint256,uint256,uint256)" "$SEQ") \

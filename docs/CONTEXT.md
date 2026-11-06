@@ -83,4 +83,6 @@ All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
 | `UNICHAIN_SEPOLIA_RPC` | pool-chain RPC and fork tests | https://sepolia.unichain.org (public) |
 | `BASE_SEPOLIA_RPC` | pool-chain RPC and fork tests | https://sepolia.base.org (public) |
 | `SEPOLIA_RPC` | lREACT faucet on Ethereum Sepolia | any Sepolia RPC provider |
-| `DEPLOYER_ADDRESS` | deployer address only, never a key | the user's wallet. Keys stay in a Foundry keystore (`cast wallet import`), never in `.env` |
+| `DEPLOYER_ADDRESS` | the project wallet `0x08e768752cA0F8a132cB82cB4bB4354470DD9111` (D-007) | public address, safe to show |
+| `ACCOUNT` | Foundry keystore name: `ripcord-deployer` | `~/.foundry/keystores/ripcord-deployer` (encrypted, mode 600) |
+| `KEYSTORE_PASSWORD_FILE` | unlocks the keystore without a prompt | `~/.foundry/ripcord-deployer.password` (mode 600, outside the repo). Never commit it, print it, or show it on screen |

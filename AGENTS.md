@@ -68,7 +68,7 @@ npm view typescript-eslint peerDependencies.typescript
 4. **Use timestamps, not block counts,** for every timer, cooldown, deadline and latency figure. Base Sepolia produces 200ms blocks (event rule).
 5. **Every loop we claim has three hashes:** origin swap, Lasna reactive tx, destination callback. Save the raw receipts in `docs/evidence/`.
 6. **Tests cover failure paths.** That means: callbacks not from our reactive contract, a price that doesn't cross, a second exit for the same position, an underfunded contract, and stale or out-of-order events.
-7. **No secrets in the repo.** Use env vars only, with blank-valued keys in `.env.example`. Deployer keys never leave the user's machine.
+7. **No secrets in the repo.** Use env vars only, with blank-valued keys in `.env.example`. The project wallet (D-007) is testnet-only: never send it mainnet funds, never print or screen-record its key or password file, and never move the keystore off this machine.
 8. **Never cut scope silently.** Cuts are the user's decision. Present the tradeoff on technical merit (security model, attack surface, latency, composability), not on effort, and record an accepted cut in `docs/DECISIONS.md`.
 
 ## Domain rules

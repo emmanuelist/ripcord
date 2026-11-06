@@ -77,3 +77,15 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Consequences:** The only difference between v4.0.0 and 1.0.2 in `IPoolManager` and the pool types is that `ModifyLiquidityParams` and `SwapParams` moved into `src/types/PoolOperation.sol`, with identical fields. Selectors and the `Swap` event are unchanged. This is checked by `test/Toolchain.t.sol` against the values found in deployed bytecode (E-001).
 
 **Evidence:** `gh api repos/Uniswap/v4-core/compare/e50237c43811...59d3ecf53afa` (2026-11-06); E-002 (gate green, 7/7 tests).
+
+## D-007 · One agent-created project wallet for spikes, demo and video · 2026-11-06 · accepted
+**Context:** The user asked the agent to provide the wallet used for every transaction, including the video.
+
+**Decision:** The project wallet is `0x08e768752cA0F8a132cB82cB4bB4354470DD9111`, created with `cast wallet new` into an encrypted keystore at `~/.foundry/keystores/ripcord-deployer`, with a random password in `~/.foundry/ripcord-deployer.password`. Both files are mode 600 and outside the repo. Scripts sign with `--account ripcord-deployer --password-file`. The user claims faucet drips to the address, because faucets need a captcha or login. The agent does everything after that.
+
+**Alternatives:** A user-held wallet, like the earlier `cast wallet import` instructions. Superseded at the user's request.
+
+**Consequences:**
+- The wallet is testnet-only and must never hold mainnet funds.
+- The frontend stays read-only (D-005), so the video needs no browser wallet extension: demo transactions are sent by scripts from this wallet, and the UI shows their on-chain effect.
+- If an interactive "register your line" step becomes necessary on screen, revisit this decision (for example, importing this key into a browser wallet).
