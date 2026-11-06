@@ -89,3 +89,17 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - The wallet is testnet-only and must never hold mainnet funds.
 - The frontend stays read-only (D-005), so the video needs no browser wallet extension: demo transactions are sent by scripts from this wallet, and the UI shows their on-chain effect.
 - If an interactive "register your line" step becomes necessary on screen, revisit this decision (for example, importing this key into a browser wallet).
+
+## D-008 · Pool chain: Unichain Sepolia · 2026-11-06 · accepted
+**Context:** M0 said to choose between Unichain Sepolia and Base Sepolia from S1 measurements and funding.
+
+**Decision:** Build Ripcord on **Unichain Sepolia**.
+
+**Evidence and reasons:**
+- **Measured:** 5/5 loops, with the callback 2 blocks (~2 s) after the origin block (E-005).
+- **Funded:** the native bridge from Sepolia works in ~90 s.
+- **Uniswap's own chain:** the Uniswap v4 deployment there is the one S2 was fork-tested against (E-004).
+
+**Alternatives:** **Base Sepolia** (200 ms blocks) could shorten the loop by up to ~1.6 s (two Unichain blocks against two Base blocks), but it's unmeasured, and the project wallet holds no Base Sepolia ETH (faucets need a Coinbase login).
+
+**Consequences:** Revisit only if Base Sepolia funds appear *and* a Base S1 run shows a materially lower median. The S1 scripts already support `POOL=base`. The track allows either chain.
