@@ -65,6 +65,7 @@ All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
   - Approval dies when the owner moves the NFT.
   - `transferFrom` **clears any subscriber**.
   - A subscribed position calls its subscriber on every liquidity change, which is arbitrary code that can revert or burn gas, so exits refuse `hasSubscriber()` positions.
+- **Exit gas on-chain (E-006):** `exit()` used 140,003 gas inside a callback tx that used 183,138 in total (gas limit 1,000,000). On-chain it beats the fork figure below, which included test-harness call overhead.
 - **Exit gas:** a full exit (decrease all liquidity + take both tokens to a recipient) costs ~196.5k gas including call overhead. Request 1,000,000 per callback, so there's headroom for ERC20s with costly transfers. Measured on a fresh 0.3% pool with ticks ±600.
 - **Public RPC log range.** `https://sepolia.unichain.org` rejects `eth_getLogs` over **1000 blocks** ("block range greater than 1000 max", 2026-11-06). Poll from the block at send time. On Base Sepolia, 1000 blocks is only ~200 s.
 - **`cast logs --json` (1.8.3).** Success prints a plain JSON array. An RPC error exits 1 but still prints an error *envelope object* (`{"schema_version":1,"success":false,...}`) on stdout. Check both the exit code and `type == "array"` (`script/spike/s1-run.sh` `wait_log`, all three paths exercised against live RPCs 2026-11-06).
