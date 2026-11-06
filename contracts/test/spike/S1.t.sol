@@ -9,6 +9,7 @@ import {PingSource} from "../../src/spike/PingSource.sol";
 import {PongSink} from "../../src/spike/PongSink.sol";
 import {PingReactive} from "../../src/spike/PingReactive.sol";
 import {SystemStub} from "../utils/SystemStub.sol";
+import {OBSERVED_PROXY_OVERHEAD_GAS} from "../utils/ReactiveBudget.sol";
 
 contract S1Test is Test {
     address internal constant SYSTEM = 0x8888888888888888888888888888888888888888;
@@ -86,6 +87,16 @@ contract S1Test is Test {
         assertEq(req.recipient, address(sink));
         assertGe(req.gasLimit, 100_000, "Reactive ignores callbacks under 100k gas");
         assertEq(req.payload, abi.encodeCall(PongSink.pong, (address(0), 7, 123, uint256(keccak256("origin-tx-7")))));
+    }
+
+    /// @notice Regression for the S1 v2 on-chain failure: the proxy forwards only gasLimit minus its overhead.
+    function test_CallbackGasLeavesEnoughForPongAfterProxyOverhead() public {
+        uint256 forwarded = uint256(rc.CALLBACK_GAS()) - OBSERVED_PROXY_OVERHEAD_GAS;
+        bytes memory delivered = abi.encodeCall(PongSink.pong, (address(rc), 1, 1, 1));
+        vm.prank(PROXY);
+        (bool ok,) = address(sink).call{gas: forwarded}(delivered);
+        assertTrue(ok, "pong runs out of gas inside the proxy's forwarded budget");
+        assertEq(sink.pongs(), 1);
     }
 
     function test_SinkRejectsCallsNotFromProxy() public {

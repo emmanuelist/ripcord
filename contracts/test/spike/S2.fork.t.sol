@@ -13,6 +13,7 @@ import {Actions} from "@uniswap/v4-periphery/src/libraries/Actions.sol";
 import {IAllowanceTransfer} from "permit2/src/interfaces/IAllowanceTransfer.sol";
 import {MockERC20} from "solmate/src/test/utils/mocks/MockERC20.sol";
 import {ExitProbe} from "../../src/spike/ExitProbe.sol";
+import {OBSERVED_PROXY_OVERHEAD_GAS} from "../utils/ReactiveBudget.sol";
 
 /// @notice Spike S2 against the LIVE Unichain Sepolia v4 deployment (fork). Nothing in Uniswap is redeployed or
 /// mocked: the pool is created on the real PoolManager, the position is minted by the real PositionManager, and the
@@ -81,7 +82,8 @@ contract S2ExitForkTest is S2ForkBase {
         bytes memory payload = abi.encodeCall(ExitProbe.exit, (REACTIVE, tokenId));
         vm.prank(PROXY);
         uint256 g0 = gasleft();
-        (bool ok,) = address(probe).call{gas: CALLBACK_GAS}(payload);
+        // The proxy forwards only gasLimit minus its own overhead (ReactiveBudget.sol), so test against that budget.
+        (bool ok,) = address(probe).call{gas: CALLBACK_GAS - OBSERVED_PROXY_OVERHEAD_GAS}(payload);
         uint256 used = g0 - gasleft();
         assertTrue(ok, "exit reverted inside the callback gas limit");
 
@@ -90,7 +92,10 @@ contract S2ExitForkTest is S2ForkBase {
         assertGt(t1.balanceOf(recipient), 0, "recipient got no token1");
         console.log("S2 exit gas used (incl. call overhead):", used);
         console.log("S2 callback gas limit requested:", uint256(CALLBACK_GAS));
-        assertLt(used, CALLBACK_GAS / 2, "exit uses more than half the callback gas limit");
+        console.log("S2 gas the proxy actually forwards:", CALLBACK_GAS - OBSERVED_PROXY_OVERHEAD_GAS);
+        assertLt(
+            used, (CALLBACK_GAS - OBSERVED_PROXY_OVERHEAD_GAS) / 2, "exit uses more than half the forwarded budget"
+        );
     }
 
     function test_ExitRejectsDirectCaller() public {

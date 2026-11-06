@@ -11,8 +11,10 @@ import {IPongSink} from "./PongSink.sol";
 contract PingReactive is AbstractReactive {
     /// @dev keccak256("Ping(uint256,address,uint256)")
     uint256 public constant PING_TOPIC = uint256(keccak256("Ping(uint256,address,uint256)"));
-    /// @dev Reactive ignores callback requests below 100,000 gas (docs/CONTEXT.md).
-    uint64 public constant CALLBACK_GAS = 200_000;
+    /// @dev This is the relayer's WHOLE transaction gas limit, not the target's budget. The Omni callback proxy keeps
+    /// ~176.5k for itself, so 200k left pong only 23.5k and it ran out of gas on testnet (S1 v2,
+    /// docs/evidence/s1/unichain-v2-callback-oog-trace-2026-11-06.txt). Fees are charged on gas used, not this limit.
+    uint64 public constant CALLBACK_GAS = 500_000;
 
     uint256 public immutable ORIGIN_CHAIN_ID;
     address public immutable PING_SOURCE;
