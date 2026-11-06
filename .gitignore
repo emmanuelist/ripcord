@@ -20,3 +20,7 @@ coverage/
 # Tool scratch
 .playwright-mcp/
 .DS_Store
+
+# impeccable working files (decision mocks, review captures); the surface brief is committed
+.impeccable/mocks/
+.impeccable/review/
