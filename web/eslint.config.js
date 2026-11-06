@@ -5,7 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
 
 export default tseslint.config(
-  { ignores: ["dist/", "node_modules/", "scripts/"] },
+  { ignores: ["dist/", "node_modules/", "scripts/", ".vercel/"] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {

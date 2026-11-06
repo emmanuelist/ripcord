@@ -143,13 +143,10 @@ export function Departure({ p, tickNow }: { p?: Position; tickNow?: number }) {
   return (
     <section className="departure" id="departure" aria-label={`Departure of position ${shown.tokenId}`}>
       <div className="dep-row dep-readouts">
-        <div>
-          <p className="dep-label">Position</p>
-          <h2 className="dep-title" tabIndex={-1}>
-            <span className="sr-only">Position </span>
-            <Flap text={`#${shown.tokenId}`} size="l" />
-          </h2>
-        </div>
+        {/* The field label is part of the heading, so nothing stands above it as a kicker. */}
+        <h2 className="dep-title" tabIndex={-1}>
+          <span className="dep-label">Position</span> <Flap text={`#${shown.tokenId}`} size="l" />
+        </h2>
         <div>
           <p className="dep-label">{tickLabel}</p>
           <Flap text={tickValue !== undefined ? fmtTick(tickValue) : "    "} tone={tickValue !== undefined ? "ink" : "dim"} size="l" />

@@ -164,7 +164,7 @@ a:hover { text-decoration-color: var(--yellow); }
 .dep-row:first-child { border-top: 0; }
 .dep-label { margin: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow); white-space: nowrap; }
 .dep-readouts { display: flex; flex-wrap: wrap; gap: 16px clamp(22px, 2.8vw, 44px); align-items: end; }
-.dep-title { margin: 0; font-size: inherit; display: inline-flex; }
+.dep-title { margin: 0; font-size: inherit; font-weight: inherit; display: grid; justify-items: start; }
 .dep-title:focus-visible { outline: none; text-decoration: underline 2px var(--yellow); text-underline-offset: 0.3em; }
 .dep-status { padding-block: 16px; }
 

@@ -1,0 +1,648 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-06T20:06:23.010Z",
+  "title": "Design System: Ripcord",
+  "source": {
+    "stylesheet": "web/src/styles.css",
+    "components": "web/src/components/",
+    "contract": ".impeccable/surfaces/web-src-app-tsx.md"
+  },
+  "extensions": {
+    "colorMeta": {
+      "housing": {
+        "role": "neutral",
+        "displayName": "Station Housing",
+        "canonical": "#16171a",
+        "oklch": "oklch(20.5% 0.006 271.1)",
+        "purpose": "Page ground, shell bar, dark text on yellow fills.",
+        "cssVar": "--housing",
+        "tonalRamp": [
+          "oklch(15.0% 0.006 271.1)",
+          "oklch(26.4% 0.006 271.1)",
+          "oklch(37.9% 0.006 271.1)",
+          "oklch(49.3% 0.006 271.1)",
+          "oklch(60.7% 0.006 271.1)",
+          "oklch(72.1% 0.006 271.1)",
+          "oklch(83.6% 0.006 271.1)",
+          "oklch(95.0% 0.006 271.1)"
+        ]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel Graphite",
+        "canonical": "#1b1c20",
+        "oklch": "oklch(22.7% 0.008 274.6)",
+        "purpose": "Face of the departure unit.",
+        "cssVar": "--panel",
+        "tonalRamp": [
+          "oklch(15.0% 0.008 274.6)",
+          "oklch(26.4% 0.008 274.6)",
+          "oklch(37.9% 0.008 274.6)",
+          "oklch(49.3% 0.008 274.6)",
+          "oklch(60.7% 0.008 274.6)",
+          "oklch(72.1% 0.008 274.6)",
+          "oklch(83.6% 0.008 274.6)",
+          "oklch(95.0% 0.008 274.6)"
+        ]
+      },
+      "row": {
+        "role": "neutral",
+        "displayName": "Row Hover",
+        "canonical": "#1e1f24",
+        "oklch": "oklch(24.0% 0.010 276.7)",
+        "purpose": "Board row on hover; the only hover fill.",
+        "cssVar": "--row",
+        "tonalRamp": [
+          "oklch(15.0% 0.010 276.7)",
+          "oklch(26.4% 0.010 276.7)",
+          "oklch(37.9% 0.010 276.7)",
+          "oklch(49.3% 0.010 276.7)",
+          "oklch(60.7% 0.010 276.7)",
+          "oklch(72.1% 0.010 276.7)",
+          "oklch(83.6% 0.010 276.7)",
+          "oklch(95.0% 0.010 276.7)"
+        ]
+      },
+      "row-sel": {
+        "role": "neutral",
+        "displayName": "Row Chosen",
+        "canonical": "#24262c",
+        "oklch": "oklch(26.9% 0.012 271.0)",
+        "purpose": "The featured departure's board row.",
+        "cssVar": "--row-sel",
+        "tonalRamp": [
+          "oklch(15.0% 0.012 271.0)",
+          "oklch(26.4% 0.012 271.0)",
+          "oklch(37.9% 0.012 271.0)",
+          "oklch(49.3% 0.012 271.0)",
+          "oklch(60.7% 0.012 271.0)",
+          "oklch(72.1% 0.012 271.0)",
+          "oklch(83.6% 0.012 271.0)",
+          "oklch(95.0% 0.012 271.0)"
+        ]
+      },
+      "flap": {
+        "role": "neutral",
+        "displayName": "Flap Charcoal",
+        "canonical": "#2a2c31",
+        "oklch": "oklch(29.3% 0.010 268.3)",
+        "purpose": "Lower half of every tile; unlit lamps and ruler cells.",
+        "cssVar": "--flap",
+        "tonalRamp": [
+          "oklch(15.0% 0.010 268.3)",
+          "oklch(26.4% 0.010 268.3)",
+          "oklch(37.9% 0.010 268.3)",
+          "oklch(49.3% 0.010 268.3)",
+          "oklch(60.7% 0.010 268.3)",
+          "oklch(72.1% 0.010 268.3)",
+          "oklch(83.6% 0.010 268.3)",
+          "oklch(95.0% 0.010 268.3)"
+        ]
+      },
+      "flap-top": {
+        "role": "neutral",
+        "displayName": "Flap Upper",
+        "canonical": "#2f3137",
+        "oklch": "oklch(31.4% 0.011 271.0)",
+        "purpose": "Upper half of every tile, one flat step lighter (the hall light).",
+        "cssVar": "--flap-top",
+        "tonalRamp": [
+          "oklch(15.0% 0.011 271.0)",
+          "oklch(26.4% 0.011 271.0)",
+          "oklch(37.9% 0.011 271.0)",
+          "oklch(49.3% 0.011 271.0)",
+          "oklch(60.7% 0.011 271.0)",
+          "oklch(72.1% 0.011 271.0)",
+          "oklch(83.6% 0.011 271.0)",
+          "oklch(95.0% 0.011 271.0)"
+        ]
+      },
+      "gap": {
+        "role": "neutral",
+        "displayName": "Hinge Gap",
+        "canonical": "#0e0f11",
+        "oklch": "oklch(16.8% 0.004 264.4)",
+        "purpose": "The split line across every tile, above glyph and falling half.",
+        "cssVar": "--gap",
+        "tonalRamp": [
+          "oklch(15.0% 0.004 264.4)",
+          "oklch(26.4% 0.004 264.4)",
+          "oklch(37.9% 0.004 264.4)",
+          "oklch(49.3% 0.004 264.4)",
+          "oklch(60.7% 0.004 264.4)",
+          "oklch(72.1% 0.004 264.4)",
+          "oklch(83.6% 0.004 264.4)",
+          "oklch(95.0% 0.004 264.4)"
+        ]
+      },
+      "hinge": {
+        "role": "neutral",
+        "displayName": "Hinge Black",
+        "canonical": "#121316",
+        "oklch": "oklch(18.7% 0.006 271.1)",
+        "purpose": "Ground of cited source lines.",
+        "cssVar": "--hinge",
+        "tonalRamp": [
+          "oklch(15.0% 0.006 271.1)",
+          "oklch(26.4% 0.006 271.1)",
+          "oklch(37.9% 0.006 271.1)",
+          "oklch(49.3% 0.006 271.1)",
+          "oklch(60.7% 0.006 271.1)",
+          "oklch(72.1% 0.006 271.1)",
+          "oklch(83.6% 0.006 271.1)",
+          "oklch(95.0% 0.006 271.1)"
+        ]
+      },
+      "rail": {
+        "role": "neutral",
+        "displayName": "Rail",
+        "canonical": "#2c2e35",
+        "oklch": "oklch(30.2% 0.013 273.0)",
+        "purpose": "Hairlines between rows and steps; unlit route line.",
+        "cssVar": "--rail",
+        "tonalRamp": [
+          "oklch(15.0% 0.013 273.0)",
+          "oklch(26.4% 0.013 273.0)",
+          "oklch(37.9% 0.013 273.0)",
+          "oklch(49.3% 0.013 273.0)",
+          "oklch(60.7% 0.013 273.0)",
+          "oklch(72.1% 0.013 273.0)",
+          "oklch(83.6% 0.013 273.0)",
+          "oklch(95.0% 0.013 273.0)"
+        ]
+      },
+      "alu": {
+        "role": "neutral",
+        "displayName": "Aluminium",
+        "canonical": "#3a3d45",
+        "oklch": "oklch(36.0% 0.014 269.3)",
+        "purpose": "Structural hairline: shell edge, departure border, service strip, chips, table heads.",
+        "cssVar": "--alu",
+        "tonalRamp": [
+          "oklch(15.0% 0.014 269.3)",
+          "oklch(26.4% 0.014 269.3)",
+          "oklch(37.9% 0.014 269.3)",
+          "oklch(49.3% 0.014 269.3)",
+          "oklch(60.7% 0.014 269.3)",
+          "oklch(72.1% 0.014 269.3)",
+          "oklch(83.6% 0.014 269.3)",
+          "oklch(95.0% 0.014 269.3)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Flap White",
+        "canonical": "#f3efe4",
+        "oklch": "oklch(95.2% 0.015 90.2)",
+        "purpose": "Primary ink and flap characters.",
+        "cssVar": "--ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.015 90.2)",
+          "oklch(26.4% 0.015 90.2)",
+          "oklch(37.9% 0.015 90.2)",
+          "oklch(49.3% 0.015 90.2)",
+          "oklch(60.7% 0.015 90.2)",
+          "oklch(72.1% 0.015 90.2)",
+          "oklch(83.6% 0.015 90.2)",
+          "oklch(95.0% 0.015 90.2)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#c3bfb4",
+        "oklch": "oklch(80.5% 0.016 90.3)",
+        "purpose": "Reading prose, secondary values.",
+        "cssVar": "--ink-2",
+        "tonalRamp": [
+          "oklch(15.0% 0.016 90.3)",
+          "oklch(26.4% 0.016 90.3)",
+          "oklch(37.9% 0.016 90.3)",
+          "oklch(49.3% 0.016 90.3)",
+          "oklch(60.7% 0.016 90.3)",
+          "oklch(72.1% 0.016 90.3)",
+          "oklch(83.6% 0.016 90.3)",
+          "oklch(95.0% 0.016 90.3)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#9a968c",
+        "oklch": "oklch(67.4% 0.015 88.7)",
+        "purpose": "Metadata, unlit stops, DISARMED, blank-reading flaps.",
+        "cssVar": "--ink-3",
+        "tonalRamp": [
+          "oklch(15.0% 0.015 88.7)",
+          "oklch(26.4% 0.015 88.7)",
+          "oklch(37.9% 0.015 88.7)",
+          "oklch(49.3% 0.015 88.7)",
+          "oklch(60.7% 0.015 88.7)",
+          "oklch(72.1% 0.015 88.7)",
+          "oklch(83.6% 0.015 88.7)",
+          "oklch(95.0% 0.015 88.7)"
+        ]
+      },
+      "yellow": {
+        "role": "primary",
+        "displayName": "Solari Yellow",
+        "canonical": "#f2c230",
+        "oklch": "oklch(83.4% 0.158 89.0)",
+        "purpose": "Board header labels, ARMED, the line, SWAP lamp, Replay, pressed chip, focus, links.",
+        "cssVar": "--yellow",
+        "tonalRamp": [
+          "oklch(15.0% 0.158 89.0)",
+          "oklch(26.4% 0.158 89.0)",
+          "oklch(37.9% 0.158 89.0)",
+          "oklch(49.3% 0.158 89.0)",
+          "oklch(60.7% 0.158 89.0)",
+          "oklch(72.1% 0.158 89.0)",
+          "oklch(83.6% 0.158 89.0)",
+          "oklch(95.0% 0.158 89.0)"
+        ]
+      },
+      "amber": {
+        "role": "secondary",
+        "displayName": "Boarding Amber",
+        "canonical": "#f0953a",
+        "oklch": "oklch(74.9% 0.149 61.4)",
+        "purpose": "BOARDING, REACT lamp, Low funding, Stale liveness. Build addition to the contract palette.",
+        "cssVar": "--amber",
+        "tonalRamp": [
+          "oklch(15.0% 0.149 61.4)",
+          "oklch(26.4% 0.149 61.4)",
+          "oklch(37.9% 0.149 61.4)",
+          "oklch(49.3% 0.149 61.4)",
+          "oklch(60.7% 0.149 61.4)",
+          "oklch(72.1% 0.149 61.4)",
+          "oklch(83.6% 0.149 61.4)",
+          "oklch(95.0% 0.149 61.4)"
+        ]
+      },
+      "green": {
+        "role": "secondary",
+        "displayName": "Departure Green",
+        "canonical": "#3fbf7f",
+        "oklch": "oklch(71.9% 0.146 157.3)",
+        "purpose": "DEPARTED, EXIT lamp, lit ruler cells, block count, In service, Live.",
+        "cssVar": "--green",
+        "tonalRamp": [
+          "oklch(15.0% 0.146 157.3)",
+          "oklch(26.4% 0.146 157.3)",
+          "oklch(37.9% 0.146 157.3)",
+          "oklch(49.3% 0.146 157.3)",
+          "oklch(60.7% 0.146 157.3)",
+          "oklch(72.1% 0.146 157.3)",
+          "oklch(83.6% 0.146 157.3)",
+          "oklch(95.0% 0.146 157.3)"
+        ]
+      },
+      "red": {
+        "role": "secondary",
+        "displayName": "Cancelled Red",
+        "canonical": "#e2533b",
+        "oklch": "oklch(63.1% 0.183 31.9)",
+        "purpose": "CANCELLED, Refused, Unfunded, RPC unreachable, inline warnings.",
+        "cssVar": "--red",
+        "tonalRamp": [
+          "oklch(15.0% 0.183 31.9)",
+          "oklch(26.4% 0.183 31.9)",
+          "oklch(37.9% 0.183 31.9)",
+          "oklch(49.3% 0.183 31.9)",
+          "oklch(60.7% 0.183 31.9)",
+          "oklch(72.1% 0.183 31.9)",
+          "oklch(83.6% 0.183 31.9)",
+          "oklch(95.0% 0.183 31.9)"
+        ]
+      }
+    },
+    "stateColorPairs": {
+      "board": {
+        "armed": [
+          "ARMED",
+          "yellow"
+        ],
+        "boarding": [
+          "BOARDING",
+          "amber"
+        ],
+        "departed": [
+          "DEPARTED",
+          "green"
+        ],
+        "cancelled": [
+          "CANCELLED",
+          "red"
+        ],
+        "disarmed": [
+          "DISARMED",
+          "ink-3"
+        ]
+      },
+      "funding": {
+        "in-service": [
+          "In service",
+          "green",
+          "covers >= 3 exits"
+        ],
+        "low": [
+          "Low",
+          "amber",
+          "covers < 3"
+        ],
+        "unfunded": [
+          "Unfunded",
+          "red",
+          "covers < 1"
+        ]
+      },
+      "liveness": {
+        "live": [
+          "Live",
+          "green"
+        ],
+        "stale": [
+          "Stale · N s",
+          "amber"
+        ],
+        "wait": [
+          "Connecting",
+          "amber"
+        ],
+        "down": [
+          "RPC unreachable · retrying",
+          "red"
+        ]
+      },
+      "route": {
+        "swap": [
+          "SWAP",
+          "yellow"
+        ],
+        "react": [
+          "REACT",
+          "amber"
+        ],
+        "exit": [
+          "EXIT",
+          "green"
+        ],
+        "refused": [
+          "REFUSED",
+          "red"
+        ]
+      }
+    },
+    "componentLiterals": {
+      "note": "Values used in the build as literals, not :root tokens (drift, recorded not repaired).",
+      "tile-blank": {
+        "top": "#26282c",
+        "bottom": "#232529"
+      },
+      "tile-s": {
+        "top": "#35373d",
+        "bottom": "#2f3136",
+        "width": "0.8em",
+        "height": "1.36em",
+        "radius": "0.1em"
+      },
+      "tile-s-blank": {
+        "top": "#292b30",
+        "bottom": "#26282c"
+      },
+      "replay-hover": "#f7cf4d"
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The hero claim only; one phrase in yellow. Under 760px: clamp(36px, 10.5vw, 48px)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Explainer section headings; board title uses clamp(30px, 3vw, 40px), line-height 1."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Explainer step headings, each opening with an inline s flap."
+      },
+      "flap": {
+        "displayName": "Flap",
+        "purpose": "Every tile. Sizes s 17px (15px phone board), m 24px, l 40px (32px <760px), xl clamp(44px, 4.4vw, 68px) (40px <760px)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading prose, 62ch in the explainer."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Hero sub-line, 44ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Yellow field/column labels (12px, 0.1em); service labels and ruler marks 11px; chips and liveness 13px."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Hashes, addresses, cited code, token tickers in their own case, ruler block numbers. Nothing else."
+      }
+    },
+    "shadows": [],
+    "elevationNote": "No shadows, blur, glass or gradients. Depth by flat tonal steps (housing > panel > row > flap), 1px aluminium/rail hairlines, and the flap's lighter upper half. Only transient shading: brightness on a falling/landing half for 65 ms.",
+    "motion": [
+      {
+        "name": "flap-fall-top",
+        "value": "65ms cubic-bezier(0.55, 0, 1, 0.45)",
+        "purpose": "Old upper half falls over the hinge, rotateX 0 to -90deg, brightness 1 to 0.5."
+      },
+      {
+        "name": "flap-land-bottom",
+        "value": "65ms cubic-bezier(0.2, 0.7, 0.3, 1) 65ms delay",
+        "purpose": "New lower half lands, rotateX 90deg through -2deg settle (80%) to 0."
+      },
+      {
+        "name": "flap-step",
+        "value": "130ms",
+        "purpose": "One visible step; at most 6 steps per tile; forward through the drum."
+      },
+      {
+        "name": "flap-stagger",
+        "value": "40ms",
+        "purpose": "Delay between adjacent tiles."
+      },
+      {
+        "name": "lamp",
+        "value": "160ms background-color, border-color",
+        "purpose": "Route lamp lighting as a hop lands."
+      },
+      {
+        "name": "replay-button",
+        "value": "120ms; press translate 0 1px with cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Replay hover/press."
+      },
+      {
+        "name": "replay-timeline",
+        "value": "0.8s lead-in + loop's Unichain seconds (swap→exit block timestamps) + 1.4s hold",
+        "purpose": "Withholds recorded hops until their moment; Lasna hop staged at the midpoint and disclosed on screen."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "No flap fall (final text only), instant scroll on row select; lamp colour change remains."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1100px",
+        "purpose": ">= : hero fills first screen (min(100svh - 61px, 960px)) so the board starts at the fold. < : hero stacks, shell drops Lasna height, board head stacks, explainer cites drop under text."
+      },
+      {
+        "name": "phone",
+        "value": "760px",
+        "purpose": "< : shell wraps with scrolling section row, heights and Read-only dropped; vertical route; full-width Replay; service strip one cell per row; split sections stack; larger scroll margins."
+      },
+      {
+        "name": "board-container",
+        "value": "640px (container query)",
+        "purpose": "< : three-line departure rows (pos/status/blocks; time/tx; line/swap) with phone-only labels."
+      },
+      {
+        "name": "contracts-container",
+        "value": "560px (container query)",
+        "purpose": "< : contracts table becomes stacked blocks on rails."
+      }
+    ],
+    "notYetBuilt": [
+      {
+        "name": "Refusal room",
+        "milestone": "M2",
+        "placement": "between 'How a ripcord pulls' and 'What you give, what you keep'",
+        "rule": "In the board's own grammar (flaps, rails, cited lines); built only once real refused transactions exist."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Flap",
+      "kind": "custom",
+      "refersTo": "flap-tile",
+      "description": "Split-flap tile row for every announced value. Two flat halves, hinge gap; turns only on a real state change (130 ms/step: 65 ms ease-in fall, 65 ms land with -2deg settle; 40 ms stagger; max 6 steps; digit-only drum between numerals; never on first render or under reduced motion). Sizes s 17px, m 24px, l 40px, xl clamp(44px, 4.4vw, 68px). Source: web/src/components/Flap.tsx, flapSteps.ts, .tile in styles.css.",
+      "html": "<div style=\"display:grid;gap:12px\"><span class=\"ds-flap green\" aria-label=\"DEPARTED\"><span class=\"ds-tile\"><span>D</span></span><span class=\"ds-tile\"><span>E</span></span><span class=\"ds-tile\"><span>P</span></span><span class=\"ds-tile\"><span>A</span></span><span class=\"ds-tile\"><span>R</span></span><span class=\"ds-tile\"><span>T</span></span><span class=\"ds-tile\"><span>E</span></span><span class=\"ds-tile\"><span>D</span></span></span><span class=\"ds-flap \" aria-label=\"#7953\"><span class=\"ds-tile\"><span>#</span></span><span class=\"ds-tile\"><span>7</span></span><span class=\"ds-tile\"><span>9</span></span><span class=\"ds-tile\"><span>5</span></span><span class=\"ds-tile\"><span>3</span></span></span><span class=\"ds-flap yellow\" aria-label=\"ARMED\"><span class=\"ds-tile\"><span>A</span></span><span class=\"ds-tile\"><span>R</span></span><span class=\"ds-tile\"><span>M</span></span><span class=\"ds-tile\"><span>E</span></span><span class=\"ds-tile\"><span>D</span></span></span></div>",
+      "css": ".ds-flap { font-family: var(--display, \"Barlow Semi Condensed\", \"Arial Narrow\", sans-serif); font-weight: 600; font-size: 40px; line-height: 1; display: inline-flex; gap: 0.08em; color: var(--ink, #f3efe4); font-variant-numeric: tabular-nums; } .ds-flap.green { color: var(--green, #3fbf7f); } .ds-flap.yellow { color: var(--yellow, #f2c230); } .ds-tile { position: relative; display: inline-grid; place-items: center; width: 0.74em; height: 1.16em; background: var(--flap, #2a2c31); border-radius: 0.06em; overflow: hidden; } .ds-tile::before { content: \"\"; position: absolute; inset: 0 0 50% 0; background: var(--flap-top, #2f3137); } .ds-tile::after { content: \"\"; position: absolute; left: 0; right: 0; top: 50%; height: max(1px, 0.045em); translate: 0 -50%; background: var(--gap, #0e0f11); z-index: 3; } .ds-tile span { position: relative; z-index: 1; } .ds-tile.blank { background: #232529; } .ds-tile.blank::before { background: #26282c; }"
+    },
+    {
+      "name": "Departure unit",
+      "kind": "card",
+      "refersTo": "departure-unit",
+      "description": "Featured departure: readouts, status at xl, calling-at route with lamps, swap-to-exit count with Replay, 8-block ruler. Rows on aluminium rails, 2px plate, no shadow. Source: Departure.tsx, .departure.",
+      "html": "<section class=\"ds-dep\"><div class=\"ds-dep-row\"><p class=\"ds-dep-label\">Position</p><span class=\"ds-dep-val\">#7953</span></div><ol class=\"ds-route\"><li class=\"ds-stop lit y\"><i></i><b>Swap</b><small>Unichain Sepolia · #67,139,908</small></li><li class=\"ds-stop lit a\"><i></i><b>React</b><small>Reactive Lasna · #7,698,816</small></li><li class=\"ds-stop lit g\"><i></i><b>Exit</b><small>Unichain Sepolia · #67,139,910</small></li></ol><div class=\"ds-dep-row\"><p class=\"ds-dep-label\">Swap to exit</p><div class=\"ds-ruler\"><span class=\"s\"></span><span class=\"on\"></span><span class=\"on\"></span><span></span><span></span><span></span><span></span><span></span></div></div></section>",
+      "css": ".ds-dep { background: var(--panel, #1b1c20); border: 1px solid var(--alu, #3a3d45); border-radius: 2px; color: var(--ink, #f3efe4); font-family: var(--text, Barlow, system-ui, sans-serif); max-width: 640px; } .ds-dep-row, .ds-route { padding: 18px 22px; border-top: 1px solid var(--alu, #3a3d45); margin: 0; } .ds-dep-row:first-child { border-top: 0; } .ds-dep-label { margin: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow, #f2c230); } .ds-dep-val { font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 600; font-size: 40px; } .ds-route { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); } .ds-stop { position: relative; padding: 24px 16px 0 0; display: grid; gap: 3px; } .ds-stop::before { content: \"\"; position: absolute; top: 6px; left: 14px; right: 0; height: 2px; background: color-mix(in srgb, var(--yellow, #f2c230) 55%, var(--rail, #2c2e35)); } .ds-stop:last-child::before { display: none; } .ds-stop i { position: absolute; top: 0; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--lamp); border: 1px solid var(--lamp); transition: background-color 160ms, border-color 160ms; } .ds-stop.y { --lamp: var(--yellow, #f2c230); } .ds-stop.a { --lamp: var(--amber, #f0953a); } .ds-stop.g { --lamp: var(--green, #3fbf7f); } .ds-stop b { font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 700; font-size: 20px; letter-spacing: 0.04em; text-transform: uppercase; } .ds-stop small { font-size: 13px; color: var(--ink-3, #9a968c); } .ds-ruler { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; } .ds-ruler span { height: 14px; background: var(--flap, #2a2c31); border-radius: 1px; } .ds-ruler .s { background: var(--yellow, #f2c230); } .ds-ruler .on { background: var(--green, #3fbf7f); }"
+    },
+    {
+      "name": "Replay button",
+      "kind": "button",
+      "refersTo": "button-replay",
+      "description": "The one filled action: replays a real recorded loop at chain speed. Playing state is outlined with a steady square, never a spinner.",
+      "html": "<div style=\"display:flex;gap:12px\"><button class=\"ds-replay\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" aria-hidden=\"true\"><path d=\"M4 2.5v9l7.5-4.5z\"/></svg>Replay this departure</button><button class=\"ds-replay\" disabled><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"8\" height=\"8\"/></svg>Replaying at chain speed</button></div>",
+      "css": ".ds-replay { display: inline-flex; align-items: center; gap: 10px; font: 600 15px/1 var(--text, Barlow, system-ui, sans-serif); color: var(--housing, #16171a); background: var(--yellow, #f2c230); border: 1px solid var(--yellow, #f2c230); border-radius: 2px; padding: 12px 16px; cursor: pointer; transition: background-color 120ms, color 120ms, translate 120ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-replay svg { fill: currentColor; } .ds-replay:hover { background: #f7cf4d; } .ds-replay:active { translate: 0 1px; } .ds-replay:focus-visible { outline: 2px solid var(--yellow, #f2c230); outline-offset: 2px; } .ds-replay:disabled { cursor: default; background: transparent; color: var(--yellow, #f2c230); }"
+    },
+    {
+      "name": "Status filter chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Rectangular 2px outlined filter with its state's dot beside its word and a count; pressed fills yellow.",
+      "html": "<div style=\"display:flex;gap:6px\"><button class=\"ds-chip\" aria-pressed=\"true\">All <span>10</span></button><button class=\"ds-chip\" style=\"--dot:#f2c230\" aria-pressed=\"false\">Armed <span>0</span></button><button class=\"ds-chip\" style=\"--dot:#3fbf7f\" aria-pressed=\"false\">Departed <span>10</span></button></div>",
+      "css": ".ds-chip { font: 600 13px/1 var(--text, Barlow, system-ui, sans-serif); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2, #c3bfb4); background: transparent; border: 1px solid var(--alu, #3a3d45); border-radius: 2px; padding: 9px 12px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; } .ds-chip span { color: var(--ink-3, #9a968c); font-weight: 500; font-variant-numeric: tabular-nums; } .ds-chip[style]::before { content: \"\"; width: 7px; height: 7px; border-radius: 50%; background: var(--dot); } .ds-chip:hover { border-color: var(--ink-3, #9a968c); color: var(--ink, #f3efe4); } .ds-chip:focus-visible { outline: 2px solid var(--yellow, #f2c230); outline-offset: 2px; } .ds-chip[aria-pressed=\"true\"] { background: var(--yellow, #f2c230); border-color: var(--yellow, #f2c230); color: var(--housing, #16171a); } .ds-chip[aria-pressed=\"true\"] span { color: color-mix(in srgb, var(--housing, #16171a) 72%, var(--yellow, #f2c230)); }"
+    },
+    {
+      "name": "Board row",
+      "kind": "custom",
+      "refersTo": "board-row",
+      "description": "Departure row on a rail hairline; fills only on hover (row) and when featured (row-sel). Under a 640px container it becomes a three-line row: pos/status/blocks, time/tx, line/swap.",
+      "html": "<table class=\"ds-board\"><thead><tr><th>Time UTC</th><th>Position</th><th>Status</th><th>Exit tx</th></tr></thead><tbody><tr class=\"sel\"><td>13:12:18</td><td>#7953</td><td class=\"g\">DEPARTED</td><td><code>0x53fd…144e</code></td></tr><tr><td>13:11:28</td><td>#7952</td><td class=\"g\">DEPARTED</td><td><code>0x2922…f22f</code></td></tr></tbody></table>",
+      "css": ".ds-board { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; color: var(--ink, #f3efe4); font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 600; } .ds-board th { text-align: left; padding: 0 12px 10px; font: 600 12px/1.5 var(--text, Barlow, sans-serif); letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow, #f2c230); border-bottom: 1px solid var(--alu, #3a3d45); } .ds-board td { padding: 11px 12px; border-bottom: 1px solid var(--rail, #2c2e35); } .ds-board tbody tr { cursor: pointer; } .ds-board tbody tr:hover { background: var(--row, #1e1f24); } .ds-board tbody tr.sel { background: var(--row-sel, #24262c); } .ds-board .g { color: var(--green, #3fbf7f); } .ds-board code { font-family: var(--mono, \"JetBrains Mono Variable\", monospace); font-size: 0.82em; font-weight: 400; }"
+    },
+    {
+      "name": "Service strip cell",
+      "kind": "custom",
+      "refersTo": "departure-unit",
+      "description": "Pool tick and funding cells: exits covered as a flap, state word with dot (In service >=3, Low <3, Unfunded <1), balance linked; priced from the last real loop with its basis named.",
+      "html": "<div class=\"ds-svc\"><div class=\"ds-svc-cell\"><p>RipcordReactive · <code>lREACT</code></p><b>17 EXITS</b><small><span class=\"ds-state\">In service</span> 1.630 <code>lREACT</code></small></div></div>",
+      "css": ".ds-svc { display: inline-grid; border: 1px solid var(--alu, #3a3d45); border-radius: 2px; color: var(--ink, #f3efe4); font-family: var(--text, Barlow, sans-serif); } .ds-svc-cell { padding: 10px 16px 11px; display: grid; gap: 6px; } .ds-svc-cell p { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow, #f2c230); } .ds-svc-cell code { font-family: var(--mono, \"JetBrains Mono Variable\", monospace); text-transform: none; letter-spacing: 0; } .ds-svc-cell b { font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 600; font-size: 17px; color: var(--green, #3fbf7f); } .ds-svc-cell small { font-size: 12px; color: var(--ink-3, #9a968c); display: flex; gap: 10px; } .ds-state { color: var(--green, #3fbf7f); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; } .ds-state::before { content: \"\"; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }"
+    },
+    {
+      "name": "Cited source line",
+      "kind": "card",
+      "refersTo": "cite",
+      "description": "Explainer citation: mono source line, optional 'This loop' evaluation from a real recorded loop, file:line link pinned to the deployed commit.",
+      "html": "<figure class=\"ds-cite\"><code>if (line.exitBelow ? tick &lt;= line.triggerTick : tick &gt;= line.triggerTick) {</code><p><span>This loop</span> <code>exitBelow = true: tick −743 &lt;= triggerTick −670 → true</code></p><figcaption><a href=\"#\">RipcordReactive.sol:137</a></figcaption></figure>",
+      "css": ".ds-cite { margin: 0; background: var(--hinge, #121316); border: 1px solid var(--rail, #2c2e35); border-radius: 2px; padding: 14px 16px; max-width: 520px; } .ds-cite code { display: block; font-family: var(--mono, \"JetBrains Mono Variable\", monospace); font-variant-ligatures: none; font-size: 13px; line-height: 1.55; color: var(--ink, #f3efe4); overflow-wrap: anywhere; } .ds-cite p { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--rail, #2c2e35); display: grid; gap: 4px; } .ds-cite p span { font: 600 11px/1.5 var(--text, Barlow, sans-serif); letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow, #f2c230); } .ds-cite p code { font-size: 12.5px; color: var(--ink-2, #c3bfb4); } .ds-cite figcaption { margin-top: 10px; font-family: var(--mono, monospace); font-size: 12px; } .ds-cite a { color: var(--ink-3, #9a968c); } .ds-cite a:hover { color: var(--ink, #f3efe4); } .ds-cite a:focus-visible { outline: 2px solid var(--yellow, #f2c230); outline-offset: 2px; }"
+    },
+    {
+      "name": "Shell",
+      "kind": "nav",
+      "refersTo": "shell",
+      "description": "Sticky 60px housing bar: flap wordmark, section links, live block heights, liveness word with dot, Read-only plate. Under 760px links wrap to a scrolling third row; heights and Read-only drop.",
+      "html": "<header class=\"ds-shell\"><span class=\"ds-brand\">RIPCORD</span><nav><a href=\"#\">Departures</a><a href=\"#\">How it works</a><a href=\"#\">Limits</a></nav><span class=\"ds-heads\">Unichain Sepolia <b>#67,142,264</b><span class=\"ds-live\">Live</span></span><span class=\"ds-ro\">Read-only</span></header>",
+      "css": ".ds-shell { display: flex; align-items: center; gap: 24px; min-height: 60px; padding: 10px 24px; background: var(--housing, #16171a); border-bottom: 1px solid var(--alu, #3a3d45); font-family: var(--text, Barlow, sans-serif); } .ds-brand { font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 600; font-size: 17px; color: var(--yellow, #f2c230); letter-spacing: 0.3em; } .ds-shell nav { display: flex; gap: 22px; } .ds-shell nav a { color: var(--ink-2, #c3bfb4); text-decoration: none; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; } .ds-shell nav a:hover { color: var(--ink, #f3efe4); border-bottom-color: var(--yellow, #f2c230); } .ds-shell nav a:focus-visible { outline: 2px solid var(--yellow, #f2c230); outline-offset: 2px; } .ds-heads { margin-left: auto; display: flex; gap: 20px; align-items: center; font-size: 14px; color: var(--ink-3, #9a968c); } .ds-heads b { color: var(--ink, #f3efe4); font-weight: 500; font-variant-numeric: tabular-nums; } .ds-live { color: var(--green, #3fbf7f); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 7px; } .ds-live::before { content: \"\"; width: 8px; height: 8px; border-radius: 50%; background: currentColor; } .ds-ro { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3, #9a968c); border: 1px solid var(--rail, #2c2e35); padding: 4px 9px; border-radius: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Departure Board",
+    "overview": "Ripcord's page is a station departure board. Every armed Uniswap v4 position is a scheduled departure; the swap that crosses its line flips its status flaps to DEPARTED, and the board counts, in whole Unichain blocks, how long the exit took. That is the thesis the world serves: a position leaves the pool seconds after a crossing swap, with nothing of the owner's running, and the board makes that visible as a station would. Each departure's swap, Lasna reaction, and exit are named and linked on the board, the way a board names its calling points (`web/src/components/Departure.tsx`, `Board.tsx`).\n\nThe material is a graphite station housing with split-flap tiles: flat paint, two flat halves per tile with a real hinge gap, hairline aluminium rails between rows, and nothing else. Depth comes from paint steps (housing, panel, row, flap), never from shadow, glass, or gradient (`web/src/styles.css` header comment and `:root`). Hierarchy is carried by scale: the same flap tile appears at four sizes, from the 17px board cell to the 68px status word. The density is that of an operating console in the first two screens, then a reading page below the fold. The explainer keeps the board's grammar: flaps inline in headings, rails between steps, and source lines cited beside the prose.\n\nEvery value on screen is read from chain. The design has no placeholder state that looks like data: an unread value is a row of blank tiles in the dim tone, and an empty board says so in a sentence.",
+    "keyCharacteristics": [
+      "Split-flap tiles as the signature: two flat halves, a hinge gap, a real two-half fall on a real state change only.",
+      "Flat paint on a graphite housing; hairline aluminium rails in place of cards and shadows.",
+      "Every state colour is paired with its word.",
+      "Condensed grotesk for flaps and display, a plain grotesk for reading, mono only for data that is literally code.",
+      "Length equals duration: one fixed ruler of real Unichain blocks."
+    ],
+    "rules": [
+      {
+        "name": "The Word-and-Lamp Rule",
+        "body": "A state colour never appears without its word beside it: ARMED in yellow, BOARDING in amber, DEPARTED in green, CANCELLED in red, DISARMED in dim ink, and for funding \"In service\", \"Low\" and \"Unfunded\" in the same three signal colours (`statusTone` in `chain/model.ts`, `stateTone` in `Board.tsx`). Lamps, chip dots and ruler cells are lit only next to their label.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hall Light Rule",
+        "body": "Depth is a flat paint step, never a blend. The upper flap is one step lighter than the lower; a chosen row is one step lighter than a hovered one. `color-mix` is used only to tint a flat line (a lit route segment, a link underline), never to fade.",
+        "section": "colors"
+      },
+      {
+        "name": "The Machine-Text Rule",
+        "body": "Mono appears only on strings a machine produced or reads: hashes, addresses, source code, token tickers, block numbers. Never on headings, labels or prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The Drawn-Glyph Rule",
+        "body": "Barlow Semi Condensed has no ≤ or ≥, so the flap draws them as SVG chevrons in its own ink and weight (`Glyph` in `Flap.tsx`). A missing glyph is drawn, never substituted from a fallback face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Paint Rule",
+        "body": "Surfaces are flat at rest and stay flat in every state. Hover and selection change paint, never elevation.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do read every value from chain. An unread value is a row of blank dim tiles or one sentence saying what is being read; it is never a placeholder number or row.",
+      "Do pair every state colour with its word (ARMED, BOARDING, DEPARTED, CANCELLED, DISARMED; In service, Low, Unfunded), and light lamps and dots only beside their label.",
+      "Do announce values as flaps at s/m/l/xl and let them turn only on a real state change, never on first render or under reduced motion.",
+      "Do quote latency in whole Unichain blocks on the fixed 8-block ruler, with the seconds on Unichain's clock named as such.",
+      "Do make Replay withhold recorded hops until their moment and invent nothing. Say on screen that the Lasna hop is staged.",
+      "Do price funding from the last real loop and name its basis.",
+      "Do separate with 1px aluminium or rail hairlines and change paint, not elevation, for hover and selection.",
+      "Do keep mono for hashes, addresses, code, token tickers and block numbers only.",
+      "Do place the refusal room (milestone M2, not yet built) between \"How a ripcord pulls\" and \"What you give, what you keep\", in the board's own grammar of flaps, rails and cited lines, and only once real refused transactions exist to fill it."
+    ],
+    "donts": [
+      "Don't use gradients, shadows, blur, glass or glows on any surface.",
+      "Don't use pills, rounded cards, or radii above 2px on plates. Circles are for lamps and state dots only.",
+      "Don't put a kicker or eyebrow above a heading. A designation flap shares the heading's first line.",
+      "Don't build a hero-metric template (big number, small label, stat cards); the hero is the claim plus one evidence sentence computed live.",
+      "Don't convey a state by colour alone, or show a colour-coded lamp, cell or dot with no word next to it.",
+      "Don't render demo, mock or placeholder rows, or state an N-second figure before it is verified.",
+      "Don't set ≤ or ≥ in a fallback face; draw them."
+    ]
+  }
+}

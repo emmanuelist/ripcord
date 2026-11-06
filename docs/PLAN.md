@@ -36,10 +36,13 @@ On (a) or (b), re-open research for this track.
 - [x] **Deploy the skeleton** (done 2026-11-06, `docs/evidence/m1/deploy.json`). Vault + reactive at precomputed addresses, plus a demo pool of disclosed test tokens and a position armed by the project wallet. Done when the addresses are in STATE and CONTEXT.
 - [x] **One real loop** (done 2026-11-06, E-009: tokenId 7944, swap → exit in 2 Unichain blocks / 2 s, liquidity 1e21 → 0; `subscribe()` inside `react()` works on Omni). A real swap through the v4 `PoolSwapTest` router crosses the line → Lasna `react()` → callback → liquidity 0. Done when three hashes and raw receipts are in docs/evidence/. **Risk:** `subscribe()` called *inside* `react()` is unverified on Omni. Fallback: subscribe to all PoolManager `Swap`s and filter in `react()`.
 - [x] **Harness** (done 2026-11-06, E-010: run 7945, swap → exit 3 Unichain blocks / 3 s on-chain, bounded per-hop wall clock; CI job added) (`harness/`, TypeScript + viem, pins re-checked per D-005). It records wall-clock per hop (swap mined → Lasna react seen → exit seen) and writes evidence JSON. Done when one run reproduces the loop's hashes with per-hop ms.
-- [ ] **Read-only frontend** (`web/`). Direction comes from `impeccable shape`. It shows the armed position, live tick vs line, status (armed / exited / failed / approval missing), and exit events, all read from chain. Done when it's deployed to a public URL. **Hosting is the user's call** (D-pending).
+- [ ] **Read-only frontend** (`web/`). Direction comes from `impeccable shape`. It shows the armed position, live tick vs line, status (armed / exited / failed / approval missing), and exit events, all read from chain. Done when it's deployed to a public URL. **Status 2026-11-06:** built (v3, finish review "ship", DESIGN.md written), live-run states inspected (E-013), deployed to Vercel production (E-014) but behind Vercel Authentication. **Remaining: the account owner turns off Vercel Authentication for project `ripcord`** (D-015), then a logged-out check from a private window and a phone.
 
 ### M2 · Core claim
-- [ ] Placeholder. Includes the "what one second buys" source: a real mainnet crash price series (research needed).
+- [x] **N over ≥10 runs** (done 2026-11-06, E-012/E-013: 11 runs, swap → exit median 2, p90 3, max 3 Unichain blocks, 2–3 s on Unichain's clock). The thesis wording (which N, chain clock or viewer wall clock) is the user's call (C-1).
+- [ ] **Reversal beat on-chain** (exit criterion above): a direct call to `RipcordVault.exit` from the project wallet reverts; a swap that doesn't cross an armed line leaves the position untouched (and its reaction is billed). Each with tx hashes and raw receipts.
+- [ ] **Refusal room on the page**, once the reversal transactions exist: between "How a ripcord pulls" and "What you give, what you keep", in the board's grammar (CANCELLED in red, decoded reason, tx read back). No placeholder rows (finish review, round 3).
+- [ ] Includes the "what one second buys" source: a real mainnet crash price series (research needed).
 
 ### M3 · Proof surface
 - [ ] Placeholder.

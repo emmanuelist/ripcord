@@ -1,0 +1,36 @@
+{
+  "id": "dpl_3jxpyDfK8ti7a8EKHj46VHkH4Fy1",
+  "name": "ripcord",
+  "url": "ripcord-75eezztcj-emmanuel-pauls-projects.vercel.app",
+  "target": "production",
+  "readyState": "READY",
+  "createdAt": 1793995752086,
+  "duration": {},
+  "buildMachine": {
+    "cores": 2,
+    "memory": 8192,
+    "machine": "basic",
+    "selectionType": "fixed",
+    "selectionSource": "plan-default"
+  },
+  "aliases": [
+    "ripcord-ashy.vercel.app",
+    "ripcord-emmanuel-pauls-projects.vercel.app"
+  ],
+  "builds": [
+    {
+      "id": "bld_hj2zycw8o",
+      "deploymentId": "dpl_3jxpyDfK8ti7a8EKHj46VHkH4Fy1",
+      "entrypoint": ".",
+      "readyState": "READY",
+      "readyStateAt": 1793995751766,
+      "createdAt": 1793995751766,
+      "createdIn": "sfo1",
+      "use": "@vercel/vc-build",
+      "config": {},
+      "output": [],
+      "fingerprint": null
+    }
+  ],
+  "contextName": "emmanuel-pauls-projects"
+}

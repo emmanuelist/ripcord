@@ -182,3 +182,21 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Consequences:**
 - The page shows the runs named in an evidence index committed to the repo. Every value is fetched live from chain by hash, and runs made while the page is open appear live.
 - Revisit if the public RPCs start rate-limiting real traffic. The fix would be a Vercel function as a caching proxy.
+
+## D-015 · Deploy web/ to Vercel as a prebuilt static site, no source maps while private · 2026-11-06 · accepted
+**Context:** D-013 hosts the page on Vercel and D-005 pins Node 26. Vercel's builders stop at Node 24.x: `vercel build` refuses `"engines": { "node": ">=26" }` even when run locally (2026-11-06). The Vite build also emits source maps that would publish the source while the repo is private (D-009).
+
+**Decision:** Build with the pinned Node 26 locally and upload only the static files through Vercel's Build Output API (`vercel deploy --prebuilt --prod`), with source maps removed. `web/scripts/deploy-vercel.sh` does the whole thing.
+
+**Reasons:**
+- The page is static: no server code runs on Vercel, so its Node version is irrelevant at runtime.
+- Keeping the pin avoids building the shipped bundle with an untested Node.
+- Only `index.html`, the bundle, fonts and the favicon leave the machine (1.2 MB). Nothing from `docs/`, `.env*` or the keystore can be uploaded.
+
+**Alternatives:**
+- **Loosen `engines` to `>=24`.** Rejected for now: it changes the pin for a host, and CI and the harness are on 26.
+- **Git-integrated builds on Vercel.** Rejected: same Node limit, and the repo is private until submission.
+
+**Consequences:**
+- Every deploy is a manual run of the script from `web/`. Re-add source maps when the repo goes public at submission, if wanted.
+- Vercel team projects start with Vercel Authentication on ("all except custom domains"), so a fresh deploy is not public. Turning it off is the account owner's call (it was denied to the agent as a security change).
