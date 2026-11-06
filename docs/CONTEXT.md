@@ -93,6 +93,7 @@ All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
 - **Cron on Omni is unknown.** The cron topics are documented only against the legacy `0x…fffFfF`. That address has bytecode on Lasna (research, 2026-11-06), but cron delivery on Omni is unverified. Ripcord's design doesn't need cron.
 - **Faucet gating (reported).** Another entrant found Base Sepolia public faucets gated on a mainnet ETH balance.
 - **Callback proxy bytecode is small (~220 bytes),** so it's a proxy. Read fee parameters on-chain, not from docs.
+- **A loop can sit half inside the web's live window.** The first poll scans the last 900 blocks on each chain, and the two windows don't cover the same events: a loop's Lasna reaction can be inside Lasna's window while its arm and exit on Unichain are older than Unichain's. Building a position from those logs alone shows defaults as chain data (seen 2026-11-06: #7952 rendered "line 0, at or below, BOARDING"). The poll now starts any unseen position from the vault's `lines(tokenId)` storage at the same head, and history and live records merge field by field (`mergeRecords`), never replace.
 
 ## Environment
 | Var | Purpose | Where to get it |

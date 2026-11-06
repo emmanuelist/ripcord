@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { encodeErrorResult, type Hex } from "viem";
 import { describe, expect, it } from "vitest";
 import { positionManagerAbi, vaultAbi } from "../src/chain/abi";
-import { applyPulledLog, applyVaultLog } from "../src/chain/live";
+import { applyPulledLog, applyVaultLog, mergeRecords } from "../src/chain/live";
 import {
   blocksToExit,
   boardStatus,
@@ -121,5 +121,42 @@ describe("split-flap steps turn forward and land on the target", () => {
   it("does nothing when unchanged, and snaps characters off the drum", () => {
     expect(flapSteps("D", "D")).toEqual([]);
     expect(flapSteps("A", "→")).toEqual(["→"]);
+  });
+});
+
+describe("a loop half inside the live window keeps its recorded truth (7952 regression)", () => {
+  // The first live poll saw only 7952's Lasna reaction: its arm and exit on Unichain were older than the window.
+  // The poll builds the base from the vault's own storage, so line and direction are real, never defaults.
+  const live: Position = {
+    tokenId: 7952n,
+    owner: "0x08e768752cA0F8a132cB82cB4bB4354470DD9111",
+    line: -636,
+    exitBelow: false,
+    vaultStatus: VaultStatus.Exited,
+    lasna: { tx: "0xd80364cf", block: 7698779n, observedTick: -550 },
+    swap: { tx: "0x1f526048", block: 67139869n, tick: -550 },
+  };
+  const recorded: Position = {
+    ...live,
+    armed: { tx: "0xaa", block: 67139860n, time: 1793992080 },
+    swap: { tx: "0x1f526048", block: 67139869n, tick: -550, time: 1793992090 },
+    exit: { tx: "0x292239a9", block: 67139871n, time: 1793992092, tickAtExit: -550, liquidity: 10n, amount0: 1n, amount1: 2n },
+  };
+
+  it("keeps the recorded exit when the live record lacks it, whichever answers first", () => {
+    for (const m of [mergeRecords(recorded, live), mergeRecords(live, recorded)]) {
+      expect(boardStatus(m)).toBe("departed");
+      expect(blocksToExit(m)).toBe(2);
+      expect(m.line).toBe(-636);
+      expect(m.exitBelow).toBe(false);
+      expect(m.swap?.time).toBe(1793992090);
+    }
+  });
+
+  it("a newer arm seen live starts a new journey: the old hops are dropped", () => {
+    const rearmed: Position = { ...live, vaultStatus: VaultStatus.Armed, armed: { tx: "0xbb", block: 67140000n }, lasna: undefined, swap: undefined };
+    const m = mergeRecords(recorded, rearmed);
+    expect(boardStatus(m)).toBe("armed");
+    expect(m.exit).toBeUndefined();
   });
 });

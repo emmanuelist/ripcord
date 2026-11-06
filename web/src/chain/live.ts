@@ -46,6 +46,41 @@ export async function loadHistory(): Promise<Position[]> {
   return settled.flatMap((s) => (s.status === "fulfilled" && s.value ? [s.value] : []));
 }
 
+/** Merges two field sets, later ones winning, never letting an undefined field erase a known one. */
+function defined<T extends object>(...xs: (T | undefined)[]): T | undefined {
+  const out: Record<string, unknown> = {};
+  let any = false;
+  for (const x of xs) {
+    if (!x) continue;
+    for (const [k, v] of Object.entries(x)) {
+      if (v === undefined) continue;
+      out[k] = v;
+      any = true;
+    }
+  }
+  return any ? (out as T) : undefined;
+}
+
+const isFinal = (s: number) => s === VaultStatus.Exited || s === VaultStatus.Failed || s === VaultStatus.Disarmed;
+
+/**
+ * Two reads of one position (recorded history and a live poll, in either order) become one record. Hops combine
+ * field by field, a final vault status stays final, and a newer arm starts a new journey that drops the old hops.
+ */
+export function mergeRecords(a: Position, b: Position): Position {
+  if (a.armed && b.armed && a.armed.block !== b.armed.block) return a.armed.block > b.armed.block ? a : b;
+  const base = defined(a, b) as Position;
+  const vaultStatus = isFinal(b.vaultStatus) ? b.vaultStatus : isFinal(a.vaultStatus) ? a.vaultStatus : Math.max(a.vaultStatus, b.vaultStatus);
+  const merged: Position = { ...base, vaultStatus };
+  const hops = ["armed", "swap", "lasna", "exit", "failure"] as const;
+  for (const k of hops) {
+    const v = defined<object>(a[k], b[k]);
+    if (v) Object.assign(merged, { [k]: v });
+    else delete merged[k];
+  }
+  return merged;
+}
+
 /** Applies a RipcordVault event to a position. Returns true when it belonged to this position. */
 export function applyVaultLog(p: Position, log: Pick<Log, "address" | "data" | "topics" | "blockNumber" | "transactionHash">): boolean {
   if (log.address.toLowerCase() !== deploy.ripcordVault.toLowerCase() || !log.blockNumber || !log.transactionHash) return false;
@@ -155,10 +190,33 @@ export async function poll(known: ReadonlyMap<bigint, Position>, cursor: Cursor 
       : Promise.resolve([]),
   ]);
 
+  // A position first seen in this window starts from the vault's own storage at the same head, never from defaults:
+  // its arm (and line) may be older than the window while its Lasna reaction or exit is inside it.
+  const ids = new Set<bigint>();
+  for (const l of vaultLogs) if (l.args.tokenId !== undefined) ids.add(l.args.tokenId);
+  for (const l of pulledLogs) if (l.args.tokenId !== undefined) ids.add(l.args.tokenId);
+  const unseen = [...ids].filter((id) => !known.has(id));
+  const stored = unseen.length
+    ? await uni.multicall({
+        allowFailure: false,
+        blockNumber: uniHead,
+        contracts: unseen.map((id) => ({ address: deploy.ripcordVault, abi: vaultAbi, functionName: "lines", args: [id] }) as const),
+      })
+    : [];
+  const base = new Map<bigint, Position>(
+    unseen.flatMap((id, i): [bigint, Position][] => {
+      const row = stored[i];
+      if (!row) return [];
+      const [owner, , line, exitBelow, vaultStatus] = row;
+      return [[id, { tokenId: id, owner, line, exitBelow, vaultStatus }]];
+    }),
+  );
+
   const changed = new Map<bigint, Position>();
   const touch = (id: bigint): Position => {
-    const existing = changed.get(id) ?? known.get(id);
-    const copy: Position = existing ? structuredClone(existing) : { tokenId: id, line: 0, exitBelow: true, vaultStatus: VaultStatus.None };
+    const existing = changed.get(id) ?? known.get(id) ?? base.get(id);
+    if (!existing) throw new Error(`position ${id} has no stored line`);
+    const copy = structuredClone(existing);
     changed.set(id, copy);
     return copy;
   };

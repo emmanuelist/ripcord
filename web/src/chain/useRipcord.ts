@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { loadHistory, poll, type Cursor } from "./live";
+import { loadHistory, mergeRecords, poll, type Cursor } from "./live";
 import { boardStatus, statusWord, type Position } from "./model";
 
 export interface RipcordState {
@@ -45,8 +45,11 @@ export function useRipcord(): RipcordState {
         cursor.current = t.cursor;
         pending.current.poll = false;
         const notes: string[] = [];
-        for (const [id, p] of t.changed) {
-          const note = announce(positions.current.get(id), p);
+        for (const [id, next] of t.changed) {
+          // Merge, never replace: history may have landed while this poll was in flight.
+          const prev = positions.current.get(id);
+          const p = prev ? mergeRecords(prev, next) : next;
+          const note = announce(prev, p);
           if (note) notes.push(note);
           positions.current.set(id, p);
         }
@@ -69,12 +72,15 @@ export function useRipcord(): RipcordState {
       }
     };
 
-    // The live poll and the recorded history start together; live updates always win over history for the same id.
+    // The live poll and the recorded history start together, and merge field by field for the same id.
     void tick();
     void loadHistory()
       .then((rows) => {
         if (stopped) return;
-        for (const p of rows) if (!positions.current.has(p.tokenId)) positions.current.set(p.tokenId, p);
+        for (const p of rows) {
+          const live = positions.current.get(p.tokenId);
+          positions.current.set(p.tokenId, live ? mergeRecords(p, live) : p);
+        }
       })
       .catch(() => undefined) // history is best-effort; the live poll reports RPC trouble
       .finally(() => {
