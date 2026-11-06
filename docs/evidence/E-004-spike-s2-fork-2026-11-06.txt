@@ -1,0 +1,65 @@
+# E-004 spike S2 (fork of live Unichain Sepolia v4), run 2026-11-06 14:09 UTC with forge Version: 1.8.3
+$ forge fmt --check
+exit 0
+$ forge lint --deny warnings
+exit 0
+$ forge build --sizes (spike contracts)
+| ExitProbe              | 2,813            | 3,179             | 21,763             | 45,973              |
+| PingReactive           | 2,111            | 2,676             | 22,465             | 46,476              |
+| PingSource             | 250              | 277               | 24,326             | 48,875              |
+| PongSink               | 1,209            | 1,408             | 23,367             | 47,744              |
+$ forge test -vv
+Ran 7 tests for test/Toolchain.t.sol:ToolchainTest
+[PASS] test_CallbackRequestSelector() (gas: 273)
+[PASS] test_OmniSystemContractAddress() (gas: 5637)
+[PASS] test_OmniWildcardTopic() (gas: 5509)
+[PASS] test_PositionManagerActionCodes() (gas: 416)
+[PASS] test_PositionManagerSelectorsMatchDeployedBytecode() (gas: 484)
+[PASS] test_ReactOnlyAcceptsSystem() (gas: 56703)
+[PASS] test_V4SwapTopic() (gas: 224)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 707.92µs (147.37µs CPU time)
+Ran 9 tests for test/spike/S1.t.sol:S1Test
+[PASS] test_ConstructorRejectsZeroAddresses() (gas: 6110)
+[PASS] test_FullLoopSimulated() (gas: 384872)
+[PASS] test_ReactRejectsAnyoneButSystem() (gas: 37566)
+[PASS] test_ReactRejectsLogFromWrongChain() (gas: 38366)
+[PASS] test_ReactRejectsLogFromWrongEmitter() (gas: 38276)
+[PASS] test_ReactRequestsOneCallbackToSink() (gas: 258735)
+[PASS] test_SinkFlagsUnexpectedInjectedSender() (gas: 58213)
+[PASS] test_SinkRejectsCallsNotFromProxy() (gas: 33074)
+[PASS] test_SubscribesToPingOnPoolChainOnly() (gas: 36003)
+Suite result: ok. 9 passed; 0 failed; 0 skipped; finished in 2.46ms (3.79ms CPU time)
+Ran 5 tests for test/spike/S2.fork.t.sol:S2ExitForkTest
+[PASS] test_CallbackPullsAllLiquidityWithinGasLimit() (gas: 679628)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+  S2 exit gas used (incl. call overhead): 196497
+  S2 callback gas limit requested: 1000000
+[PASS] test_CannotExitPositionItDoesNotOwn() (gas: 522972)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+[PASS] test_ExitRejectsDirectCaller() (gas: 486333)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+[PASS] test_ExitRejectsForeignReactiveContract() (gas: 486815)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+[PASS] test_SecondExitRevertsCleanly() (gas: 654788)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 16.45s (36.70s CPU time)
+Ran 4 tests for test/spike/S2.fork.t.sol:S2CustodyForkTest
+[PASS] test_ApprovalDiesWhenOwnerMovesTheNft() (gas: 616621)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+[PASS] test_ApprovedOperatorCanExitWithoutOwningTheNft() (gas: 683712)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+[PASS] test_DeployedTransferIntoVaultClearsSubscription() (gas: 866273)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+[PASS] test_SubscribedPositionIsRefused() (gas: 701176)
+Logs:
+  S2 fork: Unichain Sepolia block 67121755
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 16.75s (31.21s CPU time)
+Ran 4 test suites in 16.76s (33.20s CPU time): 25 tests passed, 0 failed, 0 skipped (25 total tests)
