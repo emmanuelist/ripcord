@@ -51,6 +51,11 @@ All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
 - **[reported]** another entrant (emilhuseyn/reactive-omni) measured a Base Sepolia → Lasna → Base Sepolia loop at 1–2 s in 5/5 runs. Not our evidence.
 
 ## Traps
+- **viem `getBlockNumber()` is cached (~4 s).** Timed in a loop it returns in 0 ms. Use `client.request({ method: "eth_blockNumber" })` to measure RTT (harness fix, E-010).
+- **Public-RPC visibility trails block inclusion.** In harness run 7945 the exit's log became visible ≥3.9 s after the swap receipt, though the blocks are 3 s apart. Quote N from on-chain block deltas, and wall clock as "what a UI sees".
+- **RPC round trips from this machine (2026-11-06, VPN on):** Unichain ~311 ms, Lasna ~460–590 ms (`eth_getLogs` ~317 / ~593 ms), and 1.5–2 s for a first request on a new TLS connection.
+- **npm `ERR_SSL_CIPHER_OPERATION_FAILED`** (Node 26.7.0 / OpenSSL 3.6.3) killed `npm install` mid-download of large tarballs twice. It succeeded with `--maxsockets=2` *after the user turned a VPN on*, so the cause is unconfirmed (both changed at once). Try `--maxsockets=2` first.
+- **npm 11 skips install scripts by default** (it warned about esbuild's postinstall). tsx and vitest still work, because esbuild's binary comes from its `@esbuild/darwin-arm64` optional dependency.
 - **`subscribe()` / `unsubscribe()` inside `react()` work on Omni** (E-009): RipcordReactive subscribes to a pool's Swap topic when its first line is armed, and the next swap is delivered. The fire-and-unsubscribe `react()` used 106,801 gas.
 - **Shell polling can't time hops.** Each `cast logs` call costs 1.0–1.5 s (process spawn + RPC, 2026-11-06), and the demo script polls Lasna then Unichain in sequence. Its wall-clock figures are inflated upper bounds (15–19 s against 2 s on-chain). Use on-chain block deltas, or a persistent-connection harness watching every hop at once.
 - **`cast logs` with a bare event signature mis-filters indexed topics.** With `Transfer(address,address,uint256)` plus three values, a filter for tokenId 7942 still matched 7943, because cast can't know which params are indexed. Write `indexed` in the signature (`Transfer(address indexed,address indexed,uint256 indexed)`) or pass raw topic hashes: both filter exactly (tested on Unichain Sepolia, 2026-11-06). Every script here uses annotated signatures.

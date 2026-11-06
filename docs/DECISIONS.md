@@ -152,3 +152,15 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - **Capping fires per react and carrying the rest to the next swap.** Rejected: crossed lines would then wait on an unrelated future swap, which breaks "within N seconds".
 
 **Consequences:** It's a stated limit in the README. Re-measure the real `react()` gas in M1's on-chain loop and raise the cap only with evidence.
+
+## D-013 · Frontend hosting: Vercel (account emmanuelist) · 2026-11-06 · accepted
+**Context:** M1's last item needs a public URL. The user has Vercel. The CLI (60.1.3) on this machine is signed in as `emmanuelist`.
+
+**Decision:** Deploy `web/` to Vercel under the user's account.
+
+**Alternatives:** A claude.ai Artifact page. Not chosen: the user already has Vercel.
+
+**Consequences:**
+- Every deploy is a public surface, so the claims check (truth rules 2 and 3) runs before each one.
+- The page renders only chain-read values.
+- The thesis's N appears only once C-1 is verified.

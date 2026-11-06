@@ -5,7 +5,7 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). M0 done 2026-11-06, ahead of its 11-09 checkpoint · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** M1 item 4, the latency harness (`harness/`, TypeScript + viem): persistent connections, every hop watched at once, per-hop wall clock. Shell timings are invalid (CONTEXT). Then item 5, the read-only frontend (hosting is the user's call).
+**Next action:** M1 item 5, the read-only frontend (`web/`). Start with `impeccable shape` for direction, then deploy to Vercel (D-013, account emmanuelist) after a claims check. That closes M1.
 
 **Blocked on:** nothing.
 
@@ -17,7 +17,9 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 | **Reactive callback exits a real v4 position on-chain:** tokenId 7943 liquidity 1e20 → 0 through the real proxy, 2 Unichain blocks after the trigger, owner kept the NFT (approve custody), `exit()` 140k gas | `script/spike/s2-run.sh` against live chains | E-006 |
 | **Ripcord core contracts** (vault + reactive): 21 unit + 21 live-v4 fork tests. A real swap crossing a line → delivered callback → all liquidity removed. Failures (revoked approval, moved NFT, late subscriber) become `ExitFailed`. Local and fork only | `forge test` | E-008 |
 | **The real Ripcord loop on-chain:** a swap crosses the armed line → Lasna `react()` → callback → vault removes all liquidity, **2 Unichain blocks (2 s)** after the swap. The exit event names the triggering swap | `script/demo-loop.sh` | E-009 |
+| **Latency harness:** bounded per-hop wall clock + on-chain truth; run 7945 swap → exit 3 blocks / 3 s | `npm run measure` in `harness/` | E-010 |
 | Contracts gate green: fmt, lint `--deny warnings`, build, 75/75 tests, 0 compiler warnings | gate commands in `contracts/` | E-008 |
+| Harness gate green: eslint 0 warnings, tsc, 14 tests, build | `npm run lint && npm run typecheck && npm test && npm run build` in `harness/` | E-010 |
 | Project wallet `0x08e768752cA0F8a132cB82cB4bB4354470DD9111` funded with lREACT on Lasna and ETH on Unichain Sepolia | `cast balance` | CONTEXT.md (funding paths) |
 | CI green on GitHub Actions, private repo github.com/emmanuelist/ripcord | first run | E-007 |
 | Clock hook prints the time left from docs/PLAN.md | `echo '{}' \| node .claude/hooks/clock.mjs \| jq .` | foundation commit |
@@ -38,7 +40,7 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 v1 and v2 spike deployments are superseded: records in `docs/evidence/s1/unichain-v{1,2}-*`. v2's callback gas limit was too low.
 
 ## Broken or unverified
-- Per-hop wall-clock latency (origin → Lasna → callback): unmeasured. Lasna's clock skews ~1 s, so block timestamps can't time that hop (needs the M1 harness).
+- Per-hop wall clock is measured but loose: bounds ≈ 2 polling RTTs wide over this connection (E-010). Tightening it (overlapping polls or websockets) is optional for M2.
 - Base Sepolia as the pool chain: not measured, and there are no Base funds.
 
 ## Claims not yet verified
@@ -46,5 +48,4 @@ v1 and v2 spike deployments are superseded: records in `docs/evidence/s1/unichai
 - C-2 what one second buys: needs a historical crash price source and N.
 
 ## Open questions
-- Frontend hosting (needed for M1's last item): the user picks Vercel, Netlify, Cloudflare Pages, or a claude.ai Artifact page.
 - REACT/USD payout rate and date; live judging or video only: the user asks the organizers in the DoraHacks Q&A.
