@@ -1,13 +1,13 @@
 # State
 _Last verified: 2026-11-06 20:30 UTC, after the public-URL check_
 
-**Thesis:** Your Uniswap v4 position leaves the pool within N seconds of crossing your line, with nothing of yours running. (N is measured, E-012/E-013. Which N the sentence states is the user's call, C-1.)
+**Thesis:** Your Uniswap v4 position leaves the pool within 3 seconds of crossing your line, with nothing of yours running. (Verified for testnet, 11/11 loops on Unichain's clock, D-016.)
 
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). **All five items done** (frontend public, E-015); stop for the user's go-ahead before M2 (phase gate) · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
 **Next action:** with the user's go-ahead, M2's reversal beat (PLAN.md): a direct `RipcordVault.exit` call that reverts on-chain, and a swap that doesn't cross an armed line, each with hashes and receipts. Then the refusal room on the page.
 
-**Blocked on:** the user, for (1) the thesis wording for N (3 s on Unichain's clock in 11/11 runs, or the viewer-side wall-clock upper bound, p90 5.3 s); (2) disconnecting the GitHub repo from the Vercel project (each push now makes a failing Vercel build; production is unaffected). Both actions were denied to the agent.
+**Blocked on:** nothing.
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |
@@ -40,7 +40,6 @@ Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source m
 - Per-hop wall clock is loose (bounded by polling RTTs, E-010). Base Sepolia: not measured.
 
 ## Claims not yet verified
-- C-1 the thesis: N measured (E-012/E-013), wording pending the user.
 - C-2 what one second buys: needs a historical crash price source and N.
 
 ## Open questions

@@ -200,3 +200,17 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Consequences:**
 - Every deploy is a manual run of the script from `web/`. Re-add source maps when the repo goes public at submission, if wanted.
 - Vercel team projects start with Vercel Authentication on ("all except custom domains"), so a fresh deploy is not public. Turning it off is the account owner's call (it was denied to the agent as a security change).
+
+## D-016 · The thesis states N = 3 seconds, on Unichain's clock · 2026-11-06 · accepted
+**Context:** C-1 left N open until it was measured over ≥10 runs. E-012 and E-013 measure 11 real loops. The user delegated the wording ("do what's best").
+
+**Decision:** "Your Uniswap v4 position leaves the pool within 3 seconds of crossing your line, with nothing of yours running." N is measured on Unichain's own clock: the exit block's timestamp minus the crossing swap's block timestamp.
+
+**Reasons:**
+- It is the chain's own record of the loop, re-checkable by anyone from two receipts. 11 of 11 loops: 2 s (8 runs) or 3 s (3 runs).
+- The viewer-side figure (swap mined → exit first seen through a public RPC: lower bounds 2.0–3.9 s, upper bounds 3.7–6.0 s over 10 harness runs) measures our polling as much as the loop, so it is disclosed as a limit, not claimed.
+- Break test: "3 seconds on a quiet testnet; a congested chain could be slower." True, so every surface that carries the thesis also says testnet and the run count.
+
+**Alternatives:** "within 6 seconds" (the viewer-side upper bound): rejected, it understates the system and its error comes from the RPC, not Reactive. Block counts: rejected by AGENTS.md rule 4 (timestamps for latency).
+
+**Consequences:** C-1 is verified for testnet with 11/11 runs. Any loop above 3 s on Unichain's clock breaks the sentence: re-check before every publish. The page hero keeps "seconds after", because it must hold for any future live run.

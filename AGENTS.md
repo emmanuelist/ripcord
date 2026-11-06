@@ -1,8 +1,8 @@
 # Ripcord: build rules and pinned context
 
-Your Uniswap v4 position leaves the pool within N seconds of crossing your line, with nothing of yours running.
+Your Uniswap v4 position leaves the pool within 3 seconds of crossing your line, with nothing of yours running.
 
-(N is the measured full-loop latency. The claim stays `unverified` in docs/EVIDENCE.md until it's measured on-chain.)
+(3 s on Unichain's clock: the exit block's timestamp minus the crossing swap's, 11 of 11 testnet loops, E-012/E-013, D-016. Re-check before every publish: one slower loop breaks the sentence.)
 
 **Read `docs/STATE.md` first.** It holds the current truth: what works, what's deployed and what's next. Read `docs/CONTEXT.md` before touching any integration. The research dossier and strategy notes live in `internal/`, which is gitignored and never committed.
 
