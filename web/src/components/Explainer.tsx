@@ -1,6 +1,7 @@
 import { addressUrl, deploy, txUrl } from "../chain/clients";
 import type { Funding } from "../chain/funding";
 import { crosses, fmtAmount, fmtInt, fmtTick, shortHash, type Position } from "../chain/model";
+import { useCustody } from "../chain/useCustody";
 import { Flap } from "./Flap";
 
 /** Source lines pinned to the commit the deployed contracts were built from (contracts/ unchanged since). */
@@ -61,6 +62,7 @@ export function Explainer({ p, armed, funding }: { p?: Position; armed: number; 
     ? `liquidity ${sci(p.exit.liquidity)} → 0; ${fmtAmount(p.exit.amount0)} RDA + ${fmtAmount(p.exit.amount1)} RDB to ${p.owner ? shortHash(p.owner) : "the owner"}`
     : undefined;
   const reactiveCovers = funding?.reactive.covers;
+  const custody = useCustody(p);
 
   return (
     <div className="explainer">
@@ -118,6 +120,20 @@ export function Explainer({ p, armed, funding }: { p?: Position; armed: number; 
         <div className="prose">
           <p>You approve RipcordVault on your position NFT. You never hand it over: the NFT stays in your wallet before and after the exit.</p>
           <p>The exit removes liquidity only. It doesn't swap, and both tokens go to whoever holds the NFT at that moment. You can disarm a line at any time.</p>
+          {custody && (
+            <p className="read-now">
+              <span className="cite-k">Read now</span> #{String(custody.tokenId)}'s owner, from the PositionManager: the block before its exit (
+              <span className="num">#{fmtInt(custody.beforeBlock)}</span>){" "}
+              <a className="hash" href={addressUrl("unichain", custody.before)} target="_blank" rel="noreferrer">
+                {shortHash(custody.before)}
+              </a>
+              ; now{" "}
+              <a className="hash" href={addressUrl("unichain", custody.now)} target="_blank" rel="noreferrer">
+                {shortHash(custody.now)}
+              </a>
+              {custody.before.toLowerCase() === custody.now.toLowerCase() ? ", the same wallet." : "."}
+            </p>
+          )}
         </div>
       </section>
 
@@ -130,7 +146,7 @@ export function Explainer({ p, armed, funding }: { p?: Position; armed: number; 
             At most 8 armed lines per pool, so a single swap can't push the reaction past Lasna's gas cap. <span className="live-fact num">{armed} of 8 armed now.</span>
           </li>
           <li>
-            No funding, no exit: RipcordReactive pays for reactions in lREACT and the vault pays callback gas in ETH.{" "}
+            No funding, no exit: RipcordReactive pays for reactions in <span className="ticker">lREACT</span> and the vault pays callback gas in ETH.{" "}
             {reactiveCovers !== undefined && (
               <a className="live-fact num" href="#board">
                 RipcordReactive covers {fmtInt(reactiveCovers)} more {reactiveCovers === 1 ? "exit" : "exits"} now.

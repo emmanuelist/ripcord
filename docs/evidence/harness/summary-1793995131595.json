@@ -1,0 +1,22 @@
+{
+  "runs": 1,
+  "exited": 1,
+  "unichainBlocksSwapToExit": {
+    "median": 2,
+    "max": 2
+  },
+  "wallSwapToExitMidMs": {
+    "median": 3770.386312500006,
+    "p90": 3770.386312500006
+  },
+  "wallSwapToExitMaxMs": {
+    "median": 5043.703209000003,
+    "p90": 5043.703209000003
+  },
+  "wallSwapToLasnaMidMs": {
+    "median": 1928.1282500000016
+  },
+  "tokenIds": [
+    "7954"
+  ]
+}

@@ -58,5 +58,11 @@
     "exitTx": "0x53fdc8a901e3ab348ac220480e5f44fb28f5a8ed65be3e95e34fc39c38f7144e",
     "lasnaTx": "0xd88339550bb1826d19543e27dd802278b1f53268cd38acff58e3d0158c94a0ea",
     "source": "docs/evidence/harness/run-7953.json"
+  },
+  {
+    "tokenId": "7954",
+    "exitTx": "0x31b4fbf0a260b7fd0f483bd45e51cce8bc126f9830ffa6efdc5d92f18d922337",
+    "lasnaTx": "0x04aa39b4888f4f55b28a31128ef366c14a16b3ca32900050ddc8497480d56415",
+    "source": "docs/evidence/harness/run-7954.json"
   }
 ]

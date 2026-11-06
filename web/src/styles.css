@@ -234,8 +234,8 @@ a:hover { text-decoration-color: var(--yellow); }
 .svc-cell { padding: 10px 16px 11px; border-left: 1px solid var(--alu); display: grid; gap: 6px; align-content: start; justify-items: start; min-width: 0; }
 .svc-cell:first-child { border-left: 0; }
 .svc-label { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow); white-space: nowrap; }
-/* Token symbols keep their own case: lREACT is not LREACT. */
-.svc-label .unit { text-transform: none; letter-spacing: 0.02em; }
+/* Token tickers are data: set in mono and their own case, so lREACT never reads as LREACT or IREACT. */
+.ticker { font-family: var(--mono); text-transform: none; letter-spacing: 0; font-size: 0.95em; }
 .svc-sub { margin: 0; font-size: 12px; color: var(--ink-3); display: flex; gap: 10px; align-items: center; white-space: nowrap; }
 .svc-sub a { color: var(--ink-2); }
 .svc-state { font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; }
@@ -322,6 +322,8 @@ th:not([aria-sort]) .sort-mark path { stroke: var(--ink-3); }
 .limits li { padding-left: 22px; position: relative; }
 .limits li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 2px; background: var(--yellow); }
 .live-fact { color: var(--ink); font-weight: 500; }
+.read-now { color: var(--ink-2); font-size: 15px; border-top: 1px solid var(--rail); padding-top: 14px; }
+.read-now .cite-k { margin-right: 8px; }
 .contracts-wrap { container-type: inline-size; overflow-x: auto; }
 .contracts { width: 100%; border-collapse: collapse; }
 .contracts th, .contracts td { text-align: left; padding: 12px 12px 12px 0; border-bottom: 1px solid var(--rail); vertical-align: top; }
@@ -331,6 +333,10 @@ th:not([aria-sort]) .sort-mark path { stroke: var(--ink-3); }
 .foot { color: var(--ink-3); font-size: 14px; border-top: 1px solid var(--rail); padding-top: 18px; }
 
 /* ---------- responsive: what changes, not just what shrinks ---------- */
+/* Two-column hero: the band fills the first screen, so the board starts whole at the fold instead of cut through. */
+@media (width >= 1100px) {
+  .hero { min-height: min(calc(100svh - 61px), 960px); }
+}
 @media (width < 1100px) {
   .hero { grid-template-columns: 1fr; align-items: start; }
   .hero-copy { max-width: 760px; }

@@ -15,7 +15,7 @@ import {
   VaultStatus,
   type Position,
 } from "../src/chain/model";
-import { flapSteps, FLAP_ALPHABET } from "../src/components/flapSteps";
+import { DIGIT_ALPHABET, flapSteps, FLAP_ALPHABET } from "../src/components/flapSteps";
 
 type RawLog = { address: Hex; data: Hex; topics: [Hex, ...Hex[]]; blockNumber: Hex; transactionHash: Hex };
 const fixture = JSON.parse(readFileSync(new URL("./fixtures/loop-7944-logs.json", import.meta.url), "utf8")) as {
@@ -121,6 +121,18 @@ describe("split-flap steps turn forward and land on the target", () => {
   it("does nothing when unchanged, and snaps characters off the drum", () => {
     expect(flapSteps("D", "D")).toEqual([]);
     expect(flapSteps("A", "→")).toEqual(["→"]);
+  });
+  it("numeric tiles turn on a digit-only drum, never through letters (a tick reads −1ZY mid-turn otherwise)", () => {
+    for (const [from, to] of [["7", "5"], ["4", "0"], ["−", "3"], ["9", "1"], [" ", "8"]] as const) {
+      const seq = flapSteps(from, to);
+      expect(seq.at(-1)).toBe(to);
+      for (const c of seq) expect(DIGIT_ALPHABET).toContain(c);
+    }
+  });
+  it("a letter on either side still turns on the full drum", () => {
+    const seq = flapSteps("A", "9", 6);
+    expect(seq.at(-1)).toBe("9");
+    expect(seq.slice(0, -1).some((c) => /[B-Z]/.test(c))).toBe(true);
   });
 });
 

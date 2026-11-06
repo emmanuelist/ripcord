@@ -1,31 +1,47 @@
 import { useEffect, useState } from "react";
-import { readFunding, type Funding } from "./funding";
+import { combine, readBalances, readCosts, type Balances, type Costs, type Funding } from "./funding";
 import type { Position } from "./model";
 
 const REFRESH_MS = 30_000;
 
-/** Balances and the exits they cover, re-read whenever a new exit lands and every 30 s. */
+/**
+ * Balances and the exits they cover. The cost of an exit is derived once per new exit (one log query and six
+ * historical balance reads); the 30 s timer re-reads only the two current balances, inside the page's RPC budget.
+ */
 export function useFunding(latestExit: Position | undefined): Funding | undefined {
-  const [funding, setFunding] = useState<Funding | undefined>(undefined);
-  const key = latestExit ? `${latestExit.tokenId}:${latestExit.exit?.block ?? ""}:${latestExit.lasna?.block ?? ""}` : "";
+  const [costs, setCosts] = useState<Costs | undefined>(undefined);
+  const [balances, setBalances] = useState<Balances | undefined>(undefined);
+  const key = latestExit?.exit && latestExit.lasna ? `${latestExit.tokenId}:${latestExit.exit.block}:${latestExit.lasna.block}` : "";
+
+  useEffect(() => {
+    if (!key || !latestExit) return;
+    let stopped = false;
+    readCosts(latestExit)
+      .then((c) => !stopped && setCosts(c))
+      .catch(() => undefined); // keep the last good costs; the shell's liveness reports RPC trouble
+    return () => {
+      stopped = true;
+    };
+    // The key is the exit's identity; the object itself is a fresh copy on every poll.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
 
   useEffect(() => {
     let stopped = false;
     const read = () =>
-      readFunding(latestExit)
-        .then((f) => !stopped && setFunding(f))
-        .catch(() => undefined); // keep the last good reading; the shell's liveness reports RPC trouble
+      readBalances()
+        .then((b) => !stopped && setBalances(b))
+        .catch(() => undefined);
     void read();
+    // A new exit also moves both balances: re-read them with it.
     const id = setInterval(() => void read(), REFRESH_MS);
     return () => {
       stopped = true;
       clearInterval(id);
     };
-    // The key captures what matters about the exit; the object itself is a fresh copy on every poll.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
-  return funding;
+  return balances ? combine(balances, costs) : undefined;
 }
 
 export type FundingState = "in-service" | "low" | "unfunded";

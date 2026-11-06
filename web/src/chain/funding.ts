@@ -24,6 +24,17 @@ export interface Funding {
   basis?: bigint;
 }
 
+export interface Costs {
+  reactive?: bigint;
+  vault?: bigint;
+  basis: bigint;
+}
+
+export interface Balances {
+  reactive: bigint;
+  vault: bigint;
+}
+
 /** Charge taken in block `b`: Reactive debits the contract inside the reaction's own block (no gas price on the receipt). */
 async function drop(chain: "u" | "l", address: `0x${string}`, b: bigint): Promise<bigint> {
   const c = chain === "u" ? uni : las;
@@ -31,21 +42,12 @@ async function drop(chain: "u" | "l", address: `0x${string}`, b: bigint): Promis
   return before - after;
 }
 
-const covers = (balance: bigint, perExit: bigint | undefined) => (perExit && perExit > 0n ? Number(balance / perExit) : undefined);
-
 /**
- * Current balances, and how many exits each covers at the cost of the most recent real exit. A block that also
- * received a top-up would show a non-positive charge; then the cost is unknown rather than guessed.
+ * What one real exit cost each holder: one log query and six historical balance reads, done once per exit. A block
+ * that also received a top-up shows a non-positive charge; then the cost is unknown rather than guessed.
  */
-export async function readFunding(latestExit: Position | undefined): Promise<Funding> {
-  const [reactiveBal, vaultBal] = await Promise.all([
-    las.getBalance({ address: deploy.ripcordReactive }),
-    uni.getBalance({ address: deploy.ripcordVault }),
-  ]);
-  const funding: Funding = { reactive: { balance: reactiveBal }, vault: { balance: vaultBal } };
-  const p = latestExit;
-  if (!p?.lasna || !p.exit) return funding;
-
+export async function readCosts(p: Position): Promise<Costs | undefined> {
+  if (!p.lasna || !p.exit) return undefined;
   const [tracked, fire, callback] = await Promise.all([
     las.getLogs({
       address: deploy.ripcordReactive,
@@ -59,12 +61,25 @@ export async function readFunding(latestExit: Position | undefined): Promise<Fun
   ]);
   const track = tracked.at(-1)?.blockNumber;
   const trackCost = track ? await drop("l", deploy.ripcordReactive, track) : undefined;
-
-  const reactivePer = trackCost !== undefined && trackCost > 0n && fire > 0n ? trackCost + fire : undefined;
-  const vaultPer = callback > 0n ? callback : undefined;
   return {
-    reactive: { balance: reactiveBal, perExit: reactivePer, covers: covers(reactiveBal, reactivePer) },
-    vault: { balance: vaultBal, perExit: vaultPer, covers: covers(vaultBal, vaultPer) },
+    reactive: trackCost !== undefined && trackCost > 0n && fire > 0n ? trackCost + fire : undefined,
+    vault: callback > 0n ? callback : undefined,
     basis: p.tokenId,
+  };
+}
+
+/** The two current balances: the only reads repeated on a timer. */
+export async function readBalances(): Promise<Balances> {
+  const [reactive, vault] = await Promise.all([las.getBalance({ address: deploy.ripcordReactive }), uni.getBalance({ address: deploy.ripcordVault })]);
+  return { reactive, vault };
+}
+
+const covers = (balance: bigint, perExit: bigint | undefined) => (perExit && perExit > 0n ? Number(balance / perExit) : undefined);
+
+export function combine(balances: Balances, costs: Costs | undefined): Funding {
+  return {
+    reactive: { balance: balances.reactive, perExit: costs?.reactive, covers: covers(balances.reactive, costs?.reactive) },
+    vault: { balance: balances.vault, perExit: costs?.vault, covers: covers(balances.vault, costs?.vault) },
+    basis: costs?.basis,
   };
 }

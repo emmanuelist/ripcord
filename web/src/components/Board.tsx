@@ -58,14 +58,14 @@ function TankCell({ label, unit, chain, address, tank }: { label: string; unit: 
   return (
     <div className="svc-cell">
       <p className="svc-label">
-        {label} · <span className="unit">{unit}</span>
+        {label} · <span className="ticker">{unit}</span>
       </p>
       <Flap text={tank?.covers !== undefined ? `${fmtInt(tank.covers)} ${tank.covers === 1 ? "EXIT" : "EXITS"}` : "        "} tone={tone} size="s" />
       <p className="svc-sub">
         {state && <span className={`svc-state tone-${tone}`}>{stateWord[state]}</span>}
         {tank ? (
           <a className="num" href={addressUrl(chain, address)} target="_blank" rel="noreferrer">
-            {fmtBalance(tank.balance)} {unit}
+            {fmtBalance(tank.balance)} <span className="ticker">{unit}</span>
           </a>
         ) : (
           <span>Reading balance…</span>
