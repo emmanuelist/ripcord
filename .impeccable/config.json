@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/**"
+        ],
+        "createdAt": "2026-11-06T20:11:57.527Z",
+        "reason": "Rejected candidate-world comps from the direction decision; they use other worlds' fonts by design and never ship"
+      }
+    ]
+  }
+}
