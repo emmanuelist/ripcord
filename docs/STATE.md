@@ -19,7 +19,7 @@ _Last verified: 2026-11-06 20:15 UTC, after the web v3 finish review and the Ver
 | Web gate: eslint 0 warnings, tsc, 21 tests, build; design detector clean | `npm run lint && npm run typecheck && npm test && npm run build` in `web/` | `3e605f7` |
 | Contracts gate green (75/75), harness gate green; CI green on contracts, harness and web | GitHub Actions on `354e14a` | E-008, E-010 |
 | **Every sentence on the page has a verified claims row** (C-3 … C-19); all 7 listed contracts have code on their chains | claims check + `cast code` | `f58cbb1` |
-| DESIGN.md + `.impeccable/design.json` written from the shipped build | impeccable-documenter | this commit |
+| DESIGN.md + `.impeccable/design.json` written from the shipped build | impeccable-documenter | d81ba4f |
 | Funds: wallet 0.00699 ETH (Unichain), 1.917 lREACT (Lasna); RipcordReactive 0.603 lREACT (≈16 exits); vault 0.000995 ETH (≈2,210 exits) | `cast balance` | — |
 
 ## Deployed
