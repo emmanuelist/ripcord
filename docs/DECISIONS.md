@@ -103,3 +103,14 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Alternatives:** **Base Sepolia** (200 ms blocks) could shorten the loop by up to ~1.6 s (two Unichain blocks against two Base blocks), but it's unmeasured, and the project wallet holds no Base Sepolia ETH (faucets need a Coinbase login).
 
 **Consequences:** Revisit only if Base Sepolia funds appear *and* a Base S1 run shows a materially lower median. The S1 scripts already support `POOL=base`. The track allows either chain.
+
+## D-009 · GitHub repo private until submission · 2026-11-06 · accepted
+**Context:** CI needed a remote. The rules require a public, open-source repo "by the time you submit".
+
+**Decision:** Use github.com/emmanuelist/ripcord, **private** during the build. Flip it public before submitting, as an M4 checklist item. The repo description stays neutral ("work in progress") until the thesis (C-1) has a verified row in the claims table.
+
+**Alternatives:**
+- **Public now.** Rejected by the user: it shows the work to competitors.
+- **Local only.** Rejected: CI would stay unrun.
+
+**Consequences:** The CI link in EVIDENCE only works for the owner until the flip. The commit history, with small commits from day one, shows the work was done during the event.

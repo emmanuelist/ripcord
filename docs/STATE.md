@@ -3,11 +3,11 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 
 **Thesis:** Your Uniswap v4 position leaves the pool within N seconds of crossing your line, with nothing of yours running.
 
-**Milestone:** M0 · Rigged (checkpoint 2026-11-09 09:30 UTC) · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
+**Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). M0 done 2026-11-06, ahead of its 11-09 checkpoint · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** create the GitHub repo (visibility is the user's call) and get CI green. That's the last M0 item. Then detail the M1 work items (walking skeleton: a real Swap crossing a line → exit, the harness, the hosted read-only frontend).
+**Next action:** detail the M1 work items in docs/PLAN.md (walking skeleton: a real v4 Swap crossing a registered line → Lasna → exit, the per-hop latency harness, the hosted read-only frontend), after the user settles the custody model (approve vs deposit).
 
-**Blocked on:** a GitHub repo and its visibility (user decision), for CI.
+**Blocked on:** nothing. The custody model is the only open product decision (below).
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |
@@ -17,6 +17,7 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 | **Reactive callback exits a real v4 position on-chain:** tokenId 7943 liquidity 1e20 → 0 through the real proxy, 2 Unichain blocks after the trigger, owner kept the NFT (approve custody), `exit()` 140k gas | `script/spike/s2-run.sh` against live chains | E-006 |
 | Contracts gate green: fmt, lint `--deny warnings`, build, 33/33 tests | gate commands in `contracts/` | this commit |
 | Project wallet `0x08e768752cA0F8a132cB82cB4bB4354470DD9111` funded with lREACT on Lasna and ETH on Unichain Sepolia | `cast balance` | CONTEXT.md (funding paths) |
+| CI green on GitHub Actions, private repo github.com/emmanuelist/ripcord | first run | E-007 |
 | Clock hook prints the time left from docs/PLAN.md | `echo '{}' \| node .claude/hooks/clock.mjs \| jq .` | foundation commit |
 
 ## Deployed (Unichain Sepolia = pool chain, D-008)
@@ -34,7 +35,6 @@ v1 and v2 spike deployments are superseded: records in `docs/evidence/s1/unichai
 ## Broken or unverified
 - Per-hop wall-clock latency (origin → Lasna → callback): unmeasured. Lasna's clock skews ~1 s, so block timestamps can't time that hop (needs the M1 harness).
 - Base Sepolia as the pool chain: not measured, and there are no Base funds.
-- CI: written, never run, no GitHub remote.
 
 ## Claims not yet verified
 - C-1 the thesis: needs N measured on the *real* Ripcord loop (a Swap crossing the line → exit) over ≥10 runs. S1's ~2 s is a lower-bound indicator, not N.
