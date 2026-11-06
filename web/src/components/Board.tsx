@@ -112,7 +112,7 @@ export function Board({
           <div className="svc-cell">
             <p className="svc-label">Pool tick now</p>
             <Flap text={poolTick !== undefined ? fmtTick(poolTick) : "    "} tone={poolTick !== undefined ? "ink" : "dim"} size="s" />
-            <p className="svc-sub">turns on every swap in the pool</p>
+            <p className="svc-sub">read live from the pool</p>
           </div>
           <TankCell label="RipcordReactive" unit="lREACT" chain="lasna" address={deploy.ripcordReactive} tank={funding?.reactive} />
           <TankCell label="RipcordVault" unit="ETH" chain="unichain" address={deploy.ripcordVault} tank={funding?.vault} />

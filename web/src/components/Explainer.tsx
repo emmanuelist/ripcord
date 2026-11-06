@@ -189,7 +189,7 @@ export function Explainer({ p, armed, funding }: { p?: Position; armed: number; 
           </table>
         </div>
         <p className="ex-note">
-          Demo pool {shortHash(deploy.poolId)} uses test tokens RDA and RDB that Ripcord minted, because testnet v4 pools have no organic liquidity. Source and evidence:{" "}
+          Demo pool {shortHash(deploy.poolId)} pairs RDA and RDB, test tokens the Ripcord project wallet deployed for the demo. Source and evidence:{" "}
           <a href="https://github.com/emmanuelist/ripcord">github.com/emmanuelist/ripcord</a>.
         </p>
       </section>
