@@ -142,3 +142,13 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - **Non-zero mins.** Deferred: they'd turn a sharp move into a reverted (stuck) exit.
 
 **Consequences:** One big swap can blow past the line. The README states this (C-1 break test).
+
+## D-012 · 8 lines per pool, not 16 · 2026-11-06 · supersedes D-011 point 5
+**Context:** D-011 estimated 16 lines per pool. The S1 on-chain `react()` used 84,360 gas for one callback request (E-005), so one fired line costs ~60k once the `RipcordPulled` event and storage updates are counted. A swap crossing all 16 lines would need ~1M, over Lasna's 900k reactive-tx cap. The whole reaction would then revert, and *no* line would exit.
+
+**Decision:** `MAX_LINES_PER_POOL = 8` in both RipcordVault and RipcordReactive: ~500k worst case. The vault refuses a 9th line (`PoolFull`), so a user never believes they're armed when they aren't.
+
+**Alternatives:**
+- **Capping fires per react and carrying the rest to the next swap.** Rejected: crossed lines would then wait on an unrelated future swap, which breaks "within N seconds".
+
+**Consequences:** It's a stated limit in the README. Re-measure the real `react()` gas in M1's on-chain loop and raise the cap only with evidence.

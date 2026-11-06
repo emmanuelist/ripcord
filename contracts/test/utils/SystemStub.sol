@@ -23,7 +23,15 @@ contract SystemStub {
         subscriptions.push(Subscription(chainId, contract_, t0, t1, t2, t3));
     }
 
-    function unsubscribe(uint256, address, uint256, uint256, uint256, uint256) external {}
+    Subscription[] public unsubscriptions;
+
+    function unsubscribe(uint256 chainId, address contract_, uint256 t0, uint256 t1, uint256 t2, uint256 t3) external {
+        unsubscriptions.push(Subscription(chainId, contract_, t0, t1, t2, t3));
+    }
+
+    function unsubscriptionCount() external view returns (uint256) {
+        return unsubscriptions.length;
+    }
 
     function requestCallbackV_1_0(ISystemContract.CallbackConfiguration_V_1_0 memory config) external {
         requests.push(config);

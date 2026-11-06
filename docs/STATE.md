@@ -5,7 +5,7 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). M0 done 2026-11-06, ahead of its 11-09 checkpoint · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** M1 item 1, core contracts `RipcordVault` + `RipcordReactive` with unit and fork tests (docs/PLAN.md, D-010, D-011).
+**Next action:** M1 items 2+3. Deploy RipcordVault (Unichain Sepolia) + RipcordReactive (Lasna) at precomputed addresses, plus a demo pool and an armed position. Then push one real swap across the line and capture the three-hop loop. First on-chain test of `subscribe()` *inside* `react()` (fallback in PLAN).
 
 **Blocked on:** nothing.
 
@@ -15,7 +15,8 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 | **Omni loop on-chain:** a Unichain Sepolia event → Lasna `react()` → Unichain Sepolia callback, 5/5 runs, median 2 Unichain blocks (~2 s) | `script/spike/s1-run.sh` against live chains | E-005 |
 | Omni injects the requesting reactive contract's address as the callback's first argument | `injectedSenderMatches` true in 5/5 loops | E-005 |
 | **Reactive callback exits a real v4 position on-chain:** tokenId 7943 liquidity 1e20 → 0 through the real proxy, 2 Unichain blocks after the trigger, owner kept the NFT (approve custody), `exit()` 140k gas | `script/spike/s2-run.sh` against live chains | E-006 |
-| Contracts gate green: fmt, lint `--deny warnings`, build, 33/33 tests | gate commands in `contracts/` | this commit |
+| **Ripcord core contracts** (vault + reactive): 21 unit + 21 live-v4 fork tests. A real swap crossing a line → delivered callback → all liquidity removed. Failures (revoked approval, moved NFT, late subscriber) become `ExitFailed`. Local and fork only | `forge test` | E-008 |
+| Contracts gate green: fmt, lint `--deny warnings`, build, 75/75 tests, 0 compiler warnings | gate commands in `contracts/` | E-008 |
 | Project wallet `0x08e768752cA0F8a132cB82cB4bB4354470DD9111` funded with lREACT on Lasna and ETH on Unichain Sepolia | `cast balance` | CONTEXT.md (funding paths) |
 | CI green on GitHub Actions, private repo github.com/emmanuelist/ripcord | first run | E-007 |
 | Clock hook prints the time left from docs/PLAN.md | `echo '{}' \| node .claude/hooks/clock.mjs \| jq .` | foundation commit |
