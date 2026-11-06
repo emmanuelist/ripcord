@@ -1,13 +1,13 @@
 # State
-_Last verified: 2026-11-06 20:15 UTC, after the web v3 finish review and the Vercel deploy_
+_Last verified: 2026-11-06 20:30 UTC, after the public-URL check_
 
 **Thesis:** Your Uniswap v4 position leaves the pool within N seconds of crossing your line, with nothing of yours running. (N is measured, E-012/E-013. Which N the sentence states is the user's call, C-1.)
 
-**Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). Items 1–4 done; item 5 (frontend) built, reviewed "ship", deployed, **not yet public** · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
+**Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). **All five items done** (frontend public, E-015); stop for the user's go-ahead before M2 (phase gate) · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** the user turns off Vercel Authentication for project `ripcord` (dashboard → Settings → Deployment Protection, or `vercel project protection disable ripcord --sso`). Then check `https://ripcord-emmanuel-pauls-projects.vercel.app` logged-out from a private window and a phone, record it in EVIDENCE, and close M1 item 5. After that: M2's reversal beat (PLAN.md).
+**Next action:** with the user's go-ahead, M2's reversal beat (PLAN.md): a direct `RipcordVault.exit` call that reverts on-chain, and a swap that doesn't cross an armed line, each with hashes and receipts. Then the refusal room on the page.
 
-**Blocked on:** the user, for two things: (1) disabling Vercel Authentication, which was denied to the agent as a security change; (2) the thesis wording for N (3 s on Unichain's clock in 11/11 runs, or the viewer-side wall-clock upper bound, p90 5.3 s).
+**Blocked on:** the user, for (1) the thesis wording for N (3 s on Unichain's clock in 11/11 runs, or the viewer-side wall-clock upper bound, p90 5.3 s); (2) disconnecting the GitHub repo from the Vercel project (each push now makes a failing Vercel build; production is unaffected). Both actions were denied to the agent.
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |
@@ -28,13 +28,13 @@ _Last verified: 2026-11-06 20:15 UTC, after the web v3 finish review and the Ver
 | **RipcordVault** | Unichain Sepolia | 0x641413bb227c5452ef2b968c9774bc31f5f54c98 | 2026-11-06 |
 | **RipcordReactive** | Lasna | 0xA2deA4D676236Aa905c0Cb1B90712Fc3591af2B5 | 2026-11-06 |
 | Demo pool (RDA/RDB test tokens) | Unichain Sepolia | poolId 0xcd8519fedccc6235e1775b43017dc99d10e3be81b9989bda25d9d4a20aa3d064 | 2026-11-06 |
-| **Web (production, behind Vercel Authentication)** | Vercel, project `emmanuel-pauls-projects/ripcord` | `ripcord-emmanuel-pauls-projects.vercel.app` (302 → login until protection is off) | 2026-11-06 |
+| **Web (production, public)** | Vercel, project `emmanuel-pauls-projects/ripcord` | **https://ripcord-ashy.vercel.app** (E-015; per-deployment URLs stay behind Vercel login) | 2026-11-06 |
 | S1/S2 spike contracts | Unichain Sepolia / Lasna | see `docs/evidence/s1/`, `docs/evidence/s2/` | 2026-11-06 |
 
 Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source maps, D-015).
 
 ## Broken or unverified
-- The public URL: not public until Vercel Authentication is off. `ripcord.vercel.app` belongs to someone else.
+- Not checked yet: the public page on a phone over cellular (preflight, M4). Each push to `main` adds a failing Vercel Git build until the repo is disconnected from the Vercel project.
 - The page's GitHub links (code citations pinned to `a7b4bbd`, the repo link) 404 for visitors until the repo goes public at submission (D-009).
 - The flap's two-half fall is judged from code; at 130 ms per step it can't be captured frame by frame.
 - Per-hop wall clock is loose (bounded by polling RTTs, E-010). Base Sepolia: not measured.
