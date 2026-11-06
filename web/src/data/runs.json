@@ -16,5 +16,47 @@
     "exitTx": "0x330ee41f74ec34dff8f759437eea34a9f4327f976bdab42901c85c95e274c18b",
     "lasnaTx": "0xc6aeaa32b8673489716ea6212bb89f9b5c97bc764c92d3493a8803a4a390942c",
     "source": "docs/evidence/harness/run-7946.json"
+  },
+  {
+    "tokenId": "7947",
+    "exitTx": "0x7fbd296f1992d444a23241e79d925a6840ea178c31370b4fcfb6a7f14775410d",
+    "lasnaTx": "0xefebbac656d9eef06519bff44f408f1aa04708fcf7adcc5d5e4c3ff9b0a1c891",
+    "source": "docs/evidence/harness/run-7947.json"
+  },
+  {
+    "tokenId": "7948",
+    "exitTx": "0x796e38e0ca23867b4246248410ec0c9b4b687e379e519568f17c88f00817adda",
+    "lasnaTx": "0xc90f5d6fcdfeb8491dd92162d9f4b09d5c592412e08f3dc914ef822bc8f45b7e",
+    "source": "docs/evidence/harness/run-7948.json"
+  },
+  {
+    "tokenId": "7949",
+    "exitTx": "0x269bb1d39841de0147000732fa874ad939bfaab019f7cec3c7ffe1d5880ff20a",
+    "lasnaTx": "0x573f3897bb0e1c627c93512315fede799e809690f7d31b0f5bd0a6a7c9ec0db4",
+    "source": "docs/evidence/harness/run-7949.json"
+  },
+  {
+    "tokenId": "7950",
+    "exitTx": "0xa7b3546571d802fadd0f96a2e2f247003563e39108f02c60b406355fd650ddbb",
+    "lasnaTx": "0x5726d691943a4d70fe2dc206e336ad70334aabacc7a1a6cb91ea88a8e98b5e72",
+    "source": "docs/evidence/harness/run-7950.json"
+  },
+  {
+    "tokenId": "7951",
+    "exitTx": "0x7852e39110657649848d9f843ade6fb652f39f95e8971b36471da1c28fc97ea7",
+    "lasnaTx": "0xac3ed6f9ca00f6e28c1590434b95f576f0b14dd86ebb73658e19b04cb53d1fef",
+    "source": "docs/evidence/harness/run-7951.json"
+  },
+  {
+    "tokenId": "7952",
+    "exitTx": "0x292239a93d1dc3f44535eba5e7ab3a99f804e3619747b585a8eb09c8bccbf23f",
+    "lasnaTx": "0xd80364cf0316a68612a2c57b9d62d3c9c0593ae189b8752e3178a89c4bd30c2c",
+    "source": "docs/evidence/harness/run-7952.json"
+  },
+  {
+    "tokenId": "7953",
+    "exitTx": "0x53fdc8a901e3ab348ac220480e5f44fb28f5a8ed65be3e95e34fc39c38f7144e",
+    "lasnaTx": "0xd88339550bb1826d19543e27dd802278b1f53268cd38acff58e3d0158c94a0ea",
+    "source": "docs/evidence/harness/run-7953.json"
   }
 ]

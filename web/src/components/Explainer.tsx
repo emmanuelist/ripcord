@@ -1,6 +1,34 @@
-import { addressUrl, deploy } from "../chain/clients";
-import { shortHash } from "../chain/model";
+import { addressUrl, deploy, txUrl } from "../chain/clients";
+import { fmtInt, fmtTick, shortHash, type Position } from "../chain/model";
 import { Flap } from "./Flap";
+
+/** Source lines pinned to the commit the deployed contracts were built from (contracts/ unchanged since). */
+const SRC = "https://github.com/emmanuelist/ripcord/blob/a7b4bbd68ddec105113e698e32d8c7b96c1b1c4c/contracts/src";
+
+function Cite({ code, file, line }: { code: string; file: string; line: number }) {
+  return (
+    <figure className="cite">
+      <code>{code}</code>
+      <figcaption>
+        <a href={`${SRC}/${file}#L${line}`} target="_blank" rel="noreferrer">
+          {file}:{line}
+        </a>
+      </figcaption>
+    </figure>
+  );
+}
+
+function Recorded({ label, chain, hop }: { label: string; chain: "unichain" | "lasna"; hop?: { tx: string; block: bigint } }) {
+  if (!hop) return null;
+  return (
+    <p className="recorded">
+      {label} <span className="num">#{fmtInt(hop.block)}</span>{" "}
+      <a className="hash" href={txUrl(chain, hop.tx)} target="_blank" rel="noreferrer">
+        {shortHash(hop.tx)}
+      </a>
+    </p>
+  );
+}
 
 const contracts: { name: string; role: string; chain: "unichain" | "lasna"; address: string }[] = [
   { name: "RipcordVault", role: "Holds your lines; removes liquidity on a verified callback", chain: "unichain", address: deploy.ripcordVault },
@@ -10,7 +38,8 @@ const contracts: { name: string; role: string; chain: "unichain" | "lasna"; addr
   { name: "Uniswap v4 PositionManager", role: "Owns the position NFTs the vault is approved on", chain: "unichain", address: deploy.positionManager },
 ];
 
-export function Explainer() {
+export function Explainer({ p }: { p?: Position }) {
+  const id = p ? `#${p.tokenId}` : "";
   return (
     <div className="explainer">
       <section id="how" className="ex-section" aria-labelledby="how-title">
@@ -21,21 +50,27 @@ export function Explainer() {
             <div>
               <h3>A swap moves the pool</h3>
               <p>On Unichain Sepolia, every swap in a Uniswap v4 pool emits a Swap event carrying the pool's new tick. An AMM price only moves through swaps, so no crossing goes unseen.</p>
+              <Recorded label={`${id} crossing swap, tick → ${p?.swap?.tick !== undefined ? fmtTick(p.swap.tick) : "?"}, Unichain`} chain="unichain" hop={p?.swap} />
             </div>
+            <Cite code="SYSTEM.subscribe(POOL_CHAIN_ID, POOL_MANAGER, SWAP_TOPIC, uint256(poolId), …);" file="RipcordReactive.sol" line={109} />
           </li>
           <li>
             <Flap text="REACT" tone="yellow" size="s" />
             <div>
               <h3>RipcordReactive checks the lines</h3>
               <p>On Reactive Lasna, a Reactive contract subscribed to that pool receives the event, compares the tick with every armed line, and requests one callback for each line it crosses.</p>
+              <Recorded label={`${id} reaction, Lasna`} chain="lasna" hop={p?.lasna} />
             </div>
+            <Cite code="if (line.exitBelow ? tick <= line.triggerTick : tick >= line.triggerTick) {" file="RipcordReactive.sol" line={137} />
           </li>
           <li>
             <Flap text="EXIT" tone="yellow" size="s" />
             <div>
               <h3>RipcordVault exits</h3>
               <p>Back on Unichain Sepolia, Reactive's callback proxy calls the vault, which accepts only RipcordReactive's callbacks, removes all of the position's liquidity, and sends both tokens to the NFT's owner.</p>
+              <Recorded label={`${id} exit, Unichain`} chain="unichain" hop={p?.exit} />
             </div>
+            <Cite code=") external onlyServiceProvider onlyCallbackSender(injectedSender) {" file="RipcordVault.sol" line={165} />
           </li>
         </ol>
         <p className="ex-note">Nothing of the owner's runs: no bot, no server, no open tab. The board above shows each loop's three transactions.</p>

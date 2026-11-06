@@ -12,7 +12,7 @@ Audience: Reactive team judges (watching a video under 3 min, then the link) and
 Task: see a real position's line against the live pool tick and its status; watch a crossing swap flip it to DEPARTED with its block count; open every transaction behind it.
 Proof: every value read from chain. History comes from an evidence index of tx hashes (receipts fetched live), and new runs appear live via block polling.
 Constraints: Vite + React + TS + viem, static on Vercel (D-013, D-014); at most ~1 req/s per chain; WCAG AA; reduced motion respected; self-hosted fonts; no N in the thesis until C-1 is verified.
-Memorable moment: the status flaps turning over to DEPARTED, then "2 BLOCKS".
+Memorable moment: in the featured departure, the route lamps lighting SWAP → REACT → EXIT while the status flaps turn to DEPARTED and the block count lands. It's live when a run happens, and on demand through Replay for every visitor who arrives between runs.
 
 ## Direction contract
 
@@ -22,8 +22,8 @@ OWN-WORLD: Station-board housing: graphite #16171a ground, flap charcoal #2a2c31
 
 STORY: The visitor sees the live tick, the line, and the board; understands that a swap crossing the line makes the position depart in a counted number of blocks with nothing of the owner's running; believes it because every row links its swap, Lasna reaction, and exit; scrolls for how it works, custody, and limits.
 
-FIRST VIEWPORT: 60px shell bar (RIPCORD flap wordmark left, section links, live Unichain and Lasna block heights, Read-only tag right). Lead strip at display scale: the pool tick now against the nearest armed line (left), the last exit's block count (right). Below it, the board as a sortable table across the left ~70%. Right rail ~380px: the selected loop's three hops on one fixed whole-block scale, with explorer links. No primary CTA: the board is the action.
+FIRST VIEWPORT (v2, 2026-11-06, raised against the user's two reference builds, Setoff and Warrant): 60px shell bar (RIPCORD flap wordmark, section links, live Unichain and Lasna block heights, liveness, Read-only). Hero band: left ~45%, the claim at display scale in the condensed face ("Your Uniswap v4 position leaves the pool seconds after a swap crosses your line", with "crosses your line" in Solari yellow), then one evidence sentence computed live from chain (block range and run count). Right ~55%, the featured departure, a housing panel in the board's material: the position and status flaps; the tick against the line as two flap readouts; the route as the board's "calling at" strip (SWAP · Unichain → REACT · Lasna → EXIT · Unichain), whose lamps light as each hop lands, with block numbers and explorer links under each stop; the whole-block scale with the block count as a flap; and a "Replay this departure" control that re-runs that real recorded loop at chain speed. The board starts at the fold, full width, with status filter chips. A live run takes the featured panel as it happens.
 
-FORM: Departure Board, my own grounded candidate 7 of 7, dealt by the roll. Raises: scale-only hierarchy (Variable Font Specimen); one fixed block scale (Botanical Folio); length equals duration (Labanotation); latency in whole blocks (Emigre Bitmap); every run on one sheet, no pagination (Convention Circle Catalog). seed:98299b030bb165d0
+FORM: Departure Board, my own grounded candidate 7 of 7, dealt by the roll. Raises: the claim as the hero, a live mechanism diagram, an on-demand replay, and physical material, all against the user's reference builds (Setoff, Warrant); scale-only hierarchy (Variable Font Specimen); one fixed block scale (Botanical Folio); length equals duration (Labanotation); latency in whole blocks (Emigre Bitmap); every run on one sheet, no pagination (Convention Circle Catalog). seed:98299b030bb165d0
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
