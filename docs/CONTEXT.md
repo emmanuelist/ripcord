@@ -51,6 +51,8 @@ All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
 - **[reported]** another entrant (emilhuseyn/reactive-omni) measured a Base Sepolia → Lasna → Base Sepolia loop at 1–2 s in 5/5 runs. Not our evidence.
 
 ## Traps
+- **lREACT faucet caps differ from the docs.** The docs say "max 5 ETH per tx". On-chain `max_payout()` (2026-11-06) is **1 ETH on Base Sepolia** (`0x2afa…5967`) and **50 ETH on Ethereum Sepolia** (`0x9b9B…f434`). `_request` pays `min(value, max_payout)` and **keeps the excess**. Both expose `request(address receiver)` payable (selector `0x27c78c42` present in both bytecodes). Source: Reactive-Network/testnet-faucet `ReactiveFaucetL1.sol`.
+- **Gas prices (2026-11-06):** Unichain Sepolia 0.0015 gwei, Base Sepolia 0.006 gwei, Lasna 100 gwei. Pool-chain deploys cost almost nothing, so ETH is mostly needed to fund callback contracts. lREACT goes on Lasna deploys (~0.1 lREACT) and contract funding.
 - **v4 position custody, as the deployed PositionManager behaves** (fork of Unichain Sepolia block 67121755, E-004):
   - An address that's merely `approve`d for a tokenId can run `DECREASE_LIQUIDITY` + `TAKE_PAIR`, and the owner keeps the NFT.
   - Approval dies when the owner moves the NFT.
