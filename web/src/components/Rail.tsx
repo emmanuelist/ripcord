@@ -26,8 +26,8 @@ function HopLink({ chain, tx }: { chain: "unichain" | "lasna"; tx: string }) {
 export function Rail({ p, tickNow }: { p?: Position; tickNow?: number }) {
   if (!p) {
     return (
-      <aside className="rail" aria-label="Selected position">
-        <h2 className="rail-title">Select a position</h2>
+      <aside className="rail" id="rail" aria-label="Selected position">
+        <h2 className="rail-title" tabIndex={-1}>Select a position</h2>
         <p className="rail-note">Pick a row on the board to see its swap, the Lasna reaction, and the exit.</p>
       </aside>
     );
@@ -38,8 +38,8 @@ export function Rail({ p, tickNow }: { p?: Position; tickNow?: number }) {
   const room = tickNow !== undefined ? headroom(p.line, p.exitBelow, tickNow) : undefined;
 
   return (
-    <aside className="rail" aria-label={`Position ${p.tokenId}`}>
-      <h2 className="rail-title">Position #{String(p.tokenId)}</h2>
+    <aside className="rail" id="rail" aria-label={`Position ${p.tokenId}`}>
+      <h2 className="rail-title" tabIndex={-1}>Position #{String(p.tokenId)}</h2>
       <p className="rail-line">
         Line {fmtTick(p.line)}, exit {p.exitBelow ? "at or below" : "at or above"}
       </p>
@@ -66,7 +66,12 @@ export function Rail({ p, tickNow }: { p?: Position; tickNow?: number }) {
             {p.swap ? (
               <>
                 Unichain #{fmtInt(p.swap.block)}
-                {p.swap.tick !== undefined && <> · tick {fmtTick(p.swap.tick)}</>} · <HopLink chain="unichain" tx={p.swap.tx} />
+                {p.swap.tick !== undefined && (
+                  <>
+                    {" "}· tick → {fmtTick(p.swap.tick)}, <strong className="crossed">crosses line {fmtTick(p.line)}</strong>
+                  </>
+                )}{" "}
+                · <HopLink chain="unichain" tx={p.swap.tx} />
               </>
             ) : (
               "Waiting for a swap to cross the line"

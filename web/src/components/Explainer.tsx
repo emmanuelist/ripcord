@@ -1,5 +1,6 @@
 import { addressUrl, deploy } from "../chain/clients";
 import { shortHash } from "../chain/model";
+import { Flap } from "./Flap";
 
 const contracts: { name: string; role: string; chain: "unichain" | "lasna"; address: string }[] = [
   { name: "RipcordVault", role: "Holds your lines; removes liquidity on a verified callback", chain: "unichain", address: deploy.ripcordVault },
@@ -14,21 +15,27 @@ export function Explainer() {
     <div className="explainer">
       <section id="how" className="ex-section" aria-labelledby="how-title">
         <h2 id="how-title">How a ripcord pulls</h2>
-        <ol className="flow">
+        <ol className="flow" aria-label="The three hops of one exit">
           <li>
-            <span className="flow-chain">Unichain Sepolia</span>
-            <h3>A swap moves the pool</h3>
-            <p>Every swap in a Uniswap v4 pool emits a Swap event carrying the pool's new tick. An AMM price only moves through swaps, so no crossing goes unseen.</p>
+            <Flap text="SWAP" tone="yellow" size="s" />
+            <div>
+              <h3>A swap moves the pool</h3>
+              <p>On Unichain Sepolia, every swap in a Uniswap v4 pool emits a Swap event carrying the pool's new tick. An AMM price only moves through swaps, so no crossing goes unseen.</p>
+            </div>
           </li>
           <li>
-            <span className="flow-chain">Reactive Lasna</span>
-            <h3>RipcordReactive checks the lines</h3>
-            <p>A Reactive contract subscribed to that pool receives the event, compares the tick with every armed line, and requests one callback for each line it crosses.</p>
+            <Flap text="REACT" tone="yellow" size="s" />
+            <div>
+              <h3>RipcordReactive checks the lines</h3>
+              <p>On Reactive Lasna, a Reactive contract subscribed to that pool receives the event, compares the tick with every armed line, and requests one callback for each line it crosses.</p>
+            </div>
           </li>
           <li>
-            <span className="flow-chain">Unichain Sepolia</span>
-            <h3>RipcordVault exits</h3>
-            <p>Reactive's callback proxy calls the vault, which accepts only RipcordReactive's callbacks, removes all of the position's liquidity, and sends both tokens to the NFT's owner.</p>
+            <Flap text="EXIT" tone="yellow" size="s" />
+            <div>
+              <h3>RipcordVault exits</h3>
+              <p>Back on Unichain Sepolia, Reactive's callback proxy calls the vault, which accepts only RipcordReactive's callbacks, removes all of the position's liquidity, and sends both tokens to the NFT's owner.</p>
+            </div>
           </li>
         </ol>
         <p className="ex-note">Nothing of the owner's runs: no bot, no server, no open tab. The board above shows each loop's three transactions.</p>

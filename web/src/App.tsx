@@ -33,6 +33,14 @@ export function App() {
     const url = new URL(window.location.href);
     url.searchParams.set("position", String(id));
     window.history.replaceState(null, "", url);
+    // Below 1100px the rail sits under the board: bring it into view so a tap visibly does something.
+    if (window.matchMedia("(width < 1100px)").matches) {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      requestAnimationFrame(() => {
+        document.getElementById("rail")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        document.querySelector<HTMLElement>("#rail .rail-title")?.focus({ preventScroll: true });
+      });
+    }
   };
 
   return (

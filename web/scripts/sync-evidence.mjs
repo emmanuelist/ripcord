@@ -5,6 +5,11 @@ import { join } from "node:path";
 
 const evidence = new URL("../../docs/evidence/", import.meta.url).pathname;
 const out = new URL("../src/data/", import.meta.url).pathname;
+// On a deploy that uploads only web/ (Vercel CLI), docs/ is absent: keep the committed src/data as it is.
+if (!existsSync(join(evidence, "m1/deploy.json"))) {
+  console.log("docs/evidence not present; keeping the committed src/data/deploy.json and runs.json");
+  process.exit(0);
+}
 const deploy = JSON.parse(readFileSync(join(evidence, "m1/deploy.json"), "utf8"));
 const runs = new Map();
 const add = (tokenId, exitTx, lasnaTx, source) => {
