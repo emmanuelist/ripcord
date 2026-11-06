@@ -45,7 +45,7 @@ U_FROM=$(cast block-number --rpc-url "$U"); L_FROM=$(cast block-number --rpc-url
 echo "== 4. request exit (liquidity before: $LIQ_BEFORE)"
 T_SEND=$(now_ms)
 O_RCPT=$(cast send "$TRIGGER" 'requestExit(uint256)' "$TOKEN_ID" --rpc-url "$U" "${UNLOCK[@]:0:4}" --json); T_ORIGIN=$(now_ms)
-L_LOG=$(wait_log "$L" "$L_FROM" "$EXPECTED" 'ExitRequestSeen(uint256,uint256,uint256)' "$TOKEN_ID") || { echo "no reactive tx" >&2; exit 1; }
+L_LOG=$(wait_log "$L" "$L_FROM" "$EXPECTED" 'ExitRequestSeen(uint256 indexed,uint256,uint256)' "$TOKEN_ID") || { echo "no reactive tx" >&2; exit 1; }
 T_LASNA=$(now_ms)
 EXITED=$(cast keccak 'Exited(uint256,uint128,int24,int24)')
 if D_LOG=$(wait_log "$U" "$U_FROM" "$PROBE" "$EXITED" "$(cast to-uint256 "$TOKEN_ID")"); then T_DEST=$(now_ms); RESULT=exited

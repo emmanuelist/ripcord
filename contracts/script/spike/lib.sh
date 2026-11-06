@@ -6,11 +6,13 @@
 now_ms() { node -e 'process.stdout.write(String(Date.now()))'; }
 sleep_poll() { node -e "setTimeout(()=>{}, ${POLL_MS:-100})"; }
 
-# wait_log <rpc> <from-block> <address> <event-sig-or-topic0> [topic1]: prints the first matching log as JSON.
+# wait_log <rpc> <from-block> <address> <event-sig-or-topic0> [topic1 [topic2 [topic3]]]: prints the first matching
+# log as JSON. Every topic after the 4th argument is forwarded to `cast logs`.
 wait_log() {
+  local rpc=$1 from=$2 addr=$3; shift 3
   local deadline=$(( $(date +%s) + ${TIMEOUT_S:-90} )) out n
   while :; do
-    if out=$(cast logs --rpc-url "$1" --from-block "$2" --address "$3" "$4" ${5:+"$5"} --json 2>/dev/null); then
+    if out=$(cast logs --rpc-url "$rpc" --from-block "$from" --address "$addr" --json -- "$@" 2>/dev/null); then
       n=$(echo "$out" | jq 'if type == "array" then length else 0 end')
       [ "$n" -gt 0 ] && { echo "$out" | jq -c '.[0]'; return 0; }
     fi

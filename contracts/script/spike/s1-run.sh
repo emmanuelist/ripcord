@@ -43,10 +43,10 @@ for _ in $(seq 1 "$RUNS"); do
   PING_RCPT=$(cast send "$SOURCE" "ping()" --rpc-url "$RPC" --account "$ACCOUNT" --password-file "$KEYSTORE_PASSWORD_FILE" --json)
   T_ORIGIN=$(now_ms)
   SEQ=$(echo "$PING_RCPT" | jq -r '.logs[0].topics[1]' | cast to-dec)
-  LASNA_LOG=$(wait_log "$LASNA_RPC" "$LASNA_FROM" "$RC" "PingSeen(uint256,uint256,uint256)" "$SEQ") \
+  LASNA_LOG=$(wait_log "$LASNA_RPC" "$LASNA_FROM" "$RC" "PingSeen(uint256 indexed,uint256,uint256)" "$SEQ") \
     || { echo "seq $SEQ: no reactive tx on Lasna within ${TIMEOUT_S}s" >&2; continue; }
   T_LASNA=$(now_ms)
-  PONG_LOG=$(wait_log "$RPC" "$POOL_FROM" "$SINK" "Pong(uint256,address,bool,uint256,uint256,uint256)" "$SEQ") \
+  PONG_LOG=$(wait_log "$RPC" "$POOL_FROM" "$SINK" "Pong(uint256 indexed,address indexed,bool,uint256,uint256,uint256)" "$SEQ") \
     || { echo "seq $SEQ: no callback within ${TIMEOUT_S}s" >&2; continue; }
   T_DEST=$(now_ms)
 
