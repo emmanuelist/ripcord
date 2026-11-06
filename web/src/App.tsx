@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRipcord } from "./chain/useRipcord";
-import { boardStatus, eventTime } from "./chain/model";
+import { boardStatus, eventTime, type Position } from "./chain/model";
 import { useFunding } from "./chain/useFunding";
 import { Board } from "./components/Board";
 import { Departure } from "./components/Departure";
 import { Explainer } from "./components/Explainer";
 import { Hero } from "./components/Hero";
 import { Shell } from "./components/Shell";
+
+const LIVE_WINDOW_S = 15 * 60;
 
 function initialSelection(): bigint | undefined {
   const q = new URLSearchParams(window.location.search).get("position");
@@ -24,8 +26,18 @@ export function App() {
   }, []);
 
   const positions = useMemo(() => [...s.positions.values()], [s.positions]);
-  // With nothing picked, follow the newest event, so a live run takes the featured departure as it happens.
-  const latest = useMemo(() => [...positions].sort((a, b) => eventTime(b) - eventTime(a))[0], [positions]);
+  // With nothing picked: a live run (armed or boarding in the last 15 minutes) takes the featured departure as it
+  // happens; otherwise the newest real departure, so its replay is what a visitor sees first. A disarmed line or a
+  // refused exit never displaces it; both stay on the board and in the refusal room.
+  const latest = useMemo(() => {
+    const newest = (xs: Position[]) => [...xs].sort((a, b) => eventTime(b) - eventTime(a))[0];
+    const nowS = now / 1000;
+    const live = positions.filter((p) => {
+      const st = boardStatus(p);
+      return (st === "armed" || st === "boarding") && nowS - eventTime(p) < LIVE_WINDOW_S;
+    });
+    return newest(live) ?? newest(positions.filter((p) => p.exit)) ?? newest(positions);
+  }, [positions, now]);
   const selectedId = picked !== undefined && s.positions.has(picked) ? picked : latest?.tokenId;
   const selected = selectedId !== undefined ? s.positions.get(selectedId) : undefined;
   // The explainer quotes one real loop's hops: the featured one if it exited, else the newest exit.

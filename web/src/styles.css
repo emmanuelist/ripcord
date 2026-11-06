@@ -16,6 +16,8 @@
   --ink: #f3efe4;
   --ink-2: #c3bfb4;
   --ink-3: #9a968c;
+  /* dim text on a flap tile: AA on both halves of the small tile (5.0:1 on #35373d, 5.5:1 on #2f3136) */
+  --ink-dim-flap: #aca89d;
   --yellow: #f2c230;
   --amber: #f0953a;
   --green: #3fbf7f;
@@ -55,6 +57,7 @@ a:hover { text-decoration-color: var(--yellow); }
 .tone-green { color: var(--green); }
 .tone-red { color: var(--red); }
 .tone-dim { color: var(--ink-3); }
+.flap.tone-dim { color: var(--ink-dim-flap); }
 
 /* ---------- split-flap tiles: the signature ---------- */
 .flap { font-family: var(--display); font-weight: 600; display: inline-block; line-height: 1; vertical-align: middle; }
@@ -119,7 +122,7 @@ a:hover { text-decoration-color: var(--yellow); }
 }
 .brand { text-decoration: none; display: inline-flex; }
 .sections { display: flex; gap: 22px; }
-.sections a { color: var(--ink-2); text-decoration: none; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; }
+.sections a { color: var(--ink-2); text-decoration: none; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; white-space: nowrap; flex: none; }
 .sections a:hover { color: var(--ink); border-bottom-color: var(--yellow); }
 .heads { margin-left: auto; display: flex; align-items: center; gap: 20px; font-size: 14px; color: var(--ink-3); }
 .head b { color: var(--ink); font-weight: 500; margin-left: 4px; }
@@ -235,7 +238,7 @@ a:hover { text-decoration-color: var(--yellow); }
 .svc-cell:first-child { border-left: 0; }
 .svc-label { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow); white-space: nowrap; }
 /* Token tickers are data: set in mono and their own case, so lREACT never reads as LREACT or IREACT. */
-.ticker { font-family: var(--mono); text-transform: none; letter-spacing: 0; font-size: 0.95em; }
+.ticker { font-family: var(--mono); text-transform: none; letter-spacing: 0; font-size: max(0.95em, 11px); }
 .svc-sub { margin: 0; font-size: 12px; color: var(--ink-3); display: flex; gap: 10px; align-items: center; white-space: nowrap; }
 .svc-sub a { color: var(--ink-2); }
 .svc-state { font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; }
@@ -317,6 +320,17 @@ th:not([aria-sort]) .sort-mark path { stroke: var(--ink-3); }
 .cite figcaption a { color: var(--ink-3); }
 .cite figcaption a:hover { color: var(--ink); }
 .prose { display: grid; gap: 14px; }
+/* The refusal room: the explainer's rails, with what the chain says now beside each attempt. */
+.ex-lede { margin: -8px 0 24px; color: var(--ink-2); font-size: 17px; max-width: 64ch; text-wrap: pretty; }
+.chain-says { margin: 0; background: var(--hinge); border: 1px solid var(--rail); border-radius: 2px; padding: 14px 16px; align-self: start; min-width: 0; }
+.chain-says .cite-k { margin: 0 0 10px; }
+.chain-says dl { margin: 0; display: grid; gap: 10px; }
+.chain-says dl > div { display: grid; grid-template-columns: minmax(9rem, auto) minmax(0, 1fr); gap: 4px 14px; align-items: baseline; padding-top: 10px; border-top: 1px solid var(--rail); }
+.chain-says dl > div:first-child { padding-top: 0; border-top: 0; }
+.chain-says dt { font-size: 12px; color: var(--ink-3); }
+.chain-says dd { margin: 0; font-size: 14px; color: var(--ink-2); min-width: 0; }
+.chain-says code { font-family: var(--mono); font-variant-ligatures: none; font-size: 13px; color: var(--ink); overflow-wrap: anywhere; }
+code.inline { font-family: var(--mono); font-variant-ligatures: none; font-size: 0.86em; color: var(--ink); }
 .ex-note { margin: 22px 0 0; color: var(--ink-3); font-size: 15px; max-width: 70ch; text-wrap: pretty; }
 .limits { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
 .limits li { padding-left: 22px; position: relative; }
@@ -347,12 +361,13 @@ th:not([aria-sort]) .sort-mark path { stroke: var(--ink-3); }
 }
 @media (width < 760px) {
   .shell { flex-wrap: wrap; gap: 10px 16px; }
-  .sections { order: 3; width: 100%; gap: 18px; overflow-x: auto; }
+  .sections { order: 3; width: 100%; gap: 18px; overflow-x: auto; scrollbar-width: none; }
   .heads { gap: 12px; font-size: 13px; }
   .heads .head { display: none; }
   .ro { display: none; }
   .ex-section.split { grid-template-columns: 1fr; }
   .flow li { gap: 14px; padding: 22px 0; }
+  .chain-says dl > div { grid-template-columns: 1fr; }
   .explainer { gap: 56px; padding-top: 56px; }
   .hero-title { font-size: clamp(36px, 10.5vw, 48px); }
   .flap-l { font-size: 32px; }

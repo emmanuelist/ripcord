@@ -25,7 +25,24 @@ for (const dir of ["m1", "harness"]) {
     else if (j.txs?.exit) add(j.tokenId, j.txs.exit, j.txs.lasna, `docs/evidence/${dir}/${f}`);
   }
 }
+// The M2 refusals (E-016): positions that never exited still belong on the board, rebuilt from their own receipts.
+// refusals.json for the page holds the hashes only; every value shown is read back from chain by them.
+let refusals = null;
+const m2 = join(evidence, "m2/refusals.json");
+if (existsSync(m2)) {
+  const r = JSON.parse(readFileSync(m2, "utf8"));
+  const src = "docs/evidence/m2/refusals.json";
+  runs.set(String(r.holds.tokenId), { tokenId: String(r.holds.tokenId), uniTxs: [r.holds.txs.arm, r.direct.disarm.tx], source: src });
+  runs.set(String(r.custody.tokenId), { tokenId: String(r.custody.tokenId), uniTxs: [r.custody.txs.arm, r.custody.txs.failed], lasnaTx: r.custody.txs.lasna, source: src });
+  refusals = {
+    holds: { tokenId: String(r.holds.tokenId), swap: r.holds.txs.swap, reaction: r.holds.txs.reaction },
+    direct: { tokenId: String(r.direct.tokenId), tx: r.direct.tx, disarm: r.direct.disarm.tx },
+    custody: { tokenId: String(r.custody.tokenId), revoke: r.custody.txs.revoke, swap: r.custody.txs.swap, lasna: r.custody.txs.lasna, failed: r.custody.txs.failed },
+    source: src,
+  };
+}
 const index = [...runs.values()].sort((a, b) => Number(BigInt(a.tokenId) - BigInt(b.tokenId)));
 writeFileSync(join(out, "deploy.json"), JSON.stringify(deploy, null, 2) + "\n");
 writeFileSync(join(out, "runs.json"), JSON.stringify(index, null, 2) + "\n");
-console.log(`synced deploy + ${index.length} recorded loops (${index.map((r) => r.tokenId).join(", ")})`);
+if (refusals) writeFileSync(join(out, "refusals.json"), JSON.stringify(refusals, null, 2) + "\n");
+console.log(`synced deploy + ${index.length} recorded positions (${index.map((r) => r.tokenId).join(", ")})`);

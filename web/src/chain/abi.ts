@@ -5,6 +5,7 @@ import { parseAbi, parseAbiItem } from "viem";
 export const vaultAbi = parseAbi([
   "function lines(uint256 tokenId) view returns (address owner, bytes32 poolId, int24 triggerTick, bool exitBelow, uint8 status)",
   "function armedInPool(bytes32 poolId) view returns (uint256)",
+  "function exit(address injectedSender, uint256 tokenId, int24 observedTick, uint256 originBlock, uint256 originTxHash)",
   "error HasSubscriber(uint256 tokenId)",
   "error NoLiquidity(uint256 tokenId)",
   "error OnlySelf()",
@@ -14,6 +15,7 @@ export const positionManagerAbi = parseAbi([
   "function ownerOf(uint256 id) view returns (address)",
   "function getApproved(uint256 id) view returns (address)",
   "function isApprovedForAll(address owner, address operator) view returns (bool)",
+  "function getPositionLiquidity(uint256 tokenId) view returns (uint128)",
   "error NotApproved(address caller)",
 ]);
 
@@ -38,6 +40,17 @@ export const ripcordPulled = parseAbiItem(
 );
 
 export const vaultEvents = [lineArmed, lineDisarmed, exited, exitFailed] as const;
+
+/** v4-core IPoolManager.Swap: the post-swap tick lives in the event. */
+export const poolSwap = parseAbiItem(
+  "event Swap(bytes32 indexed id, address indexed sender, int128 amount0, int128 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick, uint24 fee)",
+);
+
+/** The callback guards in reactive-lib-omni (AbstractPayer, AbstractCallback), for decoding a refused direct call. */
+export const guardErrorsAbi = parseAbi([
+  "error NotAuthorized(address sender_, address provider_)",
+  "error CallbackNotAuthorized(address sender_, address expectedSender_)",
+]);
 
 /** Errors an exit can fail with, for decoding ExitFailed.reason. Error(string) is declared explicitly: viem decodes it
  * natively, and solmate's ERC721 reverts with it (e.g. "NOT_MINTED"), so the types must admit it. */

@@ -64,5 +64,22 @@
     "exitTx": "0x31b4fbf0a260b7fd0f483bd45e51cce8bc126f9830ffa6efdc5d92f18d922337",
     "lasnaTx": "0x04aa39b4888f4f55b28a31128ef366c14a16b3ca32900050ddc8497480d56415",
     "source": "docs/evidence/harness/run-7954.json"
+  },
+  {
+    "tokenId": "7955",
+    "uniTxs": [
+      "0xd8abd94ebafdae54629522359a28f5b7e87eb7c78383eeb7efd460e3d4a3e209",
+      "0x03ce4525b8feb1c92312d8ffc0721d3633fd08919c52490e9412a3dc0a27a027"
+    ],
+    "source": "docs/evidence/m2/refusals.json"
+  },
+  {
+    "tokenId": "7956",
+    "uniTxs": [
+      "0x503ae58beea34af404f38d34741b8f4d757cec6c8b9a954efef897a06e8e83a1",
+      "0x2fb3cc41eda9f5fa7080603d6fb7b6292ad17979b3fe63b4354409b2c9cb5a8f"
+    ],
+    "lasnaTx": "0xb84a9ef26dd7d3226bb193ccbb64b262640e52ed8df151023b1ad3509afab1aa",
+    "source": "docs/evidence/m2/refusals.json"
   }
 ]

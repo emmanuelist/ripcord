@@ -1,0 +1,20 @@
+{
+  "holds": {
+    "tokenId": "7955",
+    "swap": "0x6b67894a7ef208e2b35d4d8a6a648d29985c6831654ab3182cd8dc12767a937a",
+    "reaction": "0xb52659bef2c5b0d4c77bbca45b86e538ef5a328c2cebe62de9e3991feed70421"
+  },
+  "direct": {
+    "tokenId": "7955",
+    "tx": "0x6f5761d4658392c7e01f248fe220ad29268ff4ccfd0f90fd876796476f3052ad",
+    "disarm": "0x03ce4525b8feb1c92312d8ffc0721d3633fd08919c52490e9412a3dc0a27a027"
+  },
+  "custody": {
+    "tokenId": "7956",
+    "revoke": "0x0fd10c2fdf031cc227f8cb99ecce48daaf905f25c8878e822cd470e9882cf863",
+    "swap": "0xfd32a7451b55f6e787df5e9018e685a50c95cc707442e88843dd89e6cf127cfa",
+    "lasna": "0xb84a9ef26dd7d3226bb193ccbb64b262640e52ed8df151023b1ad3509afab1aa",
+    "failed": "0x2fb3cc41eda9f5fa7080603d6fb7b6292ad17979b3fe63b4354409b2c9cb5a8f"
+  },
+  "source": "docs/evidence/m2/refusals.json"
+}

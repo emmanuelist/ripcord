@@ -6,8 +6,12 @@ import runsIndex from "../data/runs.json";
 
 interface RunRef {
   tokenId: string;
-  exitTx: Hex;
-  lasnaTx: Hex;
+  /** A loop's exit. */
+  exitTx?: Hex;
+  /** Other Unichain transactions that shaped the position (arm, disarm, a refused exit). */
+  uniTxs?: Hex[];
+  /** The Lasna transaction that pulled the ripcord, when one did. */
+  lasnaTx?: Hex;
 }
 
 /** Public Unichain RPC caps eth_getLogs at 1000 blocks; stay well inside it (docs/CONTEXT.md). */
@@ -26,17 +30,21 @@ async function blockTime(chain: "u" | "l", block: bigint): Promise<number> {
 
 const asHash = (n: bigint) => numberToHex(n, { size: 32 });
 
-/** One recorded loop, rebuilt entirely from chain by its exit and Lasna tx hashes. */
+/** One recorded position, rebuilt entirely from chain by its transaction hashes, Unichain receipts in block order. */
 async function loadRecorded(ref: RunRef): Promise<Position | undefined> {
   const tokenId = BigInt(ref.tokenId);
-  const [exitRcpt, lasnaRcpt, line] = await Promise.all([
-    uni.getTransactionReceipt({ hash: ref.exitTx }),
-    las.getTransactionReceipt({ hash: ref.lasnaTx }),
+  const uniHashes = [...(ref.uniTxs ?? []), ...(ref.exitTx ? [ref.exitTx] : [])];
+  const [uniRcpts, lasnaRcpt, line] = await Promise.all([
+    Promise.all(uniHashes.map((hash) => uni.getTransactionReceipt({ hash }))),
+    ref.lasnaTx ? las.getTransactionReceipt({ hash: ref.lasnaTx }) : Promise.resolve(undefined),
     uni.readContract({ address: deploy.ripcordVault, abi: vaultAbi, functionName: "lines", args: [tokenId] }),
   ]);
   const p: Position = { tokenId, owner: line[0], line: line[2], exitBelow: line[3], vaultStatus: line[4] };
-  for (const l of exitRcpt.logs) applyVaultLog(p, l);
-  for (const l of lasnaRcpt.logs) applyPulledLog(p, l);
+  // An arm resets the journey, so it must come first: apply in block order.
+  for (const r of [...uniRcpts].sort((a, b) => Number(a.blockNumber - b.blockNumber))) for (const l of r.logs) applyVaultLog(p, l);
+  // The vault's storage is the final word on status (the logs above may end on an arm).
+  p.vaultStatus = line[4];
+  for (const l of lasnaRcpt?.logs ?? []) applyPulledLog(p, l);
   await fillTimes(p);
   return p;
 }

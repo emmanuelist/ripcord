@@ -3,6 +3,7 @@ import type { Funding } from "../chain/funding";
 import { crosses, fmtAmount, fmtInt, fmtTick, shortHash, type Position } from "../chain/model";
 import { useCustody } from "../chain/useCustody";
 import { Flap } from "./Flap";
+import { Refusals } from "./Refusals";
 
 /** Source lines pinned to the commit the deployed contracts were built from (contracts/ unchanged since). */
 const SRC = "https://github.com/emmanuelist/ripcord/blob/a7b4bbd68ddec105113e698e32d8c7b96c1b1c4c/contracts/src";
@@ -114,6 +115,8 @@ export function Explainer({ p, armed, funding }: { p?: Position; armed: number; 
         </ol>
         <p className="ex-note">Nothing of the owner's runs: no bot, no server, no open tab. The board above shows each loop's three transactions.</p>
       </section>
+
+      <Refusals />
 
       <section className="ex-section split" aria-labelledby="custody-title">
         <h2 id="custody-title">What you give, what you keep</h2>
