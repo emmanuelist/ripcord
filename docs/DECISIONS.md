@@ -64,3 +64,16 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Decision:** `harness/` (latency recorder) and `web/` (read-only frontend) are scaffolded in M1, not now. Provisional pins looked up today: Node 26 LTS, TypeScript 6.0.3, viem 2.57.16. **TypeScript 7 is excluded**, because typescript-eslint 8.72.1 accepts only `>=4.8.4 <6.1.0`. All of these get re-checked at the scaffold. The frontend framework, hosting and design direction are chosen then (`impeccable shape`).
 
 **Alternatives:** Scaffolding now was rejected: nothing in M0 needs it, and the pins would go stale.
+
+## D-006 · Take v4-core through v4-periphery's submodule · 2026-11-06 · supersedes D-003 (v4-core pin only)
+**Context:** D-003 pinned v4-core v4.0.0 (`e50237c43811`) to match the deployed PoolManager. v4-periphery has no tags, and at the pinned commit `c6e4754dab11` it carries its own v4-core submodule at 1.0.2 (`59d3ecf53afa`). Installing both would put two v4-cores in one build.
+
+**Decision:** Install only v4-periphery at `c6e4754dab11` (recursive), and remap `@uniswap/v4-core/` to `lib/v4-periphery/lib/v4-core/`. The rest of D-003 stands.
+
+**Alternatives:**
+- **Pin an older periphery commit whose v4-core is v4.0.0.** Rejected: that's a Nov 2024 or earlier commit, missing a year of periphery fixes, for no ABI gain.
+- **Install v4-core v4.0.0 separately.** Rejected: it would conflict with periphery's own imports.
+
+**Consequences:** The only difference between v4.0.0 and 1.0.2 in `IPoolManager` and the pool types is that `ModifyLiquidityParams` and `SwapParams` moved into `src/types/PoolOperation.sol`, with identical fields. Selectors and the `Swap` event are unchanged. This is checked by `test/Toolchain.t.sol` against the values found in deployed bytecode (E-001).
+
+**Evidence:** `gh api repos/Uniswap/v4-core/compare/e50237c43811...59d3ecf53afa` (2026-11-06); E-002 (gate green, 7/7 tests).

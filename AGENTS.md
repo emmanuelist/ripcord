@@ -38,7 +38,7 @@ web/         frontend: reads chain state only [M1]
 docs/        STATE, PLAN, DECISIONS, EVIDENCE, CONTEXT (see the protocol below)
 internal/    research dossier, strategy, submission draft: gitignored, never commit
 ```
-Only `contracts/` exists today. `harness/` and `web/` are scaffolded in M1, and their versions get pinned then (D-005).
+Imports use the remappings in `contracts/remappings.txt`: `reactive-lib-omni/`, `@uniswap/v4-core/`, `@uniswap/v4-periphery/`, `permit2/`, `forge-std/`. Only `contracts/` exists today. `harness/` and `web/` are scaffolded in M1, and their versions get pinned then (D-005).
 
 ## Pinned versions
 Looked up on 2026-11-06, never from memory. Re-check before any upgrade.
@@ -50,8 +50,8 @@ Looked up on 2026-11-06, never from memory. Re-check before any upgrade.
 | EVM target | **cancun** | Conservative across Lasna, Unichain Sepolia and Base Sepolia; v4 itself targets cancun. Lasna acceptance is verified by spike S1 |
 | reactive-lib-omni | **v0.1.0** (`3ade0dcf1d27`) | The only tag, equal to master on 2026-05-21 |
 | forge-std | **v1.17.0** (`f3dae6e6ee38`) | |
-| v4-core | **v4.0.0** (`e50237c43811`) | Matches the deployed PoolManager |
-| v4-periphery | commit pinned at scaffold | It has no tags. Every PositionManager selector we call is verified against deployed bytecode (CONTEXT.md) |
+| v4-periphery | **`c6e4754dab11`** (main, 2026-10-26) | It has no tags. Every PositionManager selector we call is verified against deployed bytecode (CONTEXT.md) |
+| v4-core | **1.0.2** (`59d3ecf53afa`), taken *through* v4-periphery's own submodule | ABI-identical to the deployed v4.0.0 (D-006). Never install a second v4-core |
 | Node / TypeScript / viem | provisional: Node 26 LTS, TypeScript 6.0.3, viem 2.57.16 | **TypeScript 7 must not be pinned**: typescript-eslint 8.72.1 accepts only `>=4.8.4 <6.1.0`. Re-check at M1 scaffold |
 
 ```bash

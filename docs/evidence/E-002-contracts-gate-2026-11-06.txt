@@ -1,0 +1,35 @@
+# E-002 contracts gate, run 2026-11-06 13:48 UTC with forge Version: 1.8.3
+$ forge fmt --check
+exit 0
+$ forge lint --deny warnings
+exit 0
+$ forge build --sizes
+╭------------------------+------------------+-------------------+--------------------+---------------------╮
+| Contract               | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
++==========================================================================================================+
+| BalanceDeltaLibrary    | 132              | 182               | 24,444             | 48,970              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| BeforeSwapDeltaLibrary | 132              | 182               | 24,444             | 48,970              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| CurrencyLibrary        | 142              | 192               | 24,434             | 48,960              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| OmniProbe              | 838              | 914               | 23,738             | 48,238              |
+╰------------------------+------------------+-------------------+--------------------+---------------------╯
+
+$ forge test
+
+Ran 7 tests for test/Toolchain.t.sol:ToolchainTest
+[PASS] test_CallbackRequestSelector() (gas: 273)
+[PASS] test_OmniSystemContractAddress() (gas: 5637)
+[PASS] test_OmniWildcardTopic() (gas: 5509)
+[PASS] test_PositionManagerActionCodes() (gas: 416)
+[PASS] test_PositionManagerSelectorsMatchDeployedBytecode() (gas: 484)
+[PASS] test_ReactOnlyAcceptsSystem() (gas: 56703)
+[PASS] test_V4SwapTopic() (gas: 224)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 366.71µs (311.92µs CPU time)
+
+Ran 1 test suite in 4.49ms (366.71µs CPU time): 7 tests passed, 0 failed, 0 skipped (7 total tests)
+$ git submodule status (top level)
++f3dae6e6ee381f25eb6a246f7da9b85c91a68219 contracts/lib/forge-std (v1.17.0)
+ 3ade0dcf1d27e67e5783ef807e73a1b9e0c0cce8 contracts/lib/reactive-lib-omni (v0.1.0)
+ c6e4754dab11bd38c6f08ac51c3c868569e93d64 contracts/lib/v4-periphery (heads/main)

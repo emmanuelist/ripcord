@@ -1,0 +1,17 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: recursive }
+      - uses: foundry-rs/foundry-toolchain@v1
+        with: { version: v1.8.3 }   # pinned to match local (D-003)
+      - run: forge fmt --check
+      - run: forge lint --deny warnings   # bare `forge lint` exits 0 even with findings
+      - run: forge build --sizes
+      - run: forge test -vvv
