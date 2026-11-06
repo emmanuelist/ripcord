@@ -164,3 +164,21 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - Every deploy is a public surface, so the claims check (truth rules 2 and 3) runs before each one.
 - The page renders only chain-read values.
 - The thesis's N appears only once C-1 is verified.
+
+## D-014 · Frontend stack: Vite + React + TypeScript + viem, static · 2026-11-06 · accepted
+**Context:** The user delegated the stack choice between Vite + React and Next.js ("the one that does the best job").
+
+**Decision:** Vite + React + TypeScript + viem, built statically and deployed to Vercel (D-013).
+
+**Reasons:**
+- Both public RPCs allow browser CORS (preflight 204, POST 200 with Access-Control-Allow-Origin, checked 2026-11-06), so no server is needed.
+- History comes from transaction receipts by hash (no range limit), because Unichain's `eth_getLogs` caps at 1,000 blocks. Live updates come from polling new blocks.
+- It shares the harness's pinned TypeScript 6.0.3 and viem 2.57.16, plus its ABI module.
+
+**Alternatives:**
+- **Next.js.** Rejected: its server (API routes, SSR) adds moving parts a read-only chain view doesn't need.
+- **Plain HTML.** Rejected: it can't reuse the typed ABIs.
+
+**Consequences:**
+- The page shows the runs named in an evidence index committed to the repo. Every value is fetched live from chain by hash, and runs made while the page is open appear live.
+- Revisit if the public RPCs start rate-limiting real traffic. The fix would be a Vercel function as a caching proxy.
