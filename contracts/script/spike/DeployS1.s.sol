@@ -14,7 +14,7 @@ contract DeployS1Pool is Script {
         uint256 poolChainId = vm.envUint("POOL_CHAIN_ID");
         address proxy = vm.envAddress("CALLBACK_PROXY");
         address expectedReactive = vm.envAddress("EXPECTED_REACTIVE");
-        uint256 funding = vm.envOr("PONG_FUNDING_WEI", uint256(0.01 ether));
+        uint256 funding = vm.envOr("PONG_FUNDING_WEI", uint256(0.002 ether));
         require(block.chainid == poolChainId, "connected to the wrong pool chain");
 
         vm.startBroadcast();
@@ -36,7 +36,7 @@ contract DeployS1Reactive is Script {
         address source = vm.envAddress("PING_SOURCE");
         address sink = vm.envAddress("PONG_SINK");
         address expectedReactive = vm.envAddress("EXPECTED_REACTIVE");
-        uint256 funding = vm.envOr("REACTIVE_FUNDING_WEI", uint256(2 ether));
+        uint256 funding = vm.envOr("REACTIVE_FUNDING_WEI", uint256(0.5 ether));
         require(block.chainid == LASNA_CHAIN_ID, "connected to the wrong network: expected Lasna");
 
         vm.startBroadcast();
