@@ -114,3 +114,31 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - **Local only.** Rejected: CI would stay unrun.
 
 **Consequences:** The CI link in EVIDENCE only works for the owner until the flip. The commit history, with small commits from day one, shows the work was done during the event.
+
+## D-010 · Custody: approve, not deposit · 2026-11-06 · accepted
+**Context:** The vault must be able to pull a position's liquidity. E-004 and E-006 showed that an approved operator can exit on the deployed PositionManager while the owner keeps the NFT.
+
+**Decision:** Users keep their v4 position NFT and `approve` (or `setApprovalForAll`) RipcordVault. `arm()` refuses a position the vault can't manage, or one that has a subscriber. At exit time, liquidity goes to the NFT's **current** owner.
+
+**Alternatives:** **Deposit** (the vault holds the NFT). Rejected: it's custodial, the user must withdraw to manage the position, and it weakens "nothing of yours running" into "something of ours holding your NFT".
+
+**Consequences:**
+- If the owner later moves the NFT, revokes approval, or adds a subscriber, the exit fails.
+- The vault catches that failure and emits `ExitFailed`, and the UI shows it, rather than the failure dying silently inside the proxy.
+- The UI also warns while an armed line's approval is missing.
+
+## D-011 · Exit semantics for M1 · 2026-11-06 · accepted
+**Decision:**
+1. **Trigger.** A line is `(tokenId, triggerTick, exitBelow)`. It fires on the first v4 `Swap` in that pool whose post-swap `tick` is at or beyond the line in the chosen direction, as observed by RipcordReactive from the Swap event.
+2. **Trust.** The vault acts only on callbacks from the proxy that carry RipcordReactive's injected address (verified semantics, E-005). It also re-checks that the reported tick actually crosses the stored line.
+3. **The exit is a liquidity removal only.** `DECREASE_LIQUIDITY` + `TAKE_PAIR` to the owner, with no swap, so `amount0Min = amount1Min = 0`.
+   - Removing liquidity isn't sandwich-profitable: a front-runner's push trades *against* the exiting position at prices worse for the attacker, and the back-swap happens after the position is gone.
+   - A swap-out leg (to a single asset) would need slippage bounds, and is out of scope for M1.
+4. **Lines are one-shot.** A fired line goes to `Exited` or `Failed`, and re-arming is explicit.
+5. **Bounds.** At most 16 armed lines per pool on the reactive side, because one `react()` must stay under Lasna's 900k gas cap.
+
+**Alternatives:**
+- **Re-reading the pool tick in the vault and refusing if the price bounced back.** Rejected: a stop that cancels itself on a bounce isn't a stop, and the claim is "within N seconds of crossing". The vault still records `tickAtExit` for transparency.
+- **Non-zero mins.** Deferred: they'd turn a sharp move into a reverted (stuck) exit.
+
+**Consequences:** One big swap can blow past the line. The README states this (C-1 break test).

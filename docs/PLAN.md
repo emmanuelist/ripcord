@@ -31,8 +31,12 @@ On (a) or (b), re-open research for this track.
 - [x] **Spike S2: callback-driven exit** (done on-chain 2026-11-06, E-006: tokenId 7943 liquidity 1e20 → 0 via the real proxy, 2 Unichain blocks, approve custody). Fork-verified against the deployed PositionManager (E-004): full exit 196.5k gas of a 1M limit, 9 tests including custody. Kill criterion (b) is cleared on fork. Still needed: one on-chain exit through the real callback proxy, which comes with S1 funding. On the chosen chain, a callback contract that owns a v4 position NFT runs `modifyLiquidities` with DECREASE_LIQUIDITY + TAKE_PAIR when called through the callback proxy. Done when there's a tx hash showing the liquidity drop to 0 and the gas used is recorded against the callback gas limit.
 - [x] **Decide the pool chain:** Unichain Sepolia (D-008). from the S1 numbers and funding reality, and record it in DECISIONS.
 
-### M1 · Walking skeleton
-- [ ] Placeholder. Detail it when M0 closes.
+### M1 · Walking skeleton (detailed 2026-11-06)
+- [ ] **Core contracts.** `RipcordVault` (Unichain Sepolia: arm / disarm / exit, approve custody D-010, `ExitFailed` on a caught failure) and `RipcordReactive` (Lasna: learns lines from vault events, subscribes to each armed pool's `Swap` topic1 = poolId, fires one exit per crossed line, D-011). Done when unit tests (system stub) and fork tests (live v4) cover arm guards, crossing in both directions, one-shot lines, forged callbacks, approval revoked → `ExitFailed`, and the gate is green.
+- [ ] **Deploy the skeleton.** Vault + reactive at precomputed addresses, plus a demo pool of disclosed test tokens and a position armed by the project wallet. Done when the addresses are in STATE and CONTEXT.
+- [ ] **One real loop.** A real swap through the v4 `PoolSwapTest` router crosses the line → Lasna `react()` → callback → liquidity 0. Done when three hashes and raw receipts are in docs/evidence/. **Risk:** `subscribe()` called *inside* `react()` is unverified on Omni. Fallback: subscribe to all PoolManager `Swap`s and filter in `react()`.
+- [ ] **Harness** (`harness/`, TypeScript + viem, pins re-checked per D-005). It records wall-clock per hop (swap mined → Lasna react seen → exit seen) and writes evidence JSON. Done when one run reproduces the loop's hashes with per-hop ms.
+- [ ] **Read-only frontend** (`web/`). Direction comes from `impeccable shape`. It shows the armed position, live tick vs line, status (armed / exited / failed / approval missing), and exit events, all read from chain. Done when it's deployed to a public URL. **Hosting is the user's call** (D-pending).
 
 ### M2 · Core claim
 - [ ] Placeholder. Includes the "what one second buys" source: a real mainnet crash price series (research needed).

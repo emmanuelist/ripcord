@@ -5,9 +5,9 @@ _Last verified: 2026-11-06 15:50 UTC after S2 on-chain_
 
 **Milestone:** M1 · Walking skeleton (checkpoint 2026-11-18 05:00 UTC). M0 done 2026-11-06, ahead of its 11-09 checkpoint · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** detail the M1 work items in docs/PLAN.md (walking skeleton: a real v4 Swap crossing a registered line → Lasna → exit, the per-hop latency harness, the hosted read-only frontend), after the user settles the custody model (approve vs deposit).
+**Next action:** M1 item 1, core contracts `RipcordVault` + `RipcordReactive` with unit and fork tests (docs/PLAN.md, D-010, D-011).
 
-**Blocked on:** nothing. The custody model is the only open product decision (below).
+**Blocked on:** nothing.
 
 ## Works (verified this session)
 | Capability | Verified by | Evidence |
@@ -41,5 +41,5 @@ v1 and v2 spike deployments are superseded: records in `docs/evidence/s1/unichai
 - C-2 what one second buys: needs a historical crash price source and N.
 
 ## Open questions
-- Custody model for the vault (decide at M1): **approve** (user keeps the NFT) vs **deposit**. Both work on the deployed bytecode (E-004). Agent leans towards approve.
+- Frontend hosting (needed for M1's last item): the user picks Vercel, Netlify, Cloudflare Pages, or a claude.ai Artifact page.
 - REACT/USD payout rate and date; live judging or video only: the user asks the organizers in the DoraHacks Q&A.
