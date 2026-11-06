@@ -1,0 +1,32 @@
+# E-003 spike S1 contracts gate, run 2026-11-06 14:03 UTC with forge Version: 1.8.3
+$ forge fmt --check
+exit 0
+$ forge lint --deny warnings
+exit 0
+$ forge build --sizes
+Compiler run successful!
+| PingReactive           | 2,111            | 2,676             | 22,465             | 46,476              |
+| PingSource             | 250              | 277               | 24,326             | 48,875              |
+| PongSink               | 1,209            | 1,408             | 23,367             | 47,744              |
+$ forge test
+Ran 7 tests for test/Toolchain.t.sol:ToolchainTest
+[PASS] test_CallbackRequestSelector() (gas: 273)
+[PASS] test_OmniSystemContractAddress() (gas: 5637)
+[PASS] test_OmniWildcardTopic() (gas: 5509)
+[PASS] test_PositionManagerActionCodes() (gas: 416)
+[PASS] test_PositionManagerSelectorsMatchDeployedBytecode() (gas: 484)
+[PASS] test_ReactOnlyAcceptsSystem() (gas: 56703)
+[PASS] test_V4SwapTopic() (gas: 224)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 5.44ms (6.79ms CPU time)
+Ran 9 tests for test/spike/S1.t.sol:S1Test
+[PASS] test_ConstructorRejectsZeroAddresses() (gas: 6110)
+[PASS] test_FullLoopSimulated() (gas: 384872)
+[PASS] test_ReactRejectsAnyoneButSystem() (gas: 37566)
+[PASS] test_ReactRejectsLogFromWrongChain() (gas: 38366)
+[PASS] test_ReactRejectsLogFromWrongEmitter() (gas: 38276)
+[PASS] test_ReactRequestsOneCallbackToSink() (gas: 258735)
+[PASS] test_SinkFlagsUnexpectedInjectedSender() (gas: 58213)
+[PASS] test_SinkRejectsCallsNotFromProxy() (gas: 33074)
+[PASS] test_SubscribesToPingOnPoolChainOnly() (gas: 36003)
+Suite result: ok. 9 passed; 0 failed; 0 skipped; finished in 6.30ms (2.80ms CPU time)
+Ran 2 test suites in 13.77ms (11.74ms CPU time): 16 tests passed, 0 failed, 0 skipped (16 total tests)

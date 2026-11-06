@@ -51,6 +51,12 @@ All of these are [docs] unless marked. Re-verify each in spike S1 and S2.
 - **[reported]** another entrant (emilhuseyn/reactive-omni) measured a Base Sepolia → Lasna → Base Sepolia loop at 1–2 s in 5/5 runs. Not our evidence.
 
 ## Traps
+- **Public RPC log range.** `https://sepolia.unichain.org` rejects `eth_getLogs` over **1000 blocks** ("block range greater than 1000 max", 2026-11-06). Poll from the block at send time. On Base Sepolia, 1000 blocks is only ~200 s.
+- **`cast logs --json` (1.8.3).** Success prints a plain JSON array. An RPC error exits 1 but still prints an error *envelope object* (`{"schema_version":1,"success":false,...}`) on stdout. Check both the exit code and `type == "array"` (`script/spike/s1-run.sh` `wait_log`, all three paths exercised against live RPCs 2026-11-06).
+- **`cast compute-address` (1.8.3)** prints just the address, with no "Computed Address:" prefix.
+- **macOS `seq`** prints large numbers in scientific notation (`6.71213e+07`). Never use it for block numbers. macOS `/bin/bash` is 3.2, where `source <(...)` silently loads nothing.
+- **Injected callback sender is unverified.** The docs say Reactive writes the *requesting reactive contract's* address into the payload's first argument (legacy wrote the RVM ID, i.e. the deployer). Spike S1's `PongSink` records what actually arrives (`injectedSenderMatches`) instead of reverting. Ripcord's vault must enforce `onlyCallbackSender` with whatever S1 shows.
+- **Another entrant's vault doesn't check the injected sender** (emilhuseyn/reactive-omni sets `address(0)` and checks only `onlyServiceProvider`), so any Lasna reactive contract could trigger it via the proxy. Ripcord checks both the proxy and the sender: that's our reversal beat.
 - **Omni's `IReactive` still declares the legacy `event Callback(...)`.** It's deprecated: request callbacks with `SYSTEM.requestCallbackV_1_0`, never by emitting it. (reactive-lib-omni v0.1.0 `interfaces/IReactive.sol`)
 - **Remappings.** `@uniswap/v4-core/` points into `lib/v4-periphery/lib/v4-core/`. Installing v4-core separately would create two copies (D-006). Run `git submodule update --init --recursive` after cloning.
 - **Legacy vs Omni.** Reactive's `reactive-smart-contract-demos` (pushed 2026-10-07) still imports legacy `reactive-lib`. Its stop-order demos use `vm`, `emit Callback` and `REACTIVE_CHAIN_ID = 1597` mislabelled as Lasna. Don't copy from them. (source: repo read 2026-11-06)
