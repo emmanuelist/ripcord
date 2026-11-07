@@ -45,7 +45,10 @@ On (a) or (b), re-open research for this track.
 - [ ] Includes the "what one second buys" source: a real mainnet crash price series (research needed).
 
 ### M3 · Proof surface
-- [ ] Placeholder.
+- [x] **README as a proof surface** (done 2026-11-07): thesis heading, cover from the live page, badges, the problem, Proof (11 loops with three hashes each, the three refusals), four read-only `cast` checks run as printed, clean-clone tests (110), how it works with source lines, limits, run locally. Every sentence has a claims row (C-25..C-34).
+- [ ] **`benchmark`** run and its fixes landed.
+- [ ] **Run of show + video** under 3 min (docs/RUNOFSHOW.md, docs/VIDEO.md).
+- [ ] **C-2 "what one second buys"** (carried from M2): a real mainnet crash price series (research).
 
 ### M4 · Submitted
 - [ ] Placeholder.
