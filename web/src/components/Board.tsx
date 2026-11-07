@@ -17,8 +17,15 @@ import {
   type SortKey,
 } from "../chain/model";
 import { fundingState, type FundingState } from "../chain/useFunding";
+import refusalIndex from "../data/refusals.json";
 import { Flap } from "./Flap";
 import { SortMark } from "./SortMark";
+
+/** Positions the refusal room reads back in full: their board rows link there. */
+const refusalAnchor = new Map<string, string>([
+  [refusalIndex.direct.tokenId, "refusals-b"],
+  [refusalIndex.custody.tokenId, "refusals-c"],
+]);
 
 const columns: { key?: SortKey; label: string; cls: string }[] = [
   { key: "time", label: "Time UTC", cls: "c-time" },
@@ -202,19 +209,31 @@ export function Board({
                     <Flap text={statusWord[status]} tone={statusTone[status]} size="s" />
                     {status === "armed" && p.approvalOk === false && <span className="warn">Vault approval missing: this exit will fail</span>}
                     {status === "armed" && unfunded && <span className="warn">Unfunded: this exit can't be paid for</span>}
+                    {p.failure && !p.exit && <span className="warn">Refused: {p.failure.reason}</span>}
+                    {refusalAnchor.has(String(p.tokenId)) && (
+                      <a className="row-link" href={`#${refusalAnchor.get(String(p.tokenId))}`} onClick={(e) => e.stopPropagation()}>
+                        Read back in the refusal room
+                      </a>
+                    )}
                   </td>
                   <td className="c-blocks">
                     {blocks !== undefined ? (
-                      <Flap text={`${blocks} ${blocks === 1 ? "BLOCK " : "BLOCKS"}`} tone={p.exit ? "green" : "red"} size="s" />
+                      <>
+                        <Flap text={`${blocks} ${blocks === 1 ? "BLOCK " : "BLOCKS"}`} tone={p.exit ? "green" : "red"} size="s" />
+                        {!p.exit && <span className="cell-note">to the refusal</span>}
+                      </>
                     ) : (
                       <span className="none">—</span>
                     )}
                   </td>
                   <td className="c-tx">
                     {tx ? (
-                      <a className="hash" href={txUrl("unichain", tx)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
-                        {shortHash(tx)}
-                      </a>
+                      <>
+                        {!p.exit && <span className="cell-note">refusal</span>}
+                        <a className="hash" href={txUrl("unichain", tx)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+                          {shortHash(tx)}
+                        </a>
+                      </>
                     ) : (
                       <span className="none">—</span>
                     )}

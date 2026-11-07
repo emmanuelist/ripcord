@@ -66,9 +66,9 @@ function useReplay(p: Position | undefined) {
   return { shown, playing, canReplay, play, counting };
 }
 
-type Tone = "yellow" | "amber" | "green" | "red";
+export type Tone = "yellow" | "amber" | "green" | "red";
 
-function Stop({ k, chain, block, lit, tone, children }: { k: string; chain: string; block?: bigint; lit: boolean; tone: Tone; children: React.ReactNode }) {
+export function Stop({ k, chain, block, lit, tone, children }: { k: string; chain: string; block?: bigint; lit: boolean; tone: Tone; children: React.ReactNode }) {
   return (
     <li className={`stop${lit ? ` lit tone-${tone}` : ""}`}>
       <span className="lamp" aria-hidden="true" />
@@ -86,7 +86,7 @@ function Stop({ k, chain, block, lit, tone, children }: { k: string; chain: stri
  * Length equals duration: one cell per real Unichain block from the crossing swap, labelled with its own number.
  * The swap's cell is yellow; each block after it, up to the exit, lights green (red when the exit was refused).
  */
-function Ruler({ from, lit, end, refused }: { from?: bigint; lit?: number; end?: number; refused: boolean }) {
+export function Ruler({ from, lit, end, refused }: { from?: bigint; lit?: number; end?: number; refused: boolean }) {
   return (
     <div className="ruler" aria-hidden="true">
       {Array.from({ length: SCALE_BLOCKS }, (_, i) => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { txUrl } from "../chain/clients";
 import { fmtInt, fmtTick, shortHash } from "../chain/model";
 import { readRefusals, type Refusals as R } from "../chain/refusals";
+import { Ruler, Stop } from "./Departure";
 import { Flap } from "./Flap";
 
 /** The vault's status words as the board shows them. */
@@ -13,6 +14,7 @@ const liq = (n: bigint) => {
 };
 const lreact = (wei: bigint) => (Number(wei) / 1e18).toFixed(4);
 const addr = (a: unknown) => shortHash(String(a));
+const same = (a: bigint, b: bigint) => (a === b ? "unchanged" : "changed");
 
 function Tx({ chain, hop, label }: { chain: "unichain" | "lasna"; hop: { tx: string; block: bigint }; label: string }) {
   return (
@@ -63,7 +65,7 @@ export function Refusals() {
         <p className="ex-note">{failed ? "The public RPCs didn't answer. The three refusals load once they do." : "Reading the three refusals back from Unichain Sepolia and Lasna…"}</p>
       ) : (
         <ol className="flow refusals" aria-label="Three refused attempts">
-          <li>
+          <li id="refusals-a">
             <div className="flow-text">
               <h3>
                 <Flap text="HELD" tone="yellow" size="s" /> <span>A swap that stops short of the line</span>
@@ -80,6 +82,23 @@ export function Refusals() {
                 )}
                 , but asked for no callback.
               </p>
+              <ol className="route route-strip" aria-label="Calling at">
+                <Stop k="Swap" chain="Unichain Sepolia" block={r.holds.swap.block} lit tone="yellow">
+                  <span className="stop-line">tick → {fmtTick(r.holds.tickAfter)}</span>
+                  <span className="stop-line">{fmtInt(Math.abs(r.holds.tickAfter - r.holds.line))} short of {fmtTick(r.holds.line)}</span>
+                </Stop>
+                <Stop k="React" chain="Reactive Lasna" block={r.holds.reaction.block} lit tone="amber">
+                  {r.holds.reaction.charge !== undefined && (
+                    <span className="stop-line">
+                      billed {lreact(r.holds.reaction.charge)} <span className="ticker">lREACT</span>
+                    </span>
+                  )}
+                  <span className="stop-line">{r.holds.reaction.events} events</span>
+                </Stop>
+                <Stop k="Exit" chain="Unichain Sepolia" lit={false} tone="green">
+                  <span className="stop-line">no callback requested</span>
+                </Stop>
+              </ol>
               <p className="recorded">
                 <Tx chain="unichain" hop={r.holds.swap} label="Swap, Unichain" /> · <Tx chain="lasna" hop={r.holds.reaction} label="reaction, Lasna" />
               </p>
@@ -91,13 +110,15 @@ export function Refusals() {
                 {r.holds.reaction.ok ? "succeeded" : "failed"} · {r.holds.reaction.events} events · no callback
               </Fact>
               <Fact k={`#${r.holds.tokenId} liquidity`}>
-                <span className="num">{liq(r.holds.liquidityBefore)}</span> before · <span className="num">{liq(r.holds.liquidity)}</span> now
+                <span className="num">{liq(r.holds.liquidityBefore)}</span> before · <span className="num">{liq(r.holds.liquidity)}</span> now ·{" "}
+                {same(r.holds.liquidityBefore, r.holds.liquidity)}
               </Fact>
+              <Fact k="Means">no liquidity left the pool</Fact>
               </dl>
             </div>
           </li>
 
-          <li>
+          <li id="refusals-b">
             <div className="flow-text">
               <h3>
                 <Flap text="REVERTED" tone="red" size="s" /> <span>An exit called by anyone but Reactive</span>
@@ -107,6 +128,18 @@ export function Refusals() {
                 <span className="hash">{addr(r.direct.claimedSender)}</span>) with a crossing tick. The chain {r.direct.tx.reverted ? "reverted it" : "did not revert it"}:
                 only Reactive's callback proxy may call exit. Then the owner disarmed the line, which an owner can always do.
               </p>
+              <ol className="route route-strip" aria-label="Calling at">
+                <Stop k="Swap" chain="Unichain Sepolia" lit={false} tone="yellow">
+                  <span className="stop-line">none: nothing crossed</span>
+                </Stop>
+                <Stop k="React" chain="Reactive Lasna" lit={false} tone="amber">
+                  <span className="stop-line">none: Lasna never asked</span>
+                </Stop>
+                <Stop k="Reverted" chain="Unichain Sepolia" block={r.direct.tx.block} lit={r.direct.tx.reverted} tone="red">
+                  <span className="stop-line">{r.direct.reason?.name ?? "reverted"}</span>
+                  <span className="stop-line">the wallet is not the proxy</span>
+                </Stop>
+              </ol>
               <p className="recorded">
                 <Tx chain="unichain" hop={r.direct.tx} label="Reverted call, Unichain" /> · <Tx chain="unichain" hop={r.direct.disarm} label="disarm" />
               </p>
@@ -126,13 +159,13 @@ export function Refusals() {
               <Fact k="Means">the sender is not Reactive's callback proxy</Fact>
               <Fact k={`#${r.direct.tokenId} now`}>
                 <Flap text={boardWord[r.direct.statusNow] ?? r.direct.statusNow.toUpperCase()} tone="dim" size="s" /> · liquidity{" "}
-                <span className="num">{liq(r.direct.liquidity)}</span>, as before
+                <span className="num">{liq(r.direct.liquidity)}</span>, {same(r.direct.liquidityBefore, r.direct.liquidity)}
               </Fact>
               </dl>
             </div>
           </li>
 
-          <li>
+          <li id="refusals-c">
             <div className="flow-text">
               <h3>
                 <Flap text="CANCELLED" tone="red" size="s" /> <span>An exit after the owner revoked approval</span>
@@ -143,6 +176,27 @@ export function Refusals() {
                 {r.custody.lasna.pulled ? "Lasna pulled the ripcord" : "Lasna reacted"}, but the vault could not touch the NFT: it recorded the refusal on-chain,{" "}
                 <span className="num">{fmtInt(Number(r.custody.failed.block - r.custody.swap.block))}</span> blocks after the swap, instead of failing silently.
               </p>
+              <ol className="route route-strip" aria-label="Calling at">
+                <Stop k="Swap" chain="Unichain Sepolia" block={r.custody.swap.block} lit tone="yellow">
+                  <span className="stop-line">tick → {fmtTick(r.custody.tickAfter)}</span>
+                  <span className="stop-line">
+                    <strong className="crossed">crosses {fmtTick(r.custody.line)}</strong>
+                  </span>
+                </Stop>
+                <Stop k="React" chain="Reactive Lasna" block={r.custody.lasna.block} lit={r.custody.lasna.pulled} tone="amber">
+                  <span className="stop-line">ripcord pulled</span>
+                </Stop>
+                <Stop k="Refused" chain="Unichain Sepolia" block={r.custody.failed.block} lit tone="red">
+                  <span className="stop-line">{r.custody.failed.reason?.name ?? "ExitFailed"}</span>
+                  <span className="stop-line">the vault can't touch the NFT</span>
+                </Stop>
+              </ol>
+              <Ruler
+                from={r.custody.swap.block}
+                lit={Number(r.custody.failed.block - r.custody.swap.block)}
+                end={Number(r.custody.failed.block - r.custody.swap.block)}
+                refused
+              />
               <p className="recorded">
                 <Tx chain="unichain" hop={r.custody.revoke} label="Revoke, Unichain" /> · <Tx chain="unichain" hop={r.custody.swap} label="swap" /> ·{" "}
                 <Tx chain="lasna" hop={r.custody.lasna} label="pull, Lasna" /> · <Tx chain="unichain" hop={r.custody.failed} label="refusal" />
@@ -163,7 +217,7 @@ export function Refusals() {
               <Fact k="Means">the PositionManager refused RipcordVault</Fact>
               <Fact k={`#${r.custody.tokenId} now`}>
                 <Flap text={boardWord[r.custody.statusNow] ?? r.custody.statusNow.toUpperCase()} tone="red" size="s" /> · liquidity{" "}
-                <span className="num">{liq(r.custody.liquidity)}</span>, as before
+                <span className="num">{liq(r.custody.liquidity)}</span>, {same(r.custody.liquidityBefore, r.custody.liquidity)}
               </Fact>
               </dl>
             </div>

@@ -26,7 +26,9 @@ export function Shell({
       </a>
       <nav className="sections" aria-label="Sections">
         <a href="#board">Departures</a>
-        <a href="#how">How it works</a>
+        <a href="#how" className="wide-only">
+          How it works
+        </a>
         <a href="#refusals">Refusals</a>
         <a href="#limits">Limits</a>
         <a href="#contracts">Contracts</a>
