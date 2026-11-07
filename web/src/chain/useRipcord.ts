@@ -17,6 +17,8 @@ export interface RipcordState {
 
 const POLL_MS = 1500;
 const HIDDEN_POLL_MS = 10_000;
+/** After a failed poll, wait twice as long as last time, up to this; the first success snaps back to POLL_MS. */
+const MAX_BACKOFF_MS = 30_000;
 
 /** Polls Unichain Sepolia and Lasna and keeps the board's positions current. Every value comes from chain. */
 export function useRipcord(): RipcordState {
@@ -30,6 +32,8 @@ export function useRipcord(): RipcordState {
   useEffect(() => {
     let stopped = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    // Offline or a failing RPC: back off instead of hammering the public endpoints every 1.5 s.
+    let backoff = 0;
 
     const announce = (before: Position | undefined, after: Position): string | undefined => {
       const a = before ? boardStatus(before) : undefined;
@@ -44,6 +48,7 @@ export function useRipcord(): RipcordState {
         if (stopped) return;
         cursor.current = t.cursor;
         pending.current.poll = false;
+        backoff = 0;
         const notes: string[] = [];
         for (const [id, next] of t.changed) {
           // Merge, never replace: history may have landed while this poll was in flight.
@@ -66,9 +71,11 @@ export function useRipcord(): RipcordState {
       } catch (e) {
         if (stopped) return;
         pending.current.poll = false;
+        backoff = Math.min(MAX_BACKOFF_MS, Math.max(POLL_MS, backoff * 2));
         setState((s) => ({ ...s, loading: pending.current.history, error: e instanceof Error ? e.message : String(e) }));
       } finally {
-        if (!stopped) timer = setTimeout(() => void tick(), document.hidden ? HIDDEN_POLL_MS : POLL_MS);
+        const wait = Math.max(backoff, document.hidden ? HIDDEN_POLL_MS : POLL_MS);
+        if (!stopped) timer = setTimeout(() => void tick(), wait);
       }
     };
 
@@ -95,11 +102,19 @@ export function useRipcord(): RipcordState {
         void tick();
       }
     };
+    // Back online: don't wait out the backoff.
+    const onOnline = () => {
+      backoff = 0;
+      if (timer) clearTimeout(timer);
+      void tick();
+    };
     document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("online", onOnline);
     return () => {
       stopped = true;
       if (timer) clearTimeout(timer);
       document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("online", onOnline);
     };
   }, []);
 
