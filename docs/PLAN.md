@@ -10,8 +10,8 @@ Started: 2026-11-06 11:00 UTC
 | # | Milestone | When | Exit criteria (a stranger could check these) | Due | Status |
 |---|---|---|---|---|---|
 | M0 | Rigged | 10% | D-001 recorded. Contracts gate green locally and in CI. Spike S1 (Omni hello loop on the pool chain) and spike S2 (callback-driven liquidity decrease) each passed with tx hashes and raw receipts in docs/evidence/. Pool chain chosen by measurement (DECISIONS) | 2026-11-09 09:30 UTC | **done 2026-11-06** (E-001…E-007) |
-| M1 | Walking skeleton | 40% | One real loop through every layer, deployed: a user registers a line on a real v4 position, a real swap crosses it, Lasna reacts, and the vault pulls the liquidity. The hosted frontend shows that position's state read from chain, and the harness records the loop's three hashes and per-hop times | 2026-11-18 05:00 UTC | |
-| M2 | Core claim | 65% | Thesis demonstrated end to end, N measured over ≥10 runs (median and p90). **Reversal beat:** a direct call to the vault's exit from any address other than the Reactive callback path reverts on-chain, and a swap that doesn't cross the line leaves the position untouched. Both have tx hashes | 2026-11-25 13:15 UTC | |
+| M1 | Walking skeleton | 40% | One real loop through every layer, deployed: a user registers a line on a real v4 position, a real swap crosses it, Lasna reacts, and the vault pulls the liquidity. The hosted frontend shows that position's state read from chain, and the harness records the loop's three hashes and per-hop times | 2026-11-18 05:00 UTC || met 2026-11-06 (E-009, E-010, E-015) |
+| M2 | Core claim | 65% | Thesis demonstrated end to end, N measured over ≥10 runs (median and p90). **Reversal beat:** a direct call to the vault's exit from any address other than the Reactive callback path reverts on-chain, and a swap that doesn't cross the line leaves the position untouched. Both have tx hashes | 2026-11-25 13:15 UTC || met 2026-11-07 (E-012, E-013, E-016, E-017); C-2 carried |
 | M3 | Proof surface | freeze | README proof section. Every public claim has a verified row in docs/EVIDENCE.md. Video under 3 min recorded (docs/VIDEO.md). `benchmark` run and its fixes landed | 2026-12-03 20:00 UTC | |
 | M4 | Submitted | deadline − buffer | DoraHacks form submitted with the verbatim thesis, contract addresses, loop hashes and the latency answer. Preflight passed from a phone on cellular. Submission commit tagged | 2026-12-04 20:00 UTC | |
 
@@ -41,7 +41,7 @@ On (a) or (b), re-open research for this track.
 ### M2 · Core claim
 - [x] **N over ≥10 runs** (done 2026-11-06, E-012/E-013: 11 runs, swap → exit median 2, p90 3, max 3 Unichain blocks, 2–3 s on Unichain's clock). The thesis wording (which N, chain clock or viewer wall clock) is the user's call (C-1).
 - [x] **Reversal beat on-chain** (done 2026-11-06, E-016): a non-crossing swap leaves #7955 untouched (its reaction billed, no callback); a direct `exit()` from the wallet reverts with `NotAuthorized`; a revoked approval turns a real crossing into `ExitFailed: NotApproved` with the position untouched. 16 raw receipts.
-- [ ] **Refusal room on the page**, once the reversal transactions exist: between "How a ripcord pulls" and "What you give, what you keep", in the board's grammar (CANCELLED in red, decoded reason, tx read back). No placeholder rows (finish review, round 3).
+- [x] **Refusal room on the page** (done 2026-11-07, E-017): "What Ripcord refuses" reads the three E-016 refusals back by hash, each as its own calling-at strip; refused board rows show their reason. Finish review: ship. Public.
 - [ ] Includes the "what one second buys" source: a real mainnet crash price series (research needed).
 
 ### M3 · Proof surface

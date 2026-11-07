@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-06T20:06:23.010Z",
+  "generatedAt": "2026-11-07T00:57:30.721Z",
   "title": "Design System: Ripcord",
   "source": {
     "stylesheet": "web/src/styles.css",
@@ -230,7 +230,7 @@
         "displayName": "Ink 3",
         "canonical": "#9a968c",
         "oklch": "oklch(67.4% 0.015 88.7)",
-        "purpose": "Metadata, unlit stops, DISARMED, blank-reading flaps.",
+        "purpose": "Metadata, chain names, unlit stops, dim prose.",
         "cssVar": "--ink-3",
         "tonalRamp": [
           "oklch(15.0% 0.015 88.7)",
@@ -241,6 +241,24 @@
           "oklch(72.1% 0.015 88.7)",
           "oklch(83.6% 0.015 88.7)",
           "oklch(95.0% 0.015 88.7)"
+        ]
+      },
+      "ink-dim-flap": {
+        "role": "neutral",
+        "displayName": "Ink Dim on Flap",
+        "canonical": "#aca89d",
+        "oklch": "oklch(73.2% 0.016 90.3)",
+        "purpose": "Dim characters on a flap tile (DISARMED, blank-reading values); AA on both tile halves.",
+        "cssVar": "--ink-dim-flap",
+        "tonalRamp": [
+          "oklch(15.0% 0.016 90.3)",
+          "oklch(26.4% 0.016 90.3)",
+          "oklch(37.9% 0.016 90.3)",
+          "oklch(49.3% 0.016 90.3)",
+          "oklch(60.7% 0.016 90.3)",
+          "oklch(72.1% 0.016 90.3)",
+          "oklch(83.6% 0.016 90.3)",
+          "oklch(95.0% 0.016 90.3)"
         ]
       },
       "yellow": {
@@ -336,7 +354,24 @@
         ],
         "disarmed": [
           "DISARMED",
-          "ink-3"
+          "ink-dim-flap"
+        ]
+      },
+      "refusalOutcome": {
+        "held": [
+          "HELD",
+          "yellow",
+          "the line stayed armed"
+        ],
+        "reverted": [
+          "REVERTED",
+          "red",
+          "the chain reverted the call"
+        ],
+        "cancelled": [
+          "CANCELLED",
+          "red",
+          "the vault refused and recorded why"
         ]
       },
       "funding": {
@@ -499,12 +534,12 @@
       {
         "name": "phone",
         "value": "760px",
-        "purpose": "< : shell wraps with scrolling section row, heights and Read-only dropped; vertical route; full-width Replay; service strip one cell per row; split sections stack; larger scroll margins."
+        "purpose": "< : shell links take their own row ('How it works' dropped, four fit), heights and Read-only dropped; vertical route; full-width Replay; service strip one cell per row; split sections stack; larger scroll margins."
       },
       {
         "name": "board-container",
         "value": "640px (container query)",
-        "purpose": "< : three-line departure rows (pos/status/blocks; time/tx; line/swap) with phone-only labels."
+        "purpose": "< : three-line departure rows (pos/status with any reason; time/blocks; line/swap/tx) with phone-only labels."
       },
       {
         "name": "contracts-container",
@@ -512,14 +547,7 @@
         "purpose": "< : contracts table becomes stacked blocks on rails."
       }
     ],
-    "notYetBuilt": [
-      {
-        "name": "Refusal room",
-        "milestone": "M2",
-        "placement": "between 'How a ripcord pulls' and 'What you give, what you keep'",
-        "rule": "In the board's own grammar (flaps, rails, cited lines); built only once real refused transactions exist."
-      }
-    ]
+    "notYetBuilt": []
   },
   "components": [
     {
@@ -558,7 +586,7 @@
       "name": "Board row",
       "kind": "custom",
       "refersTo": "board-row",
-      "description": "Departure row on a rail hairline; fills only on hover (row) and when featured (row-sel). Under a 640px container it becomes a three-line row: pos/status/blocks, time/tx, line/swap.",
+      "description": "Departure row on a rail hairline; fills only on hover (row) and when featured (row-sel). A refused row never reads as an exit: decoded reason under CANCELLED, blocks 'to the refusal', tx labelled 'refusal', and a link to its read-back in the refusal room. Under a 640px container it becomes a three-line row: pos/status (with any reason), time/blocks, line/swap/tx.",
       "html": "<table class=\"ds-board\"><thead><tr><th>Time UTC</th><th>Position</th><th>Status</th><th>Exit tx</th></tr></thead><tbody><tr class=\"sel\"><td>13:12:18</td><td>#7953</td><td class=\"g\">DEPARTED</td><td><code>0x53fd…144e</code></td></tr><tr><td>13:11:28</td><td>#7952</td><td class=\"g\">DEPARTED</td><td><code>0x2922…f22f</code></td></tr></tbody></table>",
       "css": ".ds-board { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; color: var(--ink, #f3efe4); font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 600; } .ds-board th { text-align: left; padding: 0 12px 10px; font: 600 12px/1.5 var(--text, Barlow, sans-serif); letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow, #f2c230); border-bottom: 1px solid var(--alu, #3a3d45); } .ds-board td { padding: 11px 12px; border-bottom: 1px solid var(--rail, #2c2e35); } .ds-board tbody tr { cursor: pointer; } .ds-board tbody tr:hover { background: var(--row, #1e1f24); } .ds-board tbody tr.sel { background: var(--row-sel, #24262c); } .ds-board .g { color: var(--green, #3fbf7f); } .ds-board code { font-family: var(--mono, \"JetBrains Mono Variable\", monospace); font-size: 0.82em; font-weight: 400; }"
     },
@@ -582,9 +610,17 @@
       "name": "Shell",
       "kind": "nav",
       "refersTo": "shell",
-      "description": "Sticky 60px housing bar: flap wordmark, section links, live block heights, liveness word with dot, Read-only plate. Under 760px links wrap to a scrolling third row; heights and Read-only drop.",
+      "description": "Sticky 60px housing bar: flap wordmark, section links, live block heights, liveness word with dot, Read-only plate. Under 760px the links take their own row and 'How it works' drops (the hero links it) so four fit at 390px with no hidden scroll strip; heights and Read-only drop. Polls both chains every 1.5 s; failed polls back off 1.5 to 30 s and snap back on success or the online event.",
       "html": "<header class=\"ds-shell\"><span class=\"ds-brand\">RIPCORD</span><nav><a href=\"#\">Departures</a><a href=\"#\">How it works</a><a href=\"#\">Limits</a></nav><span class=\"ds-heads\">Unichain Sepolia <b>#67,142,264</b><span class=\"ds-live\">Live</span></span><span class=\"ds-ro\">Read-only</span></header>",
       "css": ".ds-shell { display: flex; align-items: center; gap: 24px; min-height: 60px; padding: 10px 24px; background: var(--housing, #16171a); border-bottom: 1px solid var(--alu, #3a3d45); font-family: var(--text, Barlow, sans-serif); } .ds-brand { font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 600; font-size: 17px; color: var(--yellow, #f2c230); letter-spacing: 0.3em; } .ds-shell nav { display: flex; gap: 22px; } .ds-shell nav a { color: var(--ink-2, #c3bfb4); text-decoration: none; font-weight: 500; padding: 4px 0; border-bottom: 2px solid transparent; } .ds-shell nav a:hover { color: var(--ink, #f3efe4); border-bottom-color: var(--yellow, #f2c230); } .ds-shell nav a:focus-visible { outline: 2px solid var(--yellow, #f2c230); outline-offset: 2px; } .ds-heads { margin-left: auto; display: flex; gap: 20px; align-items: center; font-size: 14px; color: var(--ink-3, #9a968c); } .ds-heads b { color: var(--ink, #f3efe4); font-weight: 500; font-variant-numeric: tabular-nums; } .ds-live { color: var(--green, #3fbf7f); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 7px; } .ds-live::before { content: \"\"; width: 8px; height: 8px; border-radius: 50%; background: currentColor; } .ds-ro { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3, #9a968c); border: 1px solid var(--rail, #2c2e35); padding: 4px 9px; border-radius: 2px; }"
+    },
+    {
+      "name": "Refusal attempt",
+      "kind": "card",
+      "refersTo": "refusal",
+      "description": "One real refused attempt (E-016), rebuilt from its transactions by hash: an inline outcome flap in the heading (HELD yellow; REVERTED, CANCELLED red), live narrative, a calling-at strip using the departure's lamps (the dark lamp is the proof), and a hinge-black 'what the chain says now' plate of facts on rails. Source: Refusals.tsx, chain/refusals.ts, .route-strip, .chain-says.",
+      "html": "<div class=\"ds-refusal\"><ol class=\"ds-route\"><li class=\"ds-stop lit y\"><i></i><b>Swap</b><small>tick → −1124</small></li><li class=\"ds-stop lit a\"><i></i><b>React</b><small>billed 0.0119 <code>lREACT</code></small></li><li class=\"ds-stop\"><i></i><b>Exit</b><small>no callback requested</small></li></ol><div class=\"ds-says\"><p>Read back now</p><dl><div><dt>#7955 liquidity</dt><dd>1.00e21 before · 1.00e21 now · unchanged</dd></div><div><dt>Means</dt><dd>no liquidity left the pool</dd></div></dl></div></div>",
+      "css": ".ds-refusal { display: grid; gap: 16px; max-width: 640px; color: var(--ink, #f3efe4); font-family: var(--text, Barlow, sans-serif); } .ds-refusal .ds-route { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); } .ds-refusal .ds-stop { position: relative; padding: 24px 16px 0 0; display: grid; gap: 3px; } .ds-refusal .ds-stop::before { content: \"\"; position: absolute; top: 6px; left: 14px; right: 0; height: 2px; background: var(--rail, #2c2e35); } .ds-refusal .ds-stop.lit + .ds-stop.lit::before, .ds-refusal .ds-stop.lit:has(+ .ds-stop.lit)::before { background: color-mix(in srgb, var(--yellow, #f2c230) 55%, var(--rail, #2c2e35)); } .ds-refusal .ds-stop:last-child::before { display: none; } .ds-refusal .ds-stop i { position: absolute; top: 0; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--flap, #2a2c31); border: 1px solid var(--alu, #3a3d45); } .ds-refusal .ds-stop.lit i { background: var(--lamp); border-color: var(--lamp); } .ds-refusal .ds-stop.y { --lamp: var(--yellow, #f2c230); } .ds-refusal .ds-stop.a { --lamp: var(--amber, #f0953a); } .ds-refusal .ds-stop b { font-family: var(--display, \"Barlow Semi Condensed\", sans-serif); font-weight: 700; font-size: 20px; text-transform: uppercase; color: var(--ink-3, #9a968c); } .ds-refusal .ds-stop.lit b { color: var(--ink, #f3efe4); } .ds-refusal small { font-size: 14px; color: var(--ink-2, #c3bfb4); } .ds-refusal code { font-family: var(--mono, monospace); } .ds-says { background: var(--hinge, #121316); border: 1px solid var(--rail, #2c2e35); border-radius: 2px; padding: 14px 16px; } .ds-says p { margin: 0 0 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--yellow, #f2c230); } .ds-says dl { margin: 0; display: grid; gap: 10px; } .ds-says dl > div { display: grid; grid-template-columns: 9rem 1fr; gap: 14px; padding-top: 10px; border-top: 1px solid var(--rail, #2c2e35); } .ds-says dl > div:first-child { padding-top: 0; border-top: 0; } .ds-says dt { font-size: 12px; color: var(--ink-3, #9a968c); } .ds-says dd { margin: 0; font-size: 14px; color: var(--ink-2, #c3bfb4); }"
     }
   ],
   "narrative": {
@@ -633,7 +669,7 @@
       "Do price funding from the last real loop and name its basis.",
       "Do separate with 1px aluminium or rail hairlines and change paint, not elevation, for hover and selection.",
       "Do keep mono for hashes, addresses, code, token tickers and block numbers only.",
-      "Do place the refusal room (milestone M2, not yet built) between \"How a ripcord pulls\" and \"What you give, what you keep\", in the board's own grammar of flaps, rails and cited lines, and only once real refused transactions exist to fill it."
+      "Do read every refusal back by hash (the revert replayed one block earlier, the reaction's charge, liquidity before and now, status now), and show each attempt in the board's own lamps: a lamp that stays dark says what did not happen."
     ],
     "donts": [
       "Don't use gradients, shadows, blur, glass or glows on any surface.",

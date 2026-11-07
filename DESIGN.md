@@ -15,6 +15,7 @@ colors:
   ink: "#f3efe4"
   ink-2: "#c3bfb4"
   ink-3: "#9a968c"
+  ink-dim-flap: "#aca89d"
   yellow: "#f2c230"
   amber: "#f0953a"
   green: "#3fbf7f"
@@ -168,7 +169,8 @@ A dark, warm-neutral station housing with one Solari yellow and three signal col
 - **Aluminium** (#3a3d45): the structural hairline. It draws the shell's bottom edge, the departure unit's border and inner rails, the service strip, the chip outlines, and the table header rules.
 - **Flap White** (#f3efe4): primary ink, flap characters, values.
 - **Ink 2** (#c3bfb4): reading prose and secondary values.
-- **Ink 3** (#9a968c): metadata, chain names, unlit stop names, the DISARMED tone (`tone-dim`), and blank-reading flaps.
+- **Ink 3** (#9a968c): metadata, chain names, unlit stop names, and dim prose.
+- **Ink Dim on Flap** (#aca89d): dim characters on a flap tile (DISARMED, blank-reading values; `.flap.tone-dim`). Ink 3 on the small tile measured 4.0–4.4:1; this clears AA on both halves (5.0:1 on #35373d, 5.5:1 on #2f3136).
 
 ### Named Rules
 **The Word-and-Lamp Rule.** A state colour never appears without its word beside it: ARMED in yellow, BOARDING in amber, DEPARTED in green, CANCELLED in red, DISARMED in dim ink, and for funding "In service", "Low" and "Unfunded" in the same three signal colours (`statusTone` in `chain/model.ts`, `stateTone` in `Board.tsx`). Lamps, chip dots and ruler cells are lit only next to their label.
@@ -248,6 +250,8 @@ A yellow-filled 2px plate, 600 15px Barlow, padding 12px 16px, with a play-trian
 `Board.tsx`: the "Departures" table on rails.
 - **Columns:** Time UTC, Position, Line, Swap tick, Status, Swap → exit, Exit tx. Every value cell is an `s` flap, except hashes in mono and "—" in dim ink for values that do not exist yet. Column heads are yellow labels. Sortable heads carry an authored two-chevron SVG mark (`SortMark.tsx`, 1.5px stroke) that dims the inactive direction.
 - **Rows:** transparent on a rail hairline. The hovered row takes Row Hover and the featured row takes Row Chosen, with no other fills. Clicking a row features it and brings the departure unit into view. An armed row whose approval is gone, or whose contracts are unfunded, carries an inline red sentence.
+- **A refused row never reads as an exit:** under its CANCELLED flap, the decoded reason ("Refused: …") in red; the block count stays a red flap with "to the refusal" beneath it; the tx cell reads "refusal" before the hash. Rows the refusal room reads back carry "Read back in the refusal room", on its own line, linking to that attempt.
+- **Phone rows** (container under 640px): three lines on the rail: position · status (with any reason beneath) / time and date · blocks / line · swap tick · tx.
 - **Filter chips:** rectangular 2px outlined plates in uppercase 13px labels with counts. A status chip carries its tone's dot beside its word. A pressed chip fills yellow with housing ink. "All" and "Armed" always show; other states appear only once a position holds them.
 - **Empty and loading:** one full-width sentence row, never placeholder rows.
 
@@ -259,10 +263,19 @@ A yellow-filled 2px plate, 600 15px Barlow, padding 12px 16px, with a play-trian
 - **How a ripcord pulls:** three steps on rails. Each heading begins with an inline `s` flap (SWAP / REACT / EXIT in yellow) sharing the heading's first line. Inline layout is deliberate, so the flap never stands above the heading. Beside each step are cited source lines: a hinge-black plate with mono code, an optional "This loop" evaluation of that line in one real recorded loop, and a file:line link pinned to the deployed commit. Under each step's prose, a "recorded" line gives the hop's block and hash.
 - **What you give, what you keep:** prose with a "Read now" fact, which is the NFT owner read live from the PositionManager, the block before the exit and now.
 - **Limits:** a list with 10 × 2px yellow bars as markers, including live facts ("N of 8 armed now", the exits the reactive contract covers).
+
+### Refusal room
+`Refusals.tsx`, `chain/refusals.ts`: "What Ripcord refuses", between "How a ripcord pulls" and "What you give, what you keep". Three real attempts (E-016), each rebuilt on load from its own transactions by hash; the page stores no value.
+- **Each attempt** sits on the explainer's rails (`.flow > li`, anchors `refusals-a/-b/-c`). Its heading begins with an inline outcome flap: **HELD** in yellow (the line stayed armed), **REVERTED** and **CANCELLED** in red. These are outcomes of an attempt; CANCELLED is also the board state of the same event.
+- **The narrative** is built only from live values: ticks from the Swap event and StateView one block earlier, the reaction's charge from historical balances, the block gap to the refusal.
+- **A calling-at strip per attempt** (`.route-strip`, the departure's own `Stop`): A lights SWAP and REACT and leaves EXIT dark ("no callback requested"); B leaves SWAP and REACT dark ("none: nothing crossed", "none: Lasna never asked") and lights only a red REVERTED; C lights SWAP, REACT and a red REFUSED, with the departure's `Ruler` underneath ending in the red REFUSED mark. The lamp that stays dark is the proof.
+- **What the chain says now** (`.chain-says`): a hinge-black plate with a yellow label ("Read back now", "The chain's reason", "The vault's record") over facts on rails: the decoded error in mono (the reverted call replayed one block earlier; the vault's ExitFailed reason), a plain "Means" line, the position's status now as a flap, and liquidity "before · now · unchanged".
+- **Loading or RPC failure:** one sentence, never placeholder attempts.
 - **Contracts:** a table on rails with names in the display face and addresses in mono.
 
 ### Shell
-`Shell.tsx`: a sticky 60px housing bar with an aluminium bottom edge. It holds the RIPCORD wordmark as a yellow `s` flap; section links in Ink 2 (500), which on hover turn ink with a 2px yellow underline; live Unichain and Lasna block heights; a liveness word with its dot (Live green; Stale · N s or Connecting amber; RPC unreachable · retrying red); and an outlined "Read-only" plate.
+`Shell.tsx`: a sticky 60px housing bar with an aluminium bottom edge. It holds the RIPCORD wordmark as a yellow `s` flap; section links in Ink 2 (500), which on hover turn ink with a 2px yellow underline; live Unichain and Lasna block heights; a liveness word with its dot (Live green; Stale · N s or Connecting amber; RPC unreachable · retrying red); and an outlined "Read-only" plate. Below 760px the links sit on their own line and "How it works" is dropped (the hero links "How a ripcord pulls"), so the four that remain fit at 390px without a hidden scroll strip.
+- **Polling:** both chains every 1.5 s (10 s while the tab is hidden). A failed poll backs off 1.5 → 3 → 6 → 12 → 24 → 30 s; the first success, or the browser's `online` event, snaps back.
 
 ### Motion inventory
 - **Flap turn:** 130 ms per step (65 ms fall plus 65 ms land), 40 ms stagger, at most 6 steps.
@@ -283,7 +296,7 @@ A yellow-filled 2px plate, 600 15px Barlow, padding 12px 16px, with a play-trian
 - **Do** price funding from the last real loop and name its basis.
 - **Do** separate with 1px aluminium or rail hairlines and change paint, not elevation, for hover and selection.
 - **Do** keep mono for hashes, addresses, code, token tickers and block numbers only.
-- **Do** place the refusal room (milestone M2, not yet built) between "How a ripcord pulls" and "What you give, what you keep", in the board's own grammar of flaps, rails and cited lines, and only once real refused transactions exist to fill it.
+- **Do** read every refusal back by hash (the revert replayed one block earlier, the reaction's charge, liquidity before and now, status now), and show each attempt in the board's own lamps: a lamp that stays dark says what did not happen.
 
 ### Don't:
 - **Don't** use gradients, shadows, blur, glass or glows on any surface.
