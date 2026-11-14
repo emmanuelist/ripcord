@@ -227,3 +227,15 @@ Append-only. To change a decision, add a new entry that supersedes it.
 - More UI redesign: first screen and the finish review are already at the ceiling for this pass.
 - A measured legacy-Reactive baseline: legacy Lasna was retired on 2026-10-07; the organizers' published ~7 s figure is used as a stated bound.
 - Tokenising the four leftover colour literals: no judge-visible change.
+
+## D-018 · The name Ripcord survives the collision check · 2026-11-14 · accepted
+**Context:** The hackathon skill (v2.6) now requires checking a project name for collisions before it goes anywhere, because an AI judge can read two same-named projects as duplicates and a judge who finds a live product of that name assumes a copy.
+
+**Search (2026-11-14):**
+- Event gallery (dorahacks.io/hackathon/reactive-omni-buildathon/buidl): 23 builds, none named Ripcord.
+- GitHub (`gh search repos "ripcord"`): a Discord/Slack desktop client and its patches (largest 193★), a PHP XML-RPC library, a Go Discord scraper, a macOS audio app, and `pooltogether/ripcord`, an empty 2020 Next.js starter with no product. None is a DeFi or Uniswap product.
+- npm `ripcord`: a project-scaffolding package. Unrelated.
+- CoinGecko search: no token named Ripcord.
+- Web search for "Ripcord" in DeFi: no protocol of that name found.
+
+**Decision:** Keep Ripcord. No collision inside the category or the event.
