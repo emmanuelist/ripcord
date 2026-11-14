@@ -11,6 +11,7 @@ import { Shell } from "./components/Shell";
 const LIVE_WINDOW_S = 15 * 60;
 
 function initialSelection(): bigint | undefined {
+  if (typeof window === "undefined") return undefined; // server render: no query string
   const q = new URLSearchParams(window.location.search).get("position");
   return q && /^\d+$/.test(q) ? BigInt(q) : undefined;
 }
@@ -68,11 +69,11 @@ export function App() {
       <a className="skip" href="#board">
         Skip to the departures
       </a>
-      <Shell uniHead={s.uniHead} lasnaHead={s.lasnaHead} updatedAt={s.updatedAt} error={s.error} now={now} />
+      <Shell uniHead={s.uniHead} lasnaHead={s.lasnaHead} updatedAt={s.updatedAt} error={s.error} now={now} asOf={s.asOf} />
       <main id="top">
         <section className="hero" aria-label="Ripcord">
           <Hero positions={positions} />
-          <Departure key={selected ? String(selected.tokenId) : "none"} p={selected} tickNow={s.poolTick} />
+          <Departure key={selected ? String(selected.tokenId) : "none"} p={selected} tickNow={s.poolTick} asOf={s.asOf} />
         </section>
         <Board positions={positions} selected={selectedId} onSelect={select} loading={s.loading} poolTick={s.poolTick} funding={funding} />
         <Explainer p={quoted} armed={armed} funding={funding} />

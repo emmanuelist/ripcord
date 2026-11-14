@@ -108,7 +108,10 @@ export function Ruler({ from, lit, end, refused }: { from?: bigint; lit?: number
 
 const countText = (n: number | undefined) => (n === undefined ? "        " : `${n} ${n === 1 ? "BLOCK " : "BLOCKS"}`);
 
-export function Departure({ p, tickNow }: { p?: Position; tickNow?: number }) {
+const asOfText = (a: { block: bigint; readAt: number }) =>
+  `As of Unichain block #${fmtInt(a.block)}, read ${new Date(a.readAt).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} UTC · connecting to the live chain…`;
+
+export function Departure({ p, tickNow, asOf }: { p?: Position; tickNow?: number; asOf?: { block: bigint; readAt: number } }) {
   const { shown, playing, canReplay, play, counting } = useReplay(p);
   if (!shown || !p) {
     return (
@@ -235,6 +238,8 @@ export function Departure({ p, tickNow }: { p?: Position; tickNow?: number }) {
         <p className="dep-note" id="dep-note">
           {note}
         </p>
+        {/* Always one line, so going live never moves the panel: when it was read, or that it's being read now. */}
+        <p className={`dep-asof${asOf ? "" : " live"}`}>{asOf ? asOfText(asOf) : "Live: read from Unichain Sepolia and Lasna as you watch."}</p>
       </div>
       <p className="sr-only" aria-live="polite">
         {playing ? `Replaying position ${shown.tokenId} at chain speed.` : ""}

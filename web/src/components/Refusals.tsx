@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { txUrl } from "../chain/clients";
 import { fmtInt, fmtTick, shortHash } from "../chain/model";
 import { readRefusals, type Refusals as R } from "../chain/refusals";
+import { snapshot } from "../chain/snapshot";
 import { Ruler, Stop } from "./Departure";
 import { Flap } from "./Flap";
 
@@ -41,7 +42,8 @@ function Fact({ k, children }: { k: string; children: React.ReactNode }) {
  * values read back from chain, and the card beside it is what the chain says now. No value is stored in the page.
  */
 export function Refusals() {
-  const [r, setR] = useState<R | undefined>(undefined);
+  // Starts from the build-time read (the same reads, done earlier), then reads again live.
+  const [r, setR] = useState<R | undefined>(snapshot?.refusals);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {

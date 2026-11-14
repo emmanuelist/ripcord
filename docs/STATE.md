@@ -16,7 +16,8 @@ _Last verified: 2026-11-14, after benchmark fixes B2–B4 (E-018 … E-021)_
 | **Why it needs Omni:** Lasna hop first seen a median 1.8 s after the swap (49 runs) vs legacy's ~7 s blocks; crash data: median 15.7 vs 25.0 bps within 3 s vs 7 s (10 Oct 2025), reproducible | `harness/scripts/what-one-second-buys.sh` | E-018, E-019 |
 | **A loop anyone can run:** RipcordTryout `arm()` + `cross(tokenId)`; #8015 exited 2 blocks after its swap; #8016 watched on the page ARMED → BOARDING → DEPARTED | live txs, Playwright | E-020 |
 | **Three refusals on-chain** (stops short; direct `exit()` reverts `NotAuthorized`; revoked approval → `ExitFailed: NotApproved`) | harness `npm run reversals` | E-016 |
-| **Web, public:** https://ripcord-ashy.vercel.app loads all 54 positions logged-out in ~7 s, no errors; hero, departure + replay, board, service strip, refusal room, the "why the seconds matter" note | Playwright logged-out | E-021 |
+| **First screen at once (2026-11-15):** server-rendered from a build-time chain snapshot labelled "as of block #N", readable without JS, `og.png` link preview; `ui-audit.mjs` no FAIL lines, departure visible in 2.2 s (was 5–6 s) | `ui-audit.mjs` on production | E-024 |
+| **Web, public:** https://ripcord-ashy.vercel.app loads all positions logged-out, no errors; hero, departure + replay, board, service strip, refusal room, the "why the seconds matter" note | Playwright logged-out | E-021 |
 | README as a proof surface: thesis, why Omni, 50 loops, refusals, read-only checks, run a loop yourself, limits; every sentence has a claims row (C-1 … C-37) | claims check | docs/EVIDENCE.md |
 | Gates: contracts 83/83 (fmt, lint --deny warnings, sizes); harness 18; web eslint 0, tsc, 21, build; detector clean | gate commands | this commit |
 | MIT license | `LICENSE` | `3d6a860` |
@@ -38,6 +39,7 @@ Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source m
 - Not checked yet: the public page on a phone over cellular (preflight, M4).
 - The flap's two-half fall is judged from code; at 130 ms per step it can't be captured frame by frame.
 - **Submitted to DoraHacks on 2026-11-14** (track Every Second Counts; the user pressed submit). Film on YouTube https://youtu.be/cIcXnYkJFyo, which plays logged out (oEmbed 200, 2026-11-14). Still to check: whether that upload is the final 2:35 cut or the 2:36 one before it. The README doesn't link the video yet.
+- The featured departure falls back to #8014 a few hours after a tryout loop: the live poll scans only recent blocks and the tryout loops (#8015–#8023) aren't in `runs.json`, so they drop off the board. Adding them to the recorded history would keep the filmed #8023 featured.
 - **The repo is private**: the submission's GitHub link returns 404 to judges until it is made public (B5).
 
 ## Claims not yet verified

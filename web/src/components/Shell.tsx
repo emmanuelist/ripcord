@@ -7,17 +7,20 @@ export function Shell({
   updatedAt,
   error,
   now,
+  asOf,
 }: {
   uniHead?: bigint;
   lasnaHead?: bigint;
   updatedAt?: number;
   error?: string;
   now: number;
+  asOf?: { block: bigint; readAt: number };
 }) {
   const age = updatedAt ? Math.max(0, Math.round((now - updatedAt) / 1000)) : undefined;
   const live = age !== undefined && age < 6 && !error;
   const state = error && (age === undefined || age >= 6) ? "down" : live ? "live" : age === undefined ? "wait" : "stale";
-  const word = { live: "Live", stale: `Stale · ${age ?? 0} s`, down: "RPC unreachable · retrying", wait: "Connecting" }[state];
+  // Before the first live answer the page shows the build-time snapshot, and says which block it was read at.
+  const word = { live: "Live", stale: `Stale · ${age ?? 0} s`, down: "RPC unreachable · retrying", wait: asOf ? `As of #${fmtInt(asOf.block)}` : "Connecting" }[state];
 
   return (
     <header className="shell">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { loadHistory, mergeRecords, poll, type Cursor } from "./live";
 import { boardStatus, statusWord, type Position } from "./model";
+import { snapshot } from "./snapshot";
 
 export interface RipcordState {
   positions: Map<bigint, Position>;
@@ -13,7 +14,22 @@ export interface RipcordState {
   error?: string;
   /** Latest status change, phrased for the screen-reader live region. */
   announcement: string;
+  /** Set while the page still shows the build-time snapshot: the block and moment it was read. Cleared by the first live poll. */
+  asOf?: { block: bigint; readAt: number };
 }
+
+const fromSnapshot = (): RipcordState =>
+  snapshot
+    ? {
+        positions: new Map(snapshot.positions.map((p) => [p.tokenId, p])),
+        uniHead: snapshot.uniHead,
+        lasnaHead: snapshot.lasnaHead,
+        poolTick: snapshot.poolTick,
+        loading: false,
+        announcement: "",
+        asOf: { block: snapshot.uniHead, readAt: snapshot.readAt },
+      }
+    : { positions: new Map(), loading: true, announcement: "" };
 
 const POLL_MS = 1500;
 const HIDDEN_POLL_MS = 10_000;
@@ -22,8 +38,9 @@ const MAX_BACKOFF_MS = 30_000;
 
 /** Polls Unichain Sepolia and Lasna and keeps the board's positions current. Every value comes from chain. */
 export function useRipcord(): RipcordState {
-  const [state, setState] = useState<RipcordState>({ positions: new Map(), loading: true, announcement: "" });
-  const positions = useRef(new Map<bigint, Position>());
+  const [state, setState] = useState<RipcordState>(fromSnapshot);
+  // Live reads merge over the snapshot field by field, exactly as they merge over recorded history.
+  const positions = useRef(new Map<bigint, Position>(snapshot ? snapshot.positions.map((p) => [p.tokenId, p]) : []));
   const cursor = useRef<Cursor | undefined>(undefined);
   // "Loading" lasts until both the first live poll and the recorded history have answered, so the board never flashes
   // "no departures" while history is still in flight.
@@ -64,15 +81,16 @@ export function useRipcord(): RipcordState {
           lasnaHead: t.lasnaHead,
           poolTick: t.poolTick,
           updatedAt: Date.now(),
-          loading: pending.current.history,
+          loading: snapshot ? false : pending.current.history,
           error: undefined,
+          asOf: undefined,
           announcement: notes.length ? notes.join(" ") : s.announcement,
         }));
       } catch (e) {
         if (stopped) return;
         pending.current.poll = false;
         backoff = Math.min(MAX_BACKOFF_MS, Math.max(POLL_MS, backoff * 2));
-        setState((s) => ({ ...s, loading: pending.current.history, error: e instanceof Error ? e.message : String(e) }));
+        setState((s) => ({ ...s, loading: snapshot ? false : pending.current.history, error: e instanceof Error ? e.message : String(e) }));
       } finally {
         const wait = Math.max(backoff, document.hidden ? HIDDEN_POLL_MS : POLL_MS);
         if (!stopped) timer = setTimeout(() => void tick(), wait);
@@ -93,7 +111,7 @@ export function useRipcord(): RipcordState {
       .finally(() => {
         if (stopped) return;
         pending.current.history = false;
-        setState((s) => ({ ...s, positions: new Map(positions.current), loading: pending.current.poll }));
+        setState((s) => ({ ...s, positions: new Map(positions.current), loading: snapshot ? false : pending.current.poll }));
       });
 
     const onVisible = () => {

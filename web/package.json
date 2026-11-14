@@ -10,7 +10,8 @@
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "build": "npm run sync && tsc --noEmit && vite build",
+    "snapshot": "node scripts/snapshot.mjs",
+    "build": "npm run sync && npm run snapshot && tsc --noEmit && vite build && node scripts/prerender.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -225,6 +225,8 @@ a:hover { text-decoration-color: var(--yellow); }
 .cell.on .cell-mark { color: var(--green); }
 .cell.off .cell-mark { color: var(--red); }
 .cell-no { font-family: var(--mono); font-size: 11px; color: var(--ink-3); min-height: 1.4em; }
+.dep-asof { margin: 6px 0 0; font-size: 13px; line-height: 1.45; color: var(--amber); }
+.dep-asof.live { color: var(--ink-3); }
 .dep-note { margin: 12px 0 0; font-size: 13px; line-height: 1.45; color: var(--ink-2); min-height: 2.9em; max-width: 72ch; text-wrap: pretty; }
 
 /* ---------- the board ---------- */
