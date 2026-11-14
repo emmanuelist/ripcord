@@ -5,7 +5,7 @@ _Last verified: 2026-11-14, after benchmark fixes B2–B4 (E-018 … E-021)_
 
 **Milestone:** M3 · Proof surface (freeze 2026-12-03). README done; benchmark run (19/24) and its fixes B2, B3, B4 done; **B1 (run of show + video) open**; B5 at submission · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** B1: the user watches the re-cut film `internal/film/film/ripcord-master.mp4` (2:26, Warrant's film system, loop #8023, E-023) and picks where it's hosted; then upload, play it logged-out in a private window, and link it in the README and submission.
+**Next action:** B5: make `github.com/emmanuelist/ripcord` public (it returns 404 logged out, checked 2026-11-14 after submitting), then confirm the README links and CI badge resolve logged out and tag the submission commit.
 
 **Blocked on:** nothing.
 
@@ -37,7 +37,8 @@ Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source m
 - The page's and README's GitHub links and the CI badge 404 for visitors until the repo goes public at submission (D-009, B5).
 - Not checked yet: the public page on a phone over cellular (preflight, M4).
 - The flap's two-half fall is judged from code; at 130 ms per step it can't be captured frame by frame.
-- The film is re-cut (v2, 2:26, E-023; v1 2:15 kept as a fallback) but not uploaded or linked yet (B1).
+- **Submitted to DoraHacks on 2026-11-14** (track Every Second Counts; the user pressed submit). Film on YouTube https://youtu.be/cIcXnYkJFyo, which plays logged out (oEmbed 200, 2026-11-14). Still to check: whether that upload is the final 2:35 cut or the 2:36 one before it. The README doesn't link the video yet.
+- **The repo is private**: the submission's GitHub link returns 404 to judges until it is made public (B5).
 
 ## Claims not yet verified
 - None. (C-2 verified 2026-11-14 from E-018.)
