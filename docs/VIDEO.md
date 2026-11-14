@@ -4,32 +4,45 @@
 
 Judges see only this video (DOSSIER: no live demo is mentioned), so the video is the demo. Limit: under 3:00. Target: **2:40**, leaving 20 s of margin.
 
-## How it's made
-- **Footage:** one real capture of the public page, https://ripcord-ashy.vercel.app, at 1920×1080 and 100% zoom, in a clean browser profile with no bookmarks bar and no extensions. `video/capture/` drives the page with Playwright and records it through Chrome's own screencast. While it records, the project wallet sends a real `arm()` and `cross(tokenId)` to RipcordTryout. The script signs through `cast` with the encrypted keystore, so the key never enters Node and nothing about the wallet appears on screen.
-- **The core take is continuous:** ARMED → BOARDING → DEPARTED runs at chain speed, uncut and not sped up. The wait is the proof. Cuts happen only between beats, never inside a loop.
-- **Captions and timing are composed in code** (Remotion, `video/`), so a UI change means a re-render, not a re-shoot. Overlays only label what the page shows. Nothing animates that the app doesn't do.
-- **Narration:** ElevenLabs text to speech. The key is read from `.env` and never printed. Every narrated number is read off the frame it plays over. The live loop's numbers (#ID, N s, blocks) are filled in from the capture after it lands.
-- **Muted viewers:** the claim, the live loop's result and the refusals each carry an on-screen label.
+## How it's made (the submission film, v2)
+Re-cut on Warrant's film system (the `hackathon` skill's `reference/film.md`). It lives in `internal/film/`, which is gitignored and kept out of the submitted code. The content changed; the machinery is the same: the camera, the score, the word-aligned captions, the terminal and the cards.
 
-## Beats
+- **Footage:** `internal/film/scripts/shoot.mjs` records the public page, https://ripcord-ashy.vercel.app, through Chrome's own screencast at 2x (3040×1712). While it records, the project wallet sends a real RipcordTryout `arm()` and `cross(tokenId)`, signed through `cast` with the encrypted keystore (D-007). Before any shot holds, it waits for the split-flap to settle: the markup unchanged for 450 ms, with no animation running. `explorers.mjs` films the same loop's transactions on Blockscout (Unichain Sepolia) and Reactscan (Lasna). Uniscan was skipped because it shows a Cloudflare bot check to headless browsers.
+- **The camera:** each move is the measured rectangle of a page element at that moment of the take. Footage outside the target is dimmed (a spotlight), so the subject fills the frame.
+- **The cut:** chapters are cut on the score's beat grid (31 frames at 30 fps). The only footage removed is the wait for `arm()` to be mined, which comes before the swap. From the crossing swap to DEPARTED the take is uncut and not sped up, and the shot says so.
+- **Voice:** ElevenLabs "Daniel", `eleven_multilingual_v2`. The word timing for the captions comes from the same call (`with-timestamps`). Played at 1.05× tempo with pitch kept; that is the voice only, the footage is never sped up. The free tier needs attribution: credit "Voice: ElevenLabs" in the video description.
+- **Score:** synthesised with ffmpeg (`score.ts`), so there is no licence to clear. It ducks under the voice. A riser runs into DEPARTED, with a release on the flip, and a bolt lands on each refusal stamp.
 
-| Time | Screen | On-screen label | Narration | Claims |
+## Chapters
+| # | Chapter | What's on screen | Honest label | Claims |
 |---|---|---|---|---|
-| 0:00–0:12 | Live page, top: hero and featured departure | The thesis, verbatim, with "Testnet · 50 of 50 loops" (on screen by 0:03) | "A Uniswap v4 position has no stop. Getting out is a transaction, and somebody has to send it." | C-25, C-1 |
-| 0:12–0:24 | Same frame, holding | "Arm once. Reactive watches. The vault exits." | "Ripcord arms a line on your position once. A Reactive contract on Lasna watches every swap in the pool, and pulls your liquidity out when a swap crosses the line." | C-14, C-6, C-7 |
-| 0:24–1:12 | **One continuous take.** The arm lands and the page features position #ID as ARMED; the cross swap → BOARDING; the exit → DEPARTED | "Live · not sped up". Then the tx label from each real receipt, "arm() #ID", "cross() swap", "exit" | "This is a real loop, right now. One call arms a line one tick spacing from the price… then a swap crosses it." (silence while it boards) "Out. N seconds on Unichain's clock, from the swap to the exit. Nothing of the owner's ran: Reactive's relayer sent the exit." | C-35, C-13, C-8 |
-| 1:12–1:32 | Replay this departure: the ruler of real blocks | "The three hops, each with its transaction" | "The replay shows its three hops at chain speed: the swap on Unichain, the reaction on Lasna, the exit back on Unichain." | C-36 |
-| 1:32–2:05 | The refusal room, strips A → B → C | "What it refuses", then HELD / REVERTED / CANCELLED | "What it refuses matters as much. A swap that stops short: Lasna reacts and asks for nothing. An exit called by anyone but Reactive's callback proxy: the chain reverts it. An owner who revoked approval: the ripcord pulls, and the vault records the refusal on-chain instead of touching the NFT." | C-20, C-21, C-22, C-23 |
-| 2:05–2:27 | The board, then the "why the seconds matter" note | "50 of 50 within 3 s" | "Fifty measured loops, all within three seconds. On Reactive's previous version blocks came every seven seconds. In the worst half hour of last October's crash, ETH fell a median twenty-five basis points in seven seconds, and fifteen point seven in three." | C-27, C-37 |
-| 2:27–2:40 | Back to the top of the page | The thesis, verbatim. The limits line: "Testnet only · not audited" | "Testnet only, not audited. Your Uniswap v4 position leaves the pool within three seconds of crossing your line, with nothing of yours running." | C-11, C-1 |
+| 01 | Hook card | "A Uniswap v4 position has no stop." with **25.0 bps** (ETH's median fall within 7 s, worst half hour of 10 Oct 2025) | Binance 1-second candles | C-25, C-37 |
+| 02 | How a ripcord pulls | Diagram from the real calls: `RipcordVault.arm` → PoolManager `Swap` → `RipcordReactive.react` → `requestCallbackV_1_0` → `RipcordVault.exit` (`DECREASE_LIQUIDITY + TAKE_PAIR`) | — | C-14, C-6, C-7, C-8 |
+| 03 | A live departure | The departure panel fills the frame: ARMED, then the cross swap, then DEPARTED. The cursor ends on "Replay this departure" | Live · not sped up · uncut from swap to exit | C-35, C-8 |
+| 04 | Swap to exit | Click replay. The camera zooms to the meter as it counts to the filmed loop's real count ("2 BLOCKS") | Replay of the same loop at chain speed | C-36, C-13 |
+| 05 | What it refuses | Each strip shows its action, then a stamp lands: HELD, REVERTED, CANCELLED | Recorded 6 Nov 2026 · read back from chain now | C-20 – C-23 |
+| 06 | Fifty of fifty | **50 of 50** exits within 3 s, the 1 s / 2 s / 3 s distribution (1 / 42 / 7), and 3 s against one ~7 s legacy block | Testnet · Unichain block timestamps | C-27, C-1, C-36, C-37 |
+| 07 | Check it yourself | A terminal with read-only `cast` checks run during the shoot, with their real output: the block timestamps, the exit's sender (Reactive's relayer), the Lasna tx to `0x8888…`, line status 2. Then Blockscout and Reactscan | Read-only checks · public RPCs; Public explorers | C-8, C-13 |
+| 08 | End card | "Out within 3 seconds.", then the thesis, "Testnet only · not audited", the live URL, the code and both contracts | — | C-1, C-11 |
+
+Rebuild from `internal/film/` (Node 26, `FILM_CHROME` = Playwright's `chrome-headless-shell`; Remotion's own download lacks its ICU data on this machine):
+```bash
+npm ci
+node scripts/shoot.mjs          # a real tryout loop + the refusal room (sends 2 txs from the project wallet; 60 s cooldown)
+node scripts/explorers.mjs      # read-only
+npx tsx scripts/voice.ts && npx tsx scripts/align.ts    # only lines not yet synthesised (--count to see the cost first)
+npx tsx scripts/render.ts && npx tsx scripts/score.ts && bash scripts/film-master.sh   # → film/ripcord-master.mp4
+```
+
+The first cut (v1, `video/`, 2:15, loop #8022) is kept as a fallback. It read as a page scrolling under subtitles.
 
 ## Never on screen
-`.env`, the keystore, the password file, any private key or seed phrase, any terminal session, or a browser profile with history, bookmarks or notifications.
+`.env`, the keystore, the password file, any private key or seed phrase, a live terminal session, or a browser profile with history, bookmarks or notifications. The film's terminal is drawn by the composition from read-only `cast` output captured during the shoot. It has no signing commands and no environment.
 
 ## Deliberately not in this video
 - An architecture diagram or slide. The page's own "How a ripcord pulls" section covers it, and the README links the source lines.
 - The team, a roadmap, mainnet plans, or any yield, return or price figure beyond C-2's crash data.
-- The read-only `cast` checks and the test suites. Those are in the README, where a judge can run them.
+- The test suites. Those are in the README, where a judge can run them.
 - The contracts table and custody section. They're on the page, one scroll away.
 - Phone layout.
 
@@ -41,7 +54,7 @@ Judges see only this video (DOSSIER: no live demo is mentioned), so the video is
 - [ ] Uploaded as unlisted / anyone-with-the-link; played in a private window, logged-out, start to finish
 - [ ] Linked in the README and the submission; new claims rows added for anything the video says that isn't already a row
 
-## Rebuild
+## Rebuild the v1 cut (video/)
 From `video/` (Node 26):
 ```bash
 npm ci
@@ -53,4 +66,5 @@ REMOTION_BROWSER=<a chrome-headless-shell> npm run render && npm run master   # 
 The cut re-times itself from the capture's beat marks (`src/timeline.ts`). After a re-shoot, re-read the live loop's numbers off the frame and fix L05 if they changed. Remotion's own Chrome download was missing its ICU data on this machine; Playwright's headless shell works.
 
 ## Recorded
-2026-11-14, take 3: loop #8022, 2 blocks / 2 s (E-022). Length 2:15.
+- **v2 (submission film):** 2026-11-14, loop #8023, 2 blocks / 2 s (E-023). Length 2:26, under the 3:00 limit. `internal/film/film/ripcord-master.mp4`. Its 12-tile contact sheet was compared with Warrant's before the final render: no repeated neighbouring tiles, the hook is on screen by 0:10, no silences over 0.35 s.
+- v1 (fallback): 2026-11-14, take 3, loop #8022, 2 blocks / 2 s (E-022). Length 2:15. `video/out/ripcord-final.mp4`.

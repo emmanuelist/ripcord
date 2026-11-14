@@ -1,0 +1,50 @@
+{
+  "tokenId": 8023,
+  "note": "The loop filmed for the submission film (internal/film, Warrant film system), sent by the project wallet through RipcordTryout while the public page was recorded.",
+  "arm": {
+    "tx": "0x5cc857ff4a655b39c751c20e5bd2e496e1bec99645d84021f0a5edbc2f7f6da1",
+    "block": 67816126
+  },
+  "swap": {
+    "tx": "0xdbc382f939772f432e38a4ec734dc01b737cf82f35e7e8feec6113210929159c",
+    "block": 67816144,
+    "time": 1794668572
+  },
+  "lasna": {
+    "tx": "0x6bf3ed17dfeedc13bdae36a1dffb65115b3db372f13d185c7bf7b0b89eb23ea1",
+    "block": 8335543,
+    "time": 1794668572
+  },
+  "exit": {
+    "tx": "0x6369db243c7debd06e6a0d262a19c76ca4117e4ea96b900f1b39ad7714955d50",
+    "block": 67816146,
+    "time": 1794668574
+  },
+  "swapToExitSeconds": 2,
+  "swapToExitBlocks": 2,
+  "meterOnPage": "2 BLOCKS",
+  "terminal": [
+    {
+      "cmd": "cast block 67816144 -f timestamp   # the swap's block",
+      "out": "1794668572"
+    },
+    {
+      "cmd": "cast block 67816146 -f timestamp   # the exit's block",
+      "out": "1794668574"
+    },
+    {
+      "cmd": "cast tx 0x6369db24… from   # who sent the exit",
+      "out": "0xF7E866D726658F6C3F14B8EE537fe268a4D91DDb"
+    },
+    {
+      "cmd": "cast tx 0x6bf3ed17… to --rpc-url $LASNA   # the reaction, on Lasna",
+      "out": "0x8888888888888888888888888888888888888888"
+    },
+    {
+      "cmd": "cast call $VAULT \"lines(uint256)\" 8023   # status 2: exited",
+      "out": "0xfDF1b11aae05a8a0620Fe56AD3C9A2Bd7431A698\n92959304033923040670372333086912171063449583215241608592652078680753012199524 [9.295e76]\n-1404\nfalse\n2"
+    }
+  ],
+  "consoleErrors": 0,
+  "badRequests": 0
+}
