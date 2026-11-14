@@ -5,7 +5,7 @@ _Last verified: 2026-11-14, after benchmark fixes B2–B4 (E-018 … E-021)_
 
 **Milestone:** M3 · Proof surface (freeze 2026-12-03). README done; benchmark run (19/24) and its fixes B2, B3, B4 done; **B1 (run of show + video) open**; B5 at submission · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** B1: write docs/RUNOFSHOW.md and docs/VIDEO.md (claim by 0:10; one continuous take of a live tryout loop landing on the board; the replay; the refusal room; close on the thesis), then record it under 3 min, upload, check it plays logged-out, and link it in the README. Every number it shows is now final.
+**Next action:** B1: the user watches `video/out/ripcord-final.mp4` (2:15, E-022) and picks where it's hosted; then upload, play it logged-out in a private window, and link it in the README and submission.
 
 **Blocked on:** nothing.
 
@@ -37,11 +37,11 @@ Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source m
 - The page's and README's GitHub links and the CI badge 404 for visitors until the repo goes public at submission (D-009, B5).
 - Not checked yet: the public page on a phone over cellular (preflight, M4).
 - The flap's two-half fall is judged from code; at 130 ms per step it can't be captured frame by frame.
-- The demo video doesn't exist yet (B1, a literal submission requirement).
+- The demo video is rendered (2:15, E-022) but not uploaded or linked yet (B1).
 
 ## Claims not yet verified
 - None. (C-2 verified 2026-11-14 from E-018.)
 
 ## Open questions
 - REACT/USD payout rate and date; live judging or video only: the user asks the organizers in the DoraHacks Q&A.
-- Video: voice-over by the user, or a captioned screen recording made here?
+- Video hosting: YouTube (unlisted, the user's account) or another host? ElevenLabs free tier asks for attribution: credit it in the video description.

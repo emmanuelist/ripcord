@@ -1,0 +1,29 @@
+{
+  "name": "ripcord-video",
+  "private": true,
+  "type": "module",
+  "description": "The Ripcord demo video, composed in code from a real capture of the live page (docs/VIDEO.md).",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "capture": "node capture/capture.mjs",
+    "narrate": "node narration/tts.mjs",
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts Ripcord out/ripcord.mp4 --codec h264 --crf 16 --browser-executable \"$REMOTION_BROWSER\"",
+    "typecheck": "tsc --noEmit",
+    "assemble": "node capture/assemble.mjs",
+    "master": "ffmpeg -loglevel error -y -i out/ripcord.mp4 -c:v copy -af loudnorm=I=-16:TP=-1.5:LRA=11 -c:a aac -b:a 192k -movflags +faststart out/ripcord-final.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.539",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.539"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "playwright": "1.64.1",
+    "typescript": "6.0.3"
+  }
+}

@@ -1,0 +1,104 @@
+[
+  {
+    "id": "L01",
+    "claims": [
+      "C-25"
+    ],
+    "text": "A Uniswap v4 position has no stop. Getting out is a transaction, and somebody has to send it."
+  },
+  {
+    "id": "L02",
+    "claims": [
+      "C-14",
+      "C-6",
+      "C-7"
+    ],
+    "text": "Ripcord arms a line once. A Reactive contract on Lasna watches every swap, and pulls your liquidity when one crosses it."
+  },
+  {
+    "id": "L03",
+    "claims": [
+      "C-35"
+    ],
+    "text": "This is a real loop, live, not sped up. One call arms a line, one tick spacing from the price."
+  },
+  {
+    "id": "L04",
+    "claims": [
+      "C-35"
+    ],
+    "text": "Now a swap crosses it."
+  },
+  {
+    "id": "L05",
+    "claims": [
+      "C-13"
+    ],
+    "text": "Departed. Two blocks, two seconds on Unichain's clock, from the swap to the exit."
+  },
+  {
+    "id": "L06",
+    "claims": [
+      "C-8"
+    ],
+    "text": "And nothing of the owner's ran."
+  },
+  {
+    "id": "L07",
+    "claims": [
+      "C-36"
+    ],
+    "text": "Its three hops, replayed at chain speed: the swap on Unichain, the reaction on Lasna, the exit."
+  },
+  {
+    "id": "L08",
+    "claims": [
+      "C-4",
+      "C-27"
+    ],
+    "text": "Every departure on the board is read from chain. Fifty measured loops: all fifty exited within three seconds."
+  },
+  {
+    "id": "L09",
+    "claims": [
+      "C-37"
+    ],
+    "text": "Why the seconds matter: Reactive's previous version made a block every seven seconds. In the worst half hour of the October 2025 crash, ETH fell a median twenty-five basis points in seven seconds, and fifteen point seven in three."
+  },
+  {
+    "id": "L10",
+    "claims": [
+      "C-20"
+    ],
+    "text": "What it refuses matters as much."
+  },
+  {
+    "id": "L11",
+    "claims": [
+      "C-21"
+    ],
+    "text": "A swap that stops short of the line: Lasna still reacts, and asks for no callback."
+  },
+  {
+    "id": "L12",
+    "claims": [
+      "C-22"
+    ],
+    "text": "An exit called by anyone but Reactive's callback proxy: the chain reverts it."
+  },
+  {
+    "id": "L13",
+    "claims": [
+      "C-23"
+    ],
+    "text": "And when the owner has revoked approval, the ripcord still pulls, but the vault records a refusal on-chain instead of touching the position."
+  },
+  {
+    "id": "L14",
+    "claims": [
+      "C-11",
+      "C-1"
+    ],
+    "text": "Testnet only, not audited. Your Uniswap v4 position leaves the pool within three seconds of crossing your line, with nothing of yours running."
+  }
+]

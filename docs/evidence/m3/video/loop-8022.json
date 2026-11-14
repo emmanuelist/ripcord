@@ -1,0 +1,109 @@
+{
+  "tokenId": 8022,
+  "note": "The loop filmed for the demo video (docs/VIDEO.md), sent by the project wallet through RipcordTryout while the public page was recorded.",
+  "arm": {
+    "tx": "0x112926985db0729a848b3433a4e5e43a2e484b256898091fa048712686549f84"
+  },
+  "swap": {
+    "tx": "0xeabe3a634faf5f275a7b7fc7714b34ba6a1b550c480f96a6ab28289f88735155",
+    "block": 67809154,
+    "time": 1794661582
+  },
+  "lasna": {
+    "tx": "0xe016c4af149a6a3cb91f0eb09549699c099cf34b4e58ab7a17ce0c0add2e4ac2",
+    "block": 8328934,
+    "time": 1794661581
+  },
+  "exit": {
+    "tx": "0x0273bae25e79fa75d106336585d404c9244c589291dbfea79707f924d275ae5a",
+    "block": 67809156,
+    "time": 1794661584
+  },
+  "swapToExitSeconds": 2,
+  "swapToExitBlocks": 2,
+  "capture": {
+    "page": "https://ripcord-ashy.vercel.app",
+    "recordedAt": "2026-11-14T13:05:39.100Z",
+    "marks": [
+      {
+        "name": "navigate",
+        "t": 0.533
+      },
+      {
+        "name": "loaded",
+        "t": 5.895
+      },
+      {
+        "name": "arm-sent",
+        "t": 19.921
+      },
+      {
+        "name": "arm-mined",
+        "t": 24.849,
+        "tx": "0x112926985db0729a848b3433a4e5e43a2e484b256898091fa048712686549f84",
+        "block": 67809136,
+        "tokenId": "8022"
+      },
+      {
+        "name": "armed-on-page",
+        "t": 30.183
+      },
+      {
+        "name": "cross-sent",
+        "t": 37.184
+      },
+      {
+        "name": "cross-mined",
+        "t": 42.387,
+        "tx": "0xeabe3a634faf5f275a7b7fc7714b34ba6a1b550c480f96a6ab28289f88735155",
+        "block": 67809154
+      },
+      {
+        "name": "departed-on-page",
+        "t": 49.277
+      },
+      {
+        "name": "replay",
+        "t": 58.432
+      },
+      {
+        "name": "replay-done",
+        "t": 62.859
+      },
+      {
+        "name": "board",
+        "t": 65.863
+      },
+      {
+        "name": "why",
+        "t": 75.87
+      },
+      {
+        "name": "refusals",
+        "t": 89.874
+      },
+      {
+        "name": "refusal-a",
+        "t": 94.877
+      },
+      {
+        "name": "refusal-b",
+        "t": 103.881
+      },
+      {
+        "name": "refusal-c",
+        "t": 112.886
+      },
+      {
+        "name": "top",
+        "t": 123.889
+      },
+      {
+        "name": "end",
+        "t": 137.89
+      }
+    ],
+    "consoleErrors": [],
+    "badRequests": []
+  }
+}

@@ -24,3 +24,8 @@ coverage/
 # impeccable working files (decision mocks, review captures); the surface brief is committed
 .impeccable/mocks/
 .impeccable/review/
+
+# Video: captures, narration audio and renders are regenerated, not committed
+video/public/capture/
+video/public/narration/
+video/out/
