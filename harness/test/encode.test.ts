@@ -3,6 +3,7 @@ import { decodeFunctionData, type Hex } from "viem";
 import { describe, expect, it } from "vitest";
 import { positionManagerAbi } from "../src/abi.js";
 import { encodeApprove, encodeArm, encodeMint, encodeSwap, planRun, type PoolKey } from "../src/encode.js";
+import { getSqrtPriceAtTick } from "../src/tickmath.js";
 
 // References come from the real toolchain, not from this code: forge (MintDemoPosition's broadcast tx for tokenId
 // 7944) and `cast calldata` (2026-11-06).
@@ -44,10 +45,22 @@ describe("encoders match the real toolchain byte for byte", () => {
 });
 
 describe("planRun alternates direction so the price oscillates", () => {
-  it("odd runs: stop-loss below, swap down", () => {
-    expect(planRun(1, 0, 120)).toEqual({ exitBelow: true, zeroForOne: true, line: -120 });
+  it("odd runs: stop-loss below, swap down to a limit just past the line", () => {
+    expect(planRun(1, 0, 120)).toMatchObject({ exitBelow: true, zeroForOne: true, line: -120 });
+    expect(planRun(1, 0, 120).sqrtPriceLimitX96).toBe(getSqrtPriceAtTick(-122));
   });
-  it("even runs: exit above, swap up", () => {
-    expect(planRun(2, -199, 120)).toEqual({ exitBelow: false, zeroForOne: false, line: -79 });
+  it("even runs: exit above, swap up to a limit just past the line", () => {
+    expect(planRun(2, -199, 120)).toMatchObject({ exitBelow: false, zeroForOne: false, line: -79 });
+    expect(planRun(2, -199, 120).sqrtPriceLimitX96).toBe(getSqrtPriceAtTick(-77));
+  });
+  it("the limit is on the crossing side of the line, so the swap always crosses", () => {
+    const below = planRun(1, -1218, 120);
+    expect(below.sqrtPriceLimitX96 < getSqrtPriceAtTick(below.line)).toBe(true);
+    const above = planRun(2, -1218, 120);
+    expect(above.sqrtPriceLimitX96 > getSqrtPriceAtTick(above.line)).toBe(true);
+  });
+  it("without a limit, encodeSwap keeps the protocol bounds (byte-for-byte as before)", () => {
+    const key: PoolKey = { currency0: "0x0000000000000000000000000000000000000001", currency1: "0x0000000000000000000000000000000000000002", fee: 3000, tickSpacing: 60, hooks: "0x0000000000000000000000000000000000000000" };
+    expect(encodeSwap(key, true, 10n)).not.toBe(encodeSwap(key, true, 10n, getSqrtPriceAtTick(-122)));
   });
 });

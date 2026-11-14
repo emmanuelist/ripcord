@@ -1,3 +1,4 @@
+import { getSqrtPriceAtTick } from "./tickmath.js";
 import { encodeAbiParameters, encodeFunctionData, encodePacked, type Address, type Hex } from "viem";
 import {
   Actions,
@@ -71,8 +72,11 @@ export function encodeArm(tokenId: bigint, triggerTick: number, exitBelow: boole
   return encodeFunctionData({ abi: vaultAbi, functionName: "arm", args: [tokenId, triggerTick, exitBelow] });
 }
 
-/** An exact-input swap through v4 PoolSwapTest: zeroForOne pushes the tick down, otherwise up. */
-export function encodeSwap(key: PoolKey, zeroForOne: boolean, amountIn: bigint): Hex {
+/**
+ * An exact-input swap through v4 PoolSwapTest: zeroForOne pushes the tick down, otherwise up. With a price limit, the
+ * swap stops there and spends only what it takes to reach it (amountIn is then a cap), whatever the pool's liquidity.
+ */
+export function encodeSwap(key: PoolKey, zeroForOne: boolean, amountIn: bigint, sqrtPriceLimitX96?: bigint): Hex {
   return encodeFunctionData({
     abi: swapRouterAbi,
     functionName: "swap",
@@ -81,7 +85,7 @@ export function encodeSwap(key: PoolKey, zeroForOne: boolean, amountIn: bigint):
       {
         zeroForOne,
         amountSpecified: -amountIn,
-        sqrtPriceLimitX96: zeroForOne ? MIN_SQRT_PRICE_LIMIT : MAX_SQRT_PRICE_LIMIT,
+        sqrtPriceLimitX96: sqrtPriceLimitX96 ?? (zeroForOne ? MIN_SQRT_PRICE_LIMIT : MAX_SQRT_PRICE_LIMIT),
       },
       { takeClaims: false, settleUsingBurn: false },
       "0x",
@@ -89,8 +93,16 @@ export function encodeSwap(key: PoolKey, zeroForOne: boolean, amountIn: bigint):
   });
 }
 
-/** Run n alternates direction (odd: exit below, swap down; even: exit above, swap up) so the price oscillates. */
+/** How far past the line the crossing swap is told to stop. */
+export const CROSS_BY = 2;
+
+/**
+ * Run n alternates direction (odd: exit below, swap down; even: exit above, swap up) so the price oscillates. The swap's
+ * price limit sits CROSS_BY ticks past the line, so it always crosses, however much liquidity the pool holds (the
+ * refusal positions #7955 and #7956 left 2e21 in range, which stopped a fixed-size swap 58 ticks short on 2026-11-14).
+ */
 export function planRun(run: number, currentTick: number, gap: number) {
   const exitBelow = run % 2 === 1;
-  return { exitBelow, zeroForOne: exitBelow, line: exitBelow ? currentTick - gap : currentTick + gap };
+  const line = exitBelow ? currentTick - gap : currentTick + gap;
+  return { exitBelow, zeroForOne: exitBelow, line, sqrtPriceLimitX96: getSqrtPriceAtTick(exitBelow ? line - CROSS_BY : line + CROSS_BY) };
 }

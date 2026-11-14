@@ -20,7 +20,8 @@ import { hopBounds, median, percentile, watch, type Sighting } from "./timing.js
 async function main() {
   const runs = Number(process.env.RUNS ?? "1");
   const gap = Number(process.env.GAP ?? "120");
-  const swapIn = BigInt(process.env.SWAP_IN ?? "10000000000000000000");
+  // A cap, not a size: the swap stops at its price limit just past the line (planRun).
+  const swapIn = BigInt(process.env.SWAP_IN ?? "100000000000000000000000");
   const intervalMs = Number(process.env.POLL_MS ?? "50");
   const outDir = process.env.OUT_DIR ?? "../docs/evidence/harness";
   const deploy = await loadDeploy();
@@ -117,7 +118,7 @@ async function oneRun(i: number, c: Ctx): Promise<RunResult> {
   });
 
   // ---- 2. timed loop: pre-sign, start all three watchers, then broadcast ----
-  const swapRaw = await mktx(deploy.swapRouter, encodeSwap(key, plan.zeroForOne, c.swapIn));
+  const swapRaw = await mktx(deploy.swapRouter, encodeSwap(key, plan.zeroForOne, c.swapIn, plan.sqrtPriceLimitX96));
   const swapHash = keccak256(swapRaw);
   const uniFrom = await uni.getBlockNumber();
   const lasFrom = await las.getBlockNumber();
