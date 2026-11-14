@@ -13,6 +13,8 @@ import {IAllowanceTransfer} from "permit2/src/interfaces/IAllowanceTransfer.sol"
 import {TestToken} from "../src/spike/TestToken.sol";
 import {RipcordVault} from "../src/RipcordVault.sol";
 import {RipcordReactive} from "../src/RipcordReactive.sol";
+import {RipcordTryout} from "../src/RipcordTryout.sol";
+import {PoolSwapTest} from "@uniswap/v4-core/src/test/PoolSwapTest.sol";
 
 /// @dev Unichain Sepolia addresses (docs/CONTEXT.md, bytecode verified in E-001).
 abstract contract Unichain {
@@ -107,5 +109,26 @@ contract DeployRipcordReactive is Script, Unichain {
         vm.stopBroadcast();
         require(address(rc) == expectedReactive, "RipcordReactive address differs from the precomputed one");
         console.log("RipcordReactive", address(rc));
+    }
+}
+
+/// @notice RipcordTryout on the demo pool, stocked with demo tokens from the deployer (the only minter): anyone can then
+/// run a real loop with `arm()` and, a few seconds later, `cross(tokenId)`.
+contract DeployRipcordTryout is Script, Unichain {
+    function run() external {
+        RipcordVault vault = RipcordVault(payable(vm.envAddress("VAULT")));
+        address token0 = vm.envAddress("TOKEN0");
+        address token1 = vm.envAddress("TOKEN1");
+        uint256 stock = vm.envOr("TRYOUT_STOCK", uint256(200_000e18));
+        require(block.chainid == UNICHAIN_SEPOLIA, "expected Unichain Sepolia");
+        require(token0 < token1, "token0 must sort before token1");
+        vm.startBroadcast();
+        RipcordTryout tryout = new RipcordTryout(
+            vault, POOL_MANAGER, POSM, PERMIT2, PoolSwapTest(SWAP_ROUTER), Currency.wrap(token0), Currency.wrap(token1)
+        );
+        require(TestToken(token0).transfer(address(tryout), stock), "stock token0");
+        require(TestToken(token1).transfer(address(tryout), stock), "stock token1");
+        vm.stopBroadcast();
+        console.log("RipcordTryout", address(tryout));
     }
 }
