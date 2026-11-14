@@ -114,6 +114,10 @@ export function Explainer({ p, armed, funding }: { p?: Position; armed: number; 
           </li>
         </ol>
         <p className="ex-note">Nothing of the owner's runs: no bot, no server, no open tab. The board above shows each loop's three transactions.</p>
+        <p className="ex-note">
+          Why the seconds matter: on Reactive's previous version, blocks came every ~7 s. In the worst half hour of the 10 Oct 2025 crash, ETH fell a median 25.0 bps
+          within 7 s of any second, against 15.7 bps within 3 s, Ripcord's slowest loop (Binance 1-second candles).
+        </p>
       </section>
 
       <Refusals />

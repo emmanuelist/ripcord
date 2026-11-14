@@ -6,9 +6,9 @@
 
 ### Your Uniswap v4 position leaves the pool within 3 seconds of crossing your line, with nothing of yours running.
 
-[![ci](https://github.com/emmanuelist/ripcord/actions/workflows/ci.yml/badge.svg)](https://github.com/emmanuelist/ripcord/actions/workflows/ci.yml) [![tests](https://img.shields.io/badge/tests-110%20passing-3fbf7f)](https://github.com/emmanuelist/ripcord/actions/workflows/ci.yml) [![testnet](https://img.shields.io/badge/testnet-Unichain%20Sepolia%20%2B%20Reactive%20Lasna-f2c230)](#limits) [![live](https://img.shields.io/badge/live-ripcord--ashy.vercel.app-16171a)](https://ripcord-ashy.vercel.app)
+[![ci](https://github.com/emmanuelist/ripcord/actions/workflows/ci.yml/badge.svg)](https://github.com/emmanuelist/ripcord/actions/workflows/ci.yml) [![tests](https://img.shields.io/badge/tests-122%20passing-3fbf7f)](https://github.com/emmanuelist/ripcord/actions/workflows/ci.yml) [![testnet](https://img.shields.io/badge/testnet-Unichain%20Sepolia%20%2B%20Reactive%20Lasna-f2c230)](#limits) [![live](https://img.shields.io/badge/live-ripcord--ashy.vercel.app-16171a)](https://ripcord-ashy.vercel.app)
 
-**[Live app](https://ripcord-ashy.vercel.app)** · **[Proof](#proof-nothing-here-is-a-mockup)** · **[Verify it yourself](#verify-without-trusting-this-readme)** · **[How it works](#how-it-works)** · **[Limits](#limits)** · **[Run it locally](#run-it-locally)**
+**[Live app](https://ripcord-ashy.vercel.app)** · **[Why Omni](#why-it-needs-omni)** · **[Proof](#proof-nothing-here-is-a-mockup)** · **[Run a loop](#run-a-loop-yourself)** · **[Verify it yourself](#verify-without-trusting-this-readme)** · **[How it works](#how-it-works)** · **[Limits](#limits)** · **[Run it locally](#run-it-locally)**
 
 Measured on testnet: 50 of 50 real loops exited within 3 seconds of the crossing swap (median 2 s), on Unichain's own clock.
 
@@ -18,12 +18,20 @@ A Uniswap v4 position earns only while the price stays in its range. When the pr
 
 Ripcord removes the keeper. The owner approves a vault on their position NFT and arms a line once. A Reactive contract on Reactive Lasna subscribes to that pool's `Swap` events, compares every new tick with the armed lines, and when one is crossed asks Reactive to call the vault back on Unichain. The vault removes all of the position's liquidity and sends both tokens to whoever holds the NFT. After arming, nothing the owner runs takes part. Take Reactive's event subscription and cross-chain callback away and the keeper comes back: that is the part this needs Reactive for.
 
+## Why it needs Omni
+
+A loop has three hops: the swap on Unichain, the reaction on Lasna, the exit on Unichain. Reactive adds the middle one. Across 49 measured runs, the Lasna reaction was first seen a median 1.8 s after the swap was mined, and the whole loop took a median 2 s on Unichain's clock. On Reactive's previous version, blocks came every ~7 s (the organizers' own figure), so the reactive hop alone could take up to ~7 s before a callback was even requested.
+
+What do those seconds cost an LP? Take the worst half hour of the 10 October 2025 crash, when ETH fell from 3,870 to 3,590 between 21:00 and 21:30 UTC, at one-second resolution. From any second, ETH fell a median **15.7 bps within the next 3 s**, Ripcord's slowest loop, and **25.0 bps within 7 s**, one legacy block (mean 33 vs 48 bps; 95th percentile 114 vs 157 bps). An exit at 3 s instead of 7 s kept about 15 bps on an average second of that crash, around $150 on a $100k position, and about 44 bps in the worst 5% of seconds. In the single most violent second, a 419 bps wick, no latency would have helped.
+
+These are exchange price moves (Binance ETH/USDT spot), not a v4 pool: they measure how far the price runs while you wait. Reproduce them with [`harness/scripts/what-one-second-buys.sh`](harness/scripts/what-one-second-buys.sh), which downloads Binance's public 1-second candles, checks Binance's SHA-256 and recomputes ([E-018](docs/evidence/E-018-what-one-second-buys.json)).
+
 ## Proof: nothing here is a mockup
 
 Everything below is live on testnet now. Click it.
 
 - **The app:** [ripcord-ashy.vercel.app](https://ripcord-ashy.vercel.app). It has no backend: every value is read from Unichain Sepolia and Lasna in your browser, from the transactions listed below and from live polling.
-- **The contracts:** [RipcordVault](https://sepolia.uniscan.xyz/address/0x641413bb227c5452ef2b968c9774bc31f5f54c98) on Unichain Sepolia and [RipcordReactive](https://lasna.reactscan.net/address/0xA2deA4D676236Aa905c0Cb1B90712Fc3591af2B5) on Reactive Lasna.
+- **The contracts:** [RipcordVault](https://sepolia.uniscan.xyz/address/0x641413bb227c5452ef2b968c9774bc31f5f54c98) on Unichain Sepolia and [RipcordReactive](https://lasna.reactscan.net/address/0xA2deA4D676236Aa905c0Cb1B90712Fc3591af2B5) on Reactive Lasna, plus [RipcordTryout](https://sepolia.uniscan.xyz/address/0xfDF1b11aae05a8a0620Fe56AD3C9A2Bd7431A698), which lets anyone [run a loop](#run-a-loop-yourself).
 - **Every claim, with its proof:** [`docs/EVIDENCE.md`](docs/EVIDENCE.md) has a row for every factual sentence on the page and in this README, and the raw receipts are in [`docs/evidence/`](docs/evidence/).
 
 ### Fifty real loops
@@ -127,12 +135,28 @@ cast 4byte-decode <the revert data it prints>
 cast call --rpc-url $RPC 0xf969Aee60879C54bAAed9F3eD26147Db216Fd664 "getPositionLiquidity(uint256)(uint128)" 7956
 ```
 
+### Run a loop yourself
+
+All you need is a Unichain Sepolia account with a little ETH for gas. [RipcordTryout](https://sepolia.uniscan.xyz/address/0xfDF1b11aae05a8a0620Fe56AD3C9A2Bd7431A698) holds a stock of the demo tokens: `arm()` mints a position from it, approves RipcordVault and arms a line one tick spacing from the price; `cross(tokenId)` swaps to just past that line. Then Reactive does the rest.
+
+```bash
+TRYOUT=0xfDF1b11aae05a8a0620Fe56AD3C9A2Bd7431A698
+RPC=https://sepolia.unichain.org
+
+ARM=$(cast send --rpc-url $RPC --private-key $YOUR_TESTNET_KEY $TRYOUT "arm()" --json | jq -r .transactionHash)
+ID=$(cast receipt --rpc-url $RPC $ARM --json | jq -r '.logs[] | select(.address=="0xfdf1b11aae05a8a0620fe56ad3c9a2bd7431a698") | .topics[2]' | head -1 | cast to-dec)
+echo "your position: #$ID"     # give Lasna ~5 s to start tracking the line, then:
+cast send --rpc-url $RPC --private-key $YOUR_TESTNET_KEY $TRYOUT "cross(uint256)" $ID
+```
+
+Keep [the live page](https://ripcord-ashy.vercel.app) open: your position appears ARMED, then BOARDING, then DEPARTED, with its swap, Lasna reaction and exit hashed. The first tryout, #8015, exited 2 blocks after its swap ([E-020](docs/evidence/m3/tryout/tryout-8015.json)). The positions belong to the tryout and the exit pays its tokens back, so nothing of yours is at stake. One `arm()` per minute, across all callers.
+
 And the test suites from a clean clone:
 
 ```bash
 git clone --recursive https://github.com/emmanuelist/ripcord && cd ripcord
-(cd contracts && forge test)              # 75 tests; the fork tests read live Unichain Sepolia over its public RPC, no keys
-(cd harness && npm ci && npm test)        # 14 tests, no network
+(cd contracts && forge test)              # 83 tests; the fork tests read live Unichain Sepolia over its public RPC, no keys
+(cd harness && npm ci && npm test)        # 18 tests, no network
 (cd web && npm ci && npm test)            # 21 tests, no network, including decoding #7944's real receipts
 ```
 
@@ -190,7 +214,7 @@ Deployment scripts are in `contracts/script/`; the deployed addresses are in [`d
 
 | | |
 |---|---|
-| `contracts/` | RipcordVault, RipcordReactive, the spikes, Foundry tests (unit and live-v4 fork) |
+| `contracts/` | RipcordVault, RipcordReactive, RipcordTryout, the spikes, Foundry tests (unit and live-v4 fork) |
 | `harness/` | the latency harness (`measure`) and the refusals (`reversals`), TypeScript + viem |
 | `web/` | the read-only page |
 | `docs/` | [state](docs/STATE.md), [plan](docs/PLAN.md), [decisions](docs/DECISIONS.md), [evidence and claims](docs/EVIDENCE.md), [dependency facts](docs/CONTEXT.md), [design](DESIGN.md) |

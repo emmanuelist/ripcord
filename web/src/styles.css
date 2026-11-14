@@ -338,7 +338,7 @@ th:not([aria-sort]) .sort-mark path { stroke: var(--ink-3); }
 .route-strip .stop-v { min-height: 3em; }
 .refusals .ruler { margin-top: 10px; }
 code.inline { font-family: var(--mono); font-variant-ligatures: none; font-size: 0.86em; color: var(--ink); }
-.ex-note { margin: 22px 0 0; color: var(--ink-3); font-size: 15px; max-width: 70ch; text-wrap: pretty; }
+.ex-note { margin: 22px 0 0; color: var(--ink-3); font-size: 15px; max-width: 62ch; text-wrap: pretty; }
 .limits { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
 .limits li { padding-left: 22px; position: relative; }
 .limits li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 2px; background: var(--yellow); }

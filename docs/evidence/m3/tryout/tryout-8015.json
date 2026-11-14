@@ -1,0 +1,21 @@
+{
+  "tryout": "0xfDF1b11aae05a8a0620Fe56AD3C9A2Bd7431A698",
+  "tokenId": 8015,
+  "line": -1462,
+  "exitBelow": true,
+  "txs": {
+    "arm": "0x2d512658bdd3bcfac5af159b49db836ec6cc8ab40c00e170ddeef207cbfee224",
+    "cross": "0xeb7558f7852897ba217c2967901c124da1cf38a3e2dd1d3b1ed4e91738b99d31",
+    "lasna": "0x07126f2daf2a42ffd6a9458a7728b5e8a6f51a54930a80635f6108b18476a02d",
+    "exit": "0x5ebc735354d3d11c7da439c60e92642c7e53eb1952a47e8e4a2f809943d80f6d"
+  },
+  "blocks": {
+    "cross": 67806291,
+    "lasna": 8326243,
+    "exit": 67806293
+  },
+  "unichainBlocks": 2,
+  "unichainSeconds": 2,
+  "trackedAfterArm": "~2 s (polled every 2 s)",
+  "stock": "200000e18 RDA and RDB from the deployer"
+}
