@@ -46,9 +46,12 @@ On (a) or (b), re-open research for this track.
 
 ### M3 · Proof surface
 - [x] **README as a proof surface** (done 2026-11-07): thesis heading, cover from the live page, badges, the problem, Proof (11 loops with three hashes each, the three refusals), four read-only `cast` checks run as printed, clean-clone tests (110), how it works with source lines, limits, run locally. Every sentence has a claims row (C-25..C-34).
-- [ ] **`benchmark`** run and its fixes landed.
-- [ ] **Run of show + video** under 3 min (docs/RUNOFSHOW.md, docs/VIDEO.md).
-- [ ] **C-2 "what one second buys"** (carried from M2): a real mainnet crash price series (research).
+- [x] **`benchmark`** run (2026-11-07, 19/24; fixes accepted in D-017). Its fixes, in order:
+- [ ] **B1 · Run of show + the demo video** under 3 min (docs/RUNOFSHOW.md, docs/VIDEO.md): claim by 0:10, one continuous take, playable logged-out, linked in the README. Demo +2.
+- [ ] **B2 · Why it needs Omni + C-2**: the measured Lasna hop beside legacy's published ~7 s blocks (a bound, not a measurement), and what those seconds cost in a real crash from 1-second prices. README, page sentence, form answer. Rubric +1, Advantage +1.
+- [ ] **B3 · 50 loops**: harness `RUNS=39` after topping up RipcordReactive; median and p90; narrow the thesis if any loop exceeds 3 s.
+- [ ] **B4 · Judge-run loop**: a faucet/helper so anyone with Unichain Sepolia gas can mint test tokens and a position, arm, cross, and watch it land.
+- [ ] **B5 · At submission (M4)**: repo public, description = thesis, CI badge and every README link re-checked logged-out.
 
 ### M4 · Submitted
 - [ ] Placeholder.

@@ -214,3 +214,16 @@ Append-only. To change a decision, add a new entry that supersedes it.
 **Alternatives:** "within 6 seconds" (the viewer-side upper bound): rejected, it understates the system and its error comes from the RPC, not Reactive. Block counts: rejected by AGENTS.md rule 4 (timestamps for latency).
 
 **Consequences:** C-1 is verified for testnet with 11/11 runs. Any loop above 3 s on Unichain's clock breaks the sentence: re-check before every publish. The page hero keeps "seconds after", because it must hold for any future live run.
+
+## D-017 · Benchmark 2026-11-07: five fixes accepted, six candidates not done · 2026-11-14 · accepted
+**Context:** The first benchmark (commit 272909a, report in `internal/benchmarks/2026-11-07-272909a.md`) scored Rubric fit 2, Evidence 2, Differentiation 3, Integration 3, Resilience 3, Measurable advantage 2, Demo 1, First screen 3. The user approved its fix list and the MIT license.
+
+**Decision:** Do, in order: (1) run of show + the demo video under 3 min; (2) "why it needs Omni": the measured Lasna hop beside legacy Reactive's published ~7 s blocks, stated as a bound, plus C-2 from a real crash's 1-second prices; (3) grow the sample from 11 to 50 loops and narrow the thesis if any loop exceeds 3 s; (4) a judge-run loop via a small faucet/helper contract; (5) at submission, flip the repo public and set its description to the thesis. The repo is MIT-licensed from now on.
+
+**Not doing:**
+- A Base Sepolia deployment: the track accepts either chain and Unichain was chosen on measurement (D-008).
+- Mainnet: testnet is what the track asks for.
+- Swap-on-exit: the vault removes liquidity only by design (D-011).
+- More UI redesign: first screen and the finish review are already at the ceiling for this pass.
+- A measured legacy-Reactive baseline: legacy Lasna was retired on 2026-10-07; the organizers' published ~7 s figure is used as a stated bound.
+- Tokenising the four leftover colour literals: no judge-visible change.
