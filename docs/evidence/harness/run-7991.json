@@ -1,0 +1,60 @@
+{
+  "run": 15,
+  "tokenId": "7991",
+  "result": "exited",
+  "line": -1522,
+  "exitBelow": true,
+  "tickBefore": -1402,
+  "txs": {
+    "mint": "0x833be3fe975100a9261991a103f3e0404e49204993f0cb7ef72096d2f4318058",
+    "approve": "0xec59c4b238bd053ee5d96eaf4dd7511fe197a32ec09498fad41aace67f315b1a",
+    "arm": "0x2aeba40b398f4afe1044224ba79b57b33e4d0fc5d74033ff607b6f9b638d2a83",
+    "swap": "0xef58ac3bc4df0049565e04b9fd9250a0c2bfb2b4c0923512436ed624b58babc4",
+    "lasna": "0x65d2933dc66c2b38249f641e28e1881729b07fd563a7196848a0f3a738febe1b",
+    "exit": "0x60a8703edce0fe6e5dfac6394a07118487cfde3d14ef91c3c9e91644ed195fdf"
+  },
+  "onchain": {
+    "swapBlock": "67804787",
+    "exitBlock": "67804789",
+    "lasnaBlock": "8324835",
+    "unichainBlocks": 2,
+    "unichainSeconds": 2
+  },
+  "wall": {
+    "sendToSwapSeen": {
+      "minMs": 0.018958000000566244,
+      "maxMs": 686.6802500000922
+    },
+    "swapToLasna": {
+      "minMs": 1837.1494579999708,
+      "maxMs": 3222.1857500000624
+    },
+    "swapToExit": {
+      "minMs": 2815.154957999941,
+      "maxMs": 4121.797791999998
+    }
+  },
+  "sightings": {
+    "swap": {
+      "lowerMs": 568934.867,
+      "upperMs": 569621.5282920001,
+      "polls": 2
+    },
+    "lasna": {
+      "lowerMs": 571458.67775,
+      "upperMs": 572157.05275,
+      "polls": 9
+    },
+    "exit": {
+      "lowerMs": 572436.68325,
+      "upperMs": 573056.664792,
+      "polls": 12
+    }
+  },
+  "rpc": {
+    "uniPollMs": 273,
+    "lasnaPollMs": 234,
+    "pollIntervalMs": 50
+  },
+  "measuredAt": "2026-11-14T11:53:41.187Z"
+}

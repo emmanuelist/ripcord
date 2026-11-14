@@ -36,8 +36,10 @@ export const lasna = defineChain({
 
 // Both public RPCs allow browser CORS and JSON-RPC batching (checked 2026-11-06), so one poll tick is one HTTP request
 // per chain.
-export const uni = createPublicClient({ chain: unichainSepolia, transport: http(undefined, { batch: { wait: 16 } }) });
-export const las = createPublicClient({ chain: lasna, transport: http(undefined, { batch: { wait: 16 } }) });
+// Batches are capped: Unichain's public RPC answers 413 to one batch of ~150 calls (the 52-position history, 2026-11-14).
+const BATCH = { wait: 16, batchSize: 20 };
+export const uni = createPublicClient({ chain: unichainSepolia, transport: http(undefined, { batch: BATCH }) });
+export const las = createPublicClient({ chain: lasna, transport: http(undefined, { batch: BATCH }) });
 
 export const txUrl = (chain: "unichain" | "lasna", hash: string) =>
   chain === "unichain" ? `https://sepolia.uniscan.xyz/tx/${hash}` : `https://lasna.reactscan.net/tx/${hash}`;

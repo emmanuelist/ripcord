@@ -2,7 +2,7 @@
 
 Your Uniswap v4 position leaves the pool within 3 seconds of crossing your line, with nothing of yours running.
 
-(3 s on Unichain's clock: the exit block's timestamp minus the crossing swap's, 11 of 11 testnet loops, E-012/E-013, D-016. Re-check before every publish: one slower loop breaks the sentence.)
+(3 s on Unichain's clock: the exit block's timestamp minus the crossing swap's, 50 of 50 testnet loops, E-019, D-016. Re-check before every publish: one slower loop breaks the sentence.)
 
 **Read `docs/STATE.md` first.** It holds the current truth: what works, what's deployed and what's next. Read `docs/CONTEXT.md` before touching any integration. The research dossier and strategy notes live in `internal/`, which is gitignored and never committed.
 

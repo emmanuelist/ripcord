@@ -1,0 +1,33 @@
+{
+ "window": [
+  "2025-10-10T21:00:00Z",
+  "2025-10-10T21:30:00Z"
+ ],
+ "seconds": 1800,
+ "priceFrom": 3870.17,
+ "priceTo": 3590,
+ "w1s": {
+  "medianBps": 7.3,
+  "p90Bps": 58.5,
+  "p95Bps": 78.9,
+  "meanBps": 20.5
+ },
+ "w3s": {
+  "medianBps": 15.7,
+  "p90Bps": 85.1,
+  "p95Bps": 113.7,
+  "meanBps": 33
+ },
+ "w7s": {
+  "medianBps": 25,
+  "p90Bps": 119.5,
+  "p95Bps": 157.3,
+  "meanBps": 48
+ },
+ "w9s": {
+  "medianBps": 29.4,
+  "p90Bps": 132.6,
+  "p95Bps": 171.8,
+  "meanBps": 53.7
+ }
+}

@@ -81,5 +81,239 @@
     ],
     "lasnaTx": "0xb84a9ef26dd7d3226bb193ccbb64b262640e52ed8df151023b1ad3509afab1aa",
     "source": "docs/evidence/m2/refusals.json"
+  },
+  {
+    "tokenId": "7976",
+    "exitTx": "0x01752b597c244fd5a8064a6906c897f79a8dbbb2782d9c24921be9a627a348fb",
+    "lasnaTx": "0x343576fa447bd13993a322396a5596389fdf3eb59ab5336577eba73fdf9435d8",
+    "source": "docs/evidence/harness/run-7976.json"
+  },
+  {
+    "tokenId": "7977",
+    "exitTx": "0x2751748ded683305246e18ef34996f92726b24a5c20d4b17776affd33de11c5c",
+    "lasnaTx": "0x2b3f630f83e7b26b4002371c5c1dae7d1bc1186d3fb342414d8586ebbc6bea82",
+    "source": "docs/evidence/harness/run-7977.json"
+  },
+  {
+    "tokenId": "7978",
+    "exitTx": "0x38b21d70add18532234c6179c24c239ccd94a233b15c99cc6e00734ad58e6cbc",
+    "lasnaTx": "0xaf961070e87e2b6b1e9f96369212ad175b9158e1670b1df082a2c955df5356f0",
+    "source": "docs/evidence/harness/run-7978.json"
+  },
+  {
+    "tokenId": "7979",
+    "exitTx": "0xc67b3e86bca54de6e0b293c8bcb0e25cf93a09579ebf870aa437ca25cf39bb9c",
+    "lasnaTx": "0x04ba2556227ffadb0cbe7e5836e354160e56b7f9ef36139ecb03e8767acc433b",
+    "source": "docs/evidence/harness/run-7979.json"
+  },
+  {
+    "tokenId": "7980",
+    "exitTx": "0x2d034c2e49209eccacd5e8c2c6c839e96d64d1060ad5c04b4359a5f98518c39e",
+    "lasnaTx": "0x5415b37273fef995480720cf34cf1c35d47a743680a8be71b462b562f1d2bf86",
+    "source": "docs/evidence/harness/run-7980.json"
+  },
+  {
+    "tokenId": "7981",
+    "exitTx": "0x5f939a0ad176cd5d00a7f94e117b5266b2e101aab46a1c3782e5abf95feba8a4",
+    "lasnaTx": "0x90a55aac8823dac408e8b76091ec6f39f9e376d2771b69fbb1a8a5ea393773c2",
+    "source": "docs/evidence/harness/run-7981.json"
+  },
+  {
+    "tokenId": "7982",
+    "exitTx": "0x6dad7b0e5a0df84b0573fe95a6872067fcec08e780162869126393de3704fd21",
+    "lasnaTx": "0x11784d5b873dd7e5c12c6cb85f51382e8cdc2569b7a6e887fbe46b6636963ce6",
+    "source": "docs/evidence/harness/run-7982.json"
+  },
+  {
+    "tokenId": "7983",
+    "exitTx": "0x769f68a6d38dbe5eb12f7c34f8958c9bcc380f0715239203d664fe2f560088dd",
+    "lasnaTx": "0x33869c3b6697f81ea2e0592cbb15907140fb1eb22c6dacf7238a60ba88b874d8",
+    "source": "docs/evidence/harness/run-7983.json"
+  },
+  {
+    "tokenId": "7984",
+    "exitTx": "0x28d2c3db0120e538e61a4d423aee1b6be62530755a465382a44d9efc6238ad0a",
+    "lasnaTx": "0xaa5fa8ae2fdef284c2a57fb0b9d133fd94ba1f2a038b00a0057889afe25bc1f7",
+    "source": "docs/evidence/harness/run-7984.json"
+  },
+  {
+    "tokenId": "7985",
+    "exitTx": "0x6b5ba42329f3ea4dfa0aec89ad22ab6b6191b067d3e90560b957e6b95d81810c",
+    "lasnaTx": "0x65acf54004dbfea95fa10c28e8b12a9c6f179fcd34ab3153b083ce0aaeb8cae5",
+    "source": "docs/evidence/harness/run-7985.json"
+  },
+  {
+    "tokenId": "7986",
+    "exitTx": "0xefbd252167ce60371f96c8e95659c07829a22e8763c2f4ef937042c6f7e667f1",
+    "lasnaTx": "0x42367e7e0c97ad0449e34125a3a9b26976402650de30e3de2fc0dbac51345b43",
+    "source": "docs/evidence/harness/run-7986.json"
+  },
+  {
+    "tokenId": "7987",
+    "exitTx": "0x539ab952748125058c4e71a7310cbb4c241f932bdae52caa5a39aad8f486992f",
+    "lasnaTx": "0x8c3266628020e97d376f7b948b6e999481f7483d55156b7c846c8cd2be6a057e",
+    "source": "docs/evidence/harness/run-7987.json"
+  },
+  {
+    "tokenId": "7988",
+    "exitTx": "0xdb5d3cd63830696600c3d7fb48f4382abd5614f60e2d9b4e8ebe82f88ffd3c4d",
+    "lasnaTx": "0x09c900e9b04da155fc9acc4fc5be00076cc471fab4c318a98db05534f845122b",
+    "source": "docs/evidence/harness/run-7988.json"
+  },
+  {
+    "tokenId": "7989",
+    "exitTx": "0x71740cf98ab7649976929568d105fa416840546e1b2aef3279058c649638a641",
+    "lasnaTx": "0xcba08568334cc6aaf2fcf9f1a961d3902282aa3353ab2e916dd75fe13f2f107a",
+    "source": "docs/evidence/harness/run-7989.json"
+  },
+  {
+    "tokenId": "7990",
+    "exitTx": "0x2f688612c390138e8486c8a69cc66b0171cf85b6f2a4776ba58f56fa77935be0",
+    "lasnaTx": "0x179f9efd37e031bae22c4390afa5b85ea874cf94951ba558a9fcb3a0c496e29b",
+    "source": "docs/evidence/harness/run-7990.json"
+  },
+  {
+    "tokenId": "7991",
+    "exitTx": "0x60a8703edce0fe6e5dfac6394a07118487cfde3d14ef91c3c9e91644ed195fdf",
+    "lasnaTx": "0x65d2933dc66c2b38249f641e28e1881729b07fd563a7196848a0f3a738febe1b",
+    "source": "docs/evidence/harness/run-7991.json"
+  },
+  {
+    "tokenId": "7992",
+    "exitTx": "0x80cbf9921411b993ef482c9c20d3741adaa6a4d135119ea35e756e948308225c",
+    "lasnaTx": "0x6559fad274210fd3b76142311f843c35f74ccb508648ded29cdea98be768cef8",
+    "source": "docs/evidence/harness/run-7992.json"
+  },
+  {
+    "tokenId": "7993",
+    "exitTx": "0x8c0367d828e021b7dff3f3cf707fbccdb38c5a6bcfbc515c28f5410f3e1a895c",
+    "lasnaTx": "0x9ac2e80665c13e3fb19c0cf05c9b854bc9678eedbf5401f2dd8c70c2b6ef4f8d",
+    "source": "docs/evidence/harness/run-7993.json"
+  },
+  {
+    "tokenId": "7994",
+    "exitTx": "0x8ba22b67d933d44a2c1905b670218afe7e5a7e20a6a6154e9f8641cf1b529774",
+    "lasnaTx": "0xcab342399e5edadf29e6b9dcf4c59c1869ff06f9f6da4a4ccdd8d7c0e1cc9742",
+    "source": "docs/evidence/harness/run-7994.json"
+  },
+  {
+    "tokenId": "7995",
+    "exitTx": "0xc591ab678f73dc538e74c87719dbc1b29d6b7eb9d9538d3a6c3c2aba58a8c34a",
+    "lasnaTx": "0x6f562948376f6b06953a4e697f9681be953bbc5f81ef97431d7001b11759e1b6",
+    "source": "docs/evidence/harness/run-7995.json"
+  },
+  {
+    "tokenId": "7996",
+    "exitTx": "0x0770da0acb9665d6a7377c8ee4d5219fa70e41334b4f187882035beec3e7dd87",
+    "lasnaTx": "0x8ecc14fa2001df8887a6d38ed5aefada3df3dfeb6ebb7a43a38d906d757b6719",
+    "source": "docs/evidence/harness/run-7996.json"
+  },
+  {
+    "tokenId": "7997",
+    "exitTx": "0x188ae6dfb8273d72a3492c675a75ab1b06a88a9b437efb202b04c38b8151f63e",
+    "lasnaTx": "0x2de5f08d8a51c8823016a2917b9a7c4feb7089d9655dfdf8af9ffbb6e8a69854",
+    "source": "docs/evidence/harness/run-7997.json"
+  },
+  {
+    "tokenId": "7998",
+    "exitTx": "0x2f0e7d8c6eaa55825d624e4b0bfb85a9439a6ba05b4a7f45e20e66663f0ac7ab",
+    "lasnaTx": "0x45eadc7f19e487f495312462066d7370eb7ee2d1507acd1b552467da9fe5c4af",
+    "source": "docs/evidence/harness/run-7998.json"
+  },
+  {
+    "tokenId": "7999",
+    "exitTx": "0xf8947eef0234e5e0b4c88b54c68473ce81388a771f7fdfefb8f90132f22e8c0a",
+    "lasnaTx": "0xc2b0b1ace19cafb3675a91341dbb1f0b8bef77c84fcb4c5d9df2311a8627d688",
+    "source": "docs/evidence/harness/run-7999.json"
+  },
+  {
+    "tokenId": "8000",
+    "exitTx": "0xe76617cb4e17e5be87e0ba02497b448402a9043334e1db6f1535752f4b9cd408",
+    "lasnaTx": "0x10f5b0b53d81859584e74931d6561de3c229eae9747b11f422838a96e88ce83b",
+    "source": "docs/evidence/harness/run-8000.json"
+  },
+  {
+    "tokenId": "8001",
+    "exitTx": "0x09610a287e0cd86e6a5dc2e1ec550bda45de2ff953c43641ae8a75689e83a15e",
+    "lasnaTx": "0xb81b9c5c959a45de10d1ce55188b2f6a4215b3e6227809cbe1103e2afaa8aa5a",
+    "source": "docs/evidence/harness/run-8001.json"
+  },
+  {
+    "tokenId": "8002",
+    "exitTx": "0x981a2c309f3d926bc44c62b0368daa2fa6ee1abf73f6f63af1668a5f2bc76100",
+    "lasnaTx": "0x22f1897aca1a2dcc194e01285da28c1946e9dcb67bdc0e0eb1c586f95111c08e",
+    "source": "docs/evidence/harness/run-8002.json"
+  },
+  {
+    "tokenId": "8003",
+    "exitTx": "0x1398a6203e430e0918710fb18740c9e52a60bf1861ca22c6921a3a45204d66d5",
+    "lasnaTx": "0xf9c9c6d43b8d51ae7993144947bf3adf273a1a3cb7c67e98969aac61adee4782",
+    "source": "docs/evidence/harness/run-8003.json"
+  },
+  {
+    "tokenId": "8004",
+    "exitTx": "0x389483df02a59394f78a2ceb6be029f1ee19eb01a3b762f2166cf31720f552b5",
+    "lasnaTx": "0xd34cd5e6b9de01fb74c5a5a60f92b659cb9fd7b71c2202d0c1a882ba80c8aedc",
+    "source": "docs/evidence/harness/run-8004.json"
+  },
+  {
+    "tokenId": "8005",
+    "exitTx": "0xd8b02a8d2b1bad3d06e7ce451c1eab160182dca642677a2d95c8a0271efe99fb",
+    "lasnaTx": "0x966a7f5c8d23ff9ca529879a53a507c76514263602139ae20e7745062d511062",
+    "source": "docs/evidence/harness/run-8005.json"
+  },
+  {
+    "tokenId": "8006",
+    "exitTx": "0x5b6b0bcc612acb218094dc2b432ee33dfd3ff8d79a4e92781d517bc03086c75d",
+    "lasnaTx": "0xa6344c20e3d17b972f3cdae555df5b6524b0a9e172d993b9014b08778ea16cf7",
+    "source": "docs/evidence/harness/run-8006.json"
+  },
+  {
+    "tokenId": "8007",
+    "exitTx": "0x61d2df8a03400ba85d377e6f2df52409f28e1e920d30ae5dc4fd822dd6af589d",
+    "lasnaTx": "0x1d3e5712eac29b51b3f00b6a8568a7f439952815be2a8aa544ee1f6433f981c7",
+    "source": "docs/evidence/harness/run-8007.json"
+  },
+  {
+    "tokenId": "8008",
+    "exitTx": "0xb301810d1cb9bc21d1bead775e5c8d5a5fb21121a6477afbb2ff12099007986b",
+    "lasnaTx": "0x5ac5c85904d5160358953e32637eb3ce2af7fe4858a8a593d0fa15d3bc37a16b",
+    "source": "docs/evidence/harness/run-8008.json"
+  },
+  {
+    "tokenId": "8009",
+    "exitTx": "0x74c9546e1ea5d8464cf9ed6e3fca44b3a32db19d20658705847169b216e1bed8",
+    "lasnaTx": "0x4902509eee7cf72e16b21c4c0dd3362e36b2de06e8ff66e025ab48954e346ccd",
+    "source": "docs/evidence/harness/run-8009.json"
+  },
+  {
+    "tokenId": "8010",
+    "exitTx": "0xdb33b678f9bcf423806e78f8cae13d564e3fc231653b59211f46a477cb96d70d",
+    "lasnaTx": "0x4c021b566b2f89aef8552fd771d57a5a8f105afe371ab2516d0ea53a9fbe1de1",
+    "source": "docs/evidence/harness/run-8010.json"
+  },
+  {
+    "tokenId": "8011",
+    "exitTx": "0x0c964e324668428cff202a3a70d3cd09bfd6205db43854ce8ceb2d038dc2be70",
+    "lasnaTx": "0x47edd0cf0040ecbd51fecc1d979180e0db1019a3e2c171ae18eb89439a26c245",
+    "source": "docs/evidence/harness/run-8011.json"
+  },
+  {
+    "tokenId": "8012",
+    "exitTx": "0x534c9b668df4e4b7473a669a4997d6ef0925a50b709c0fd25d41ead36eddc484",
+    "lasnaTx": "0x028fa6edcca1bc0c2ac0822bc813c61c6329fc70ea6b2614731d9e1b4761b1a8",
+    "source": "docs/evidence/harness/run-8012.json"
+  },
+  {
+    "tokenId": "8013",
+    "exitTx": "0xe1f11f654d44214589f933829c38d1906b8aa8a5133621222c41f83817b7efc2",
+    "lasnaTx": "0xac670458787061c37e812fe5d1d6fc733b776712910386eedefd95a03ed1a2e6",
+    "source": "docs/evidence/harness/run-8013.json"
+  },
+  {
+    "tokenId": "8014",
+    "exitTx": "0xd6c163615c26d05b037b51197f4c663effd83523f7ebae7c749cf0fa35700b0f",
+    "lasnaTx": "0xe4f54bc4fd6fe8bfe02998c0c42366cc08c4dc9da58c786ebd7f9ed176f5d805",
+    "source": "docs/evidence/harness/run-8014.json"
   }
 ]
