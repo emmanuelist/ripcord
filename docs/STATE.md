@@ -5,7 +5,7 @@ _Last verified: 2026-11-14, after benchmark fixes B2–B4 (E-018 … E-021)_
 
 **Milestone:** M3 · Proof surface (freeze 2026-12-03). README done; benchmark run (19/24) and its fixes B2, B3, B4 done; **B1 (run of show + video) open**; B5 at submission · **Deadline:** 2026-12-05 20:00 UTC (time left: the clock line)
 
-**Next action:** B5: make `github.com/emmanuelist/ripcord` public (it returns 404 logged out, checked 2026-11-14 after submitting), then confirm the README links and CI badge resolve logged out and tag the submission commit.
+**Next action:** the UI pass by 2026-11-28 (impeccable critique + polish, the motion pass, `/benchmark judge`); before the deadline, tag the commit the judges should see (`git tag submission`) and run `/hackathon preflight`.
 
 **Blocked on:** nothing.
 
@@ -35,12 +35,11 @@ _Last verified: 2026-11-14, after benchmark fixes B2–B4 (E-018 … E-021)_
 Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source maps, D-015). The Vercel Git connection is removed on purpose: don't re-link it.
 
 ## Broken or unverified
-- The page's and README's GitHub links and the CI badge 404 for visitors until the repo goes public at submission (D-009, B5).
+- **Repo public** (checked 2026-11-15 logged out: repo page, raw README and CI badge all 200). B5 done except the submission tag.
 - Not checked yet: the public page on a phone over cellular (preflight, M4).
 - The flap's two-half fall is judged from code; at 130 ms per step it can't be captured frame by frame.
 - **Submitted to DoraHacks on 2026-11-14** (track Every Second Counts; the user pressed submit). Film on YouTube https://youtu.be/cIcXnYkJFyo, which plays logged out (oEmbed 200, 2026-11-14). Still to check: whether that upload is the final 2:35 cut or the 2:36 one before it. The README doesn't link the video yet.
 - The featured departure falls back to #8014 a few hours after a tryout loop: the live poll scans only recent blocks and the tryout loops (#8015–#8023) aren't in `runs.json`, so they drop off the board. Adding them to the recorded history would keep the filmed #8023 featured.
-- **The repo is private**: the submission's GitHub link returns 404 to judges until it is made public (B5).
 
 ## Claims not yet verified
 - None. (C-2 verified 2026-11-14 from E-018.)
