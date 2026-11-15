@@ -315,5 +315,41 @@
     "exitTx": "0xd6c163615c26d05b037b51197f4c663effd83523f7ebae7c749cf0fa35700b0f",
     "lasnaTx": "0xe4f54bc4fd6fe8bfe02998c0c42366cc08c4dc9da58c786ebd7f9ed176f5d805",
     "source": "docs/evidence/harness/run-8014.json"
+  },
+  {
+    "tokenId": "8015",
+    "exitTx": "0x5ebc735354d3d11c7da439c60e92642c7e53eb1952a47e8e4a2f809943d80f6d",
+    "lasnaTx": "0x07126f2daf2a42ffd6a9458a7728b5e8a6f51a54930a80635f6108b18476a02d",
+    "source": "docs/evidence/m3/tryout/loops.json"
+  },
+  {
+    "tokenId": "8016",
+    "exitTx": "0x8c206ecd2bab93a999284f3b58fa88f1fea6ade19806cb36a0083f00ef25c5b7",
+    "lasnaTx": "0x4fedd243e70767126d9375b2bc8a08bece5a23cafb8a5ddca500aaffca6010d9",
+    "source": "docs/evidence/m3/tryout/loops.json"
+  },
+  {
+    "tokenId": "8020",
+    "exitTx": "0xf123f9e0e19ff73b41d27f2b1020e42cf5545166517e0482e9ec8c283c6cfa67",
+    "lasnaTx": "0x9a028750b70b2962de45c1bc83b5e88631c21b91b8740a39bb300088233dd59e",
+    "source": "docs/evidence/m3/tryout/loops.json"
+  },
+  {
+    "tokenId": "8021",
+    "exitTx": "0xe906a27d96cfca850f835e344ec2a065c843085d9d67e5f73c3fecc4999d25fa",
+    "lasnaTx": "0xe1e775dbaf42baf8421ac14f6bb2431d4d8508393ffdb05543e466929025b305",
+    "source": "docs/evidence/m3/tryout/loops.json"
+  },
+  {
+    "tokenId": "8022",
+    "exitTx": "0x0273bae25e79fa75d106336585d404c9244c589291dbfea79707f924d275ae5a",
+    "lasnaTx": "0xe016c4af149a6a3cb91f0eb09549699c099cf34b4e58ab7a17ce0c0add2e4ac2",
+    "source": "docs/evidence/m3/tryout/loops.json"
+  },
+  {
+    "tokenId": "8023",
+    "exitTx": "0x6369db243c7debd06e6a0d262a19c76ca4117e4ea96b900f1b39ad7714955d50",
+    "lasnaTx": "0x6bf3ed17dfeedc13bdae36a1dffb65115b3db372f13d185c7bf7b0b89eb23ea1",
+    "source": "docs/evidence/m3/tryout/loops.json"
   }
 ]

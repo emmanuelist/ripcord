@@ -25,6 +25,12 @@ for (const dir of ["m1", "harness"]) {
     else if (j.txs?.exit) add(j.tokenId, j.txs.exit, j.txs.lasna, `docs/evidence/${dir}/${f}`);
   }
 }
+// The RipcordTryout loops (E-020, E-022, E-023): recorded from chain logs by scripts/record-tryout.mjs, so they stay on
+// the board after they fall out of the live poll's window.
+const tryout = join(evidence, "m3/tryout/loops.json");
+if (existsSync(tryout)) {
+  for (const l of JSON.parse(readFileSync(tryout, "utf8")).loops) if (l.lasna) add(l.tokenId, l.exit.tx, l.lasna.tx, "docs/evidence/m3/tryout/loops.json");
+}
 // The M2 refusals (E-016): positions that never exited still belong on the board, rebuilt from their own receipts.
 // refusals.json for the page holds the hashes only; every value shown is read back from chain by them.
 let refusals = null;

@@ -39,7 +39,6 @@ Deploy the web with `web/scripts/deploy-vercel.sh` (prebuilt static, no source m
 - Not checked yet: the public page on a phone over cellular (preflight, M4).
 - The flap's two-half fall is judged from code; at 130 ms per step it can't be captured frame by frame.
 - **Submitted to DoraHacks on 2026-11-14** (track Every Second Counts; the user pressed submit). Film on YouTube https://youtu.be/cIcXnYkJFyo, which plays logged out (oEmbed 200, 2026-11-14). Still to check: whether that upload is the final 2:35 cut or the 2:36 one before it. The README doesn't link the video yet.
-- The featured departure falls back to #8014 a few hours after a tryout loop: the live poll scans only recent blocks and the tryout loops (#8015–#8023) aren't in `runs.json`, so they drop off the board. Adding them to the recorded history would keep the filmed #8023 featured.
 
 ## Claims not yet verified
 - None. (C-2 verified 2026-11-14 from E-018.)
